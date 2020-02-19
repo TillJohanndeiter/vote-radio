@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="270.0" prefWidth="877.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CurrentSong">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="250.0" layoutX="14.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="250.0">
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+         <effect>
+            <MotionBlur angle="13.17" radius="16.15" />
+         </effect></Rectangle>
+      <ImageView fx:id="cover" depthTest="DISABLE" fitHeight="250.0" fitWidth="250.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@blankCdIcon.png" />
+         </image>
+         <effect>
+            <MotionBlur radius="0.0" />
+         </effect>
+         <cursor>
+            <Cursor fx:constant="DEFAULT" />
+         </cursor>
+      </ImageView>
+      <Text fx:id="title" layoutX="274.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="134.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="artist" layoutX="274.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Artist" wrappingWidth="134.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="album" layoutX="274.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Album" wrappingWidth="134.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="32.0" />
+         </font>
+      </Text>
+      <Slider fx:id="slider" layoutX="403.0" layoutY="105.0" prefHeight="60.0" prefWidth="428.0" scaleY="2.0" />
+      <Text layoutX="395.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0:00" wrappingWidth="32.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="duration" layoutX="798.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3:00" wrappingWidth="32.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="16.0" />
+         </font>
+      </Text>
+      <Text fx:id="playedTime" layoutX="596.0" layoutY="172.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3:00" wrappingWidth="41.7294921875">
+         <font>
+            <Font name="Liberation Sans Bold" size="19.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>
