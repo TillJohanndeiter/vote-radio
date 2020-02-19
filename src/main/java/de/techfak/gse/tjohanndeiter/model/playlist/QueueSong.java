@@ -38,7 +38,7 @@ public class QueueSong extends Song {
         return voteCount;
     }
 
-    int getPlaysBeforeReplay() {
+    public int getPlaysBeforeReplay() {
         return playsBeforeReplay;
     }
 
