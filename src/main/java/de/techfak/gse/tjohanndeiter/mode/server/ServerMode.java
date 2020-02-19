@@ -13,18 +13,20 @@ import de.techfak.gse.tjohanndeiter.model.server.SocketRestServer;
 public class ServerMode implements ProgramMode {
 
     private SocketRestServer server;
+    private MusicPlayer musicPlayer;
 
 
     ServerMode(final String address, final int restPort, final MusicPlayer musicPlayer,
                final SessionHandler sessionHandler) {
+        this.musicPlayer = musicPlayer;
         server = new SocketRestServer(address, restPort, sessionHandler);
         sessionHandler.getVoteList().addPropertyChangeListener(server);
         new Thread(() -> new ServerController(sessionHandler.getVoteList(), server).inputLoop()).start();
-        musicPlayer.startPlay();
     }
 
     @Override
     public void startProgram() throws ShutdownException {
         server.startServer();
+        musicPlayer.startPlay();
     }
 }

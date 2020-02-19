@@ -11,7 +11,7 @@ class TerminalFactoryTest {
 
     @Test
     void createProgramMode() throws ShutdownException {
-        ProgramMode programMode = factory.createProgramMode();
+        ProgramMode programMode = factory.createProgramMode(Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
         Assertions.assertTrue(programMode instanceof TerminalMode);
     }
 

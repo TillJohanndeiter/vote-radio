@@ -3,14 +3,11 @@ package de.techfak.gse.tjohanndeiter.mode.terminal;
 import de.techfak.gse.tjohanndeiter.controller.cmd.TerminalController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
-import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.ShuffleList;
-
-import java.io.File;
 
 /**
  * Commandline terminal. Handles user interaction with the model.
@@ -25,12 +22,11 @@ public class TerminalMode implements ProgramMode {
     /**
      * Constructor
      *
-     * @param filepath music source folder
      * @throws de.techfak.gse.tjohanndeiter.model.exception.prototypes.ParseException in case of non readable path
      */
     /* default */
-    TerminalMode(final String filepath) throws ShutdownException {
-        songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
+    TerminalMode(final SongLibrary songLibrary) throws ShutdownException {
+        this.songLibrary = songLibrary;
         final Playlist playlist = new ShuffleList(songLibrary);
         musicPlayer = new OfflinePlayer(playlist);
         terminalController = new TerminalController(playlist);

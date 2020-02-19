@@ -41,6 +41,7 @@ class SessionHandlerITest {
      */
     @Test
     void currentSongStatusCode() throws IOException {
+        System.out.println("currentSongTest");
         int code = getCode("current-song");
         Assertions.assertThat(code == 200).isTrue();
     }

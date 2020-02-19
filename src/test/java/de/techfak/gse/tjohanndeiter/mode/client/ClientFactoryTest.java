@@ -6,12 +6,12 @@ import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class ClientFactoryTest {
+public class ClientFactoryTest {
 
     private ClientFactory factory = new ClientFactory();
 
     @Test
-    void createProgramMode() throws ShutdownException {
+    void createProgramModeTest() throws ShutdownException {
         final ProgramMode programMode = factory.createProgramMode(GSERadio.CLIENT_ARG);
         Assertions.assertTrue(programMode instanceof ClientMode);
     }

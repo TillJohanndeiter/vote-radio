@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-class JsonSongTest {
+class JsonQueuedSongTest {
 
     private static final String NO_METADATA = "---";
     private static final String FP_TEST = "fpTest";
@@ -18,11 +18,11 @@ class JsonSongTest {
     private static final String ARTIST_TEST = "artistTest";
     private static final String ALBUM_TEST = "albumTest";
     private static final String GENRE_TEST = "genreTest";
-    private static final String JSON_DEFAULT_SONG = "{\"filepath\":\"---\",\"title\":\"---\",\"artist\":\"---\"," +
-            "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"voteCount\":0,\"id\":3}";
+    private static final String JSON_DEFAULT_SONG = "{\"title\":\"---\",\"artist\":\"---\"," +
+            "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"cover\":null,\"voteCount\":0,\"playsBeforeReplay\":0,\"id\":3}";
 
-    private static final String NORMAL_JSON_SONG = "{\"filepath\":\"fpTest\",\"title\":\"titleTest\",\"artist\":\"artistTest\"," +
-            "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"voteCount\":0,\"id\":1}";
+    private static final String NORMAL_JSON_SONG = "{\"title\":\"titleTest\",\"artist\":\"artistTest\"," +
+            "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"cover\":null,\"voteCount\":0,\"playsBeforeReplay\":0,\"id\":1}";
 
 
     private QueueSong queueSong = new QueueSong(

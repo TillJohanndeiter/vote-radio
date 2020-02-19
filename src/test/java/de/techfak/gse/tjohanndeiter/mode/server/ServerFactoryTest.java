@@ -14,8 +14,9 @@ class ServerFactoryTest {
 
     @Test
     void createProgramMode() throws ShutdownException {
-        ProgramMode programMode = factory.createProgramMode();
+        ProgramMode programMode = factory.createProgramMode(GSERadio.SERVER_ARG, Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
         Assertions.assertTrue(programMode instanceof ServerMode);
+
     }
 
 
