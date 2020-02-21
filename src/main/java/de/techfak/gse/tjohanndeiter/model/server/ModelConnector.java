@@ -38,10 +38,9 @@ public class ModelConnector implements PropertyChangeListener {
         try {
             switch (propertyChangeEvent.getPropertyName()) { //NOPMD
                 case Playlist.PLAYLIST_CHANGE:
-                case VoteList.VOTE_CHANGED:
                     refreshPlaylistJson(propertyChangeEvent);
                     break;
-                case Playlist.NEW_SONG:
+                case MusicPlayer.NEW_SONG:
                     refreshSongJson(propertyChangeEvent);
                     break;
                 default:

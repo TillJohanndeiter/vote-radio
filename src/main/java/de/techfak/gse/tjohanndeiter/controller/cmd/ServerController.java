@@ -1,6 +1,5 @@
 package de.techfak.gse.tjohanndeiter.controller.cmd;
 
-import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.server.RestServer;
 
 public class ServerController extends TerminalController {
@@ -12,10 +11,8 @@ public class ServerController extends TerminalController {
 
     private RestServer server;
 
-    public ServerController(final Playlist playlist, final RestServer server) {
-        super(playlist);
+    public ServerController(final RestServer server) {
         this.server = server;
-
     }
 
     @Override

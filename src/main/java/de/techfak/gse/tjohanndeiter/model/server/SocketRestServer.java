@@ -1,8 +1,8 @@
 package de.techfak.gse.tjohanndeiter.model.server;
 
 import de.techfak.gse.tjohanndeiter.model.exception.shutdown.RestServerException;
+import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import fi.iki.elonen.NanoWSD;
 
 import java.beans.PropertyChangeEvent;
@@ -53,10 +53,9 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
 
         switch (name) {
             case Playlist.PLAYLIST_CHANGE:
-            case VoteList.VOTE_CHANGED:
                 setNextMessageForAllSockets(ServerSocket.CHANGED_PLAYLIST);
                 break;
-            case Playlist.NEW_SONG:
+            case MusicPlayer.NEW_SONG:
                 setNextMessageForAllSockets(ServerSocket.CHANGED_SONG);
                 break;
             default:

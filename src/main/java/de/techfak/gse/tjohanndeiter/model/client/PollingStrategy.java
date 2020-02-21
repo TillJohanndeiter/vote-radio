@@ -1,6 +1,7 @@
 package de.techfak.gse.tjohanndeiter.model.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
@@ -44,7 +45,7 @@ public class PollingStrategy implements RequesterStrategy {
             public void run() {
                 try {
                     final QueueSong currentSong = requester.getCurrentSong();
-                    support.firePropertyChange(Playlist.NEW_SONG, oldSong, currentSong);
+                    support.firePropertyChange(MusicPlayer.NEW_SONG, oldSong, currentSong);
                     support.firePropertyChange(Client.CONNECTED, true, true);
                     oldSong = currentSong;
                 } catch (JsonProcessingException e) {

@@ -31,7 +31,8 @@ public class OldStreamPlayer extends MusicPlayer {
         mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
             @Override
             public void finished(final MediaPlayer mediaPlayer) {
-                mediaPlayer.submit(() -> mediaPlayer.media().play(playlist.getNextSong().getFilepath(), streamAddress));
+                playlist.skipToNext();
+                mediaPlayer.media().play(playlist.getCurrentSong().getFilepath(), streamAddress);
             }
         });
     }

@@ -2,9 +2,11 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
+import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.LinkedList;
 
 /**
  * Abstract representation for a list of {@link Song} objects.
@@ -16,23 +18,32 @@ import java.beans.PropertyChangeSupport;
 public abstract class Playlist {
 
     public static final String PLAYLIST_CHANGE = "PLAYLIST_CHANGED";
-    public static final String NEW_SONG = "NEW_SONG";
 
-    PropertyChangeSupport propertyChangeSupport;
+    LinkedList<Song> songList;
+
+    PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     Playlist() {
-        propertyChangeSupport = new PropertyChangeSupport(this);
+    }
+
+    Playlist(final SongLibrary songLibrary) {
+        songList = new LinkedList<>(songLibrary.getSongs());
     }
 
     @JsonIgnore
-    public abstract Song getNextSong();
+    public abstract void skipToNext();
 
     @JsonIgnore
-    public abstract Song getCurrentSong();
+    public Song getCurrentSong() {
+        return songList.get(0);
+    }
 
     public void addPropertyChangeListener(final PropertyChangeListener observer) {
-        propertyChangeSupport.addPropertyChangeListener(observer);
+        support.addPropertyChangeListener(observer);
     }
 
-    public abstract void addSong(final Song song);
+    public void addSong(final Song song) {
+        songList.add(song);
+    }
+
 }

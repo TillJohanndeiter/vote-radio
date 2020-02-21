@@ -4,24 +4,22 @@ import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class VoteList extends Playlist {
 
-
-    public static final String VOTE_CHANGED = "VOTE_CHANGED";
-
-
-    private List<QueueSong> songList = new ArrayList<>();
     private int playsBeforeReplay;
+    private QueueSong currentSong;
+    private LinkedList<QueueSong> songList = new LinkedList<>();
 
     /**
      * Default constructor for serialization. Do not delete.
      */
     private VoteList() {
+        super();
     }
 
     /**
@@ -40,8 +38,14 @@ public class VoteList extends Playlist {
             songList.add(votedSong);
             idx++;
         }
+        currentSong = songList.get(0);
     }
 
+
+    /**
+     * Only for tests
+     * @param songList test list
+     */
 
     public VoteList(final List<QueueSong> songList) {
         super();
@@ -58,56 +62,26 @@ public class VoteList extends Playlist {
      * @throws SongIdNotAvailable in case if not song with #idOfSong is available
      */
     public void voteForSongById(final int idOfSong) throws SongIdNotAvailable {
-        boolean found = false;
+        QueueSong foundSong = findSongById(idOfSong);
+        updatePlaylist(foundSong);
+    }
+
+    private void updatePlaylist(final QueueSong foundSong) {
+        if (!currentSong.equals(foundSong)) {
+            foundSong.increaseVote();
+            songList.sort(new VoteComparator());
+            support.firePropertyChange(PLAYLIST_CHANGE, null, this);
+        }
+    }
+
+
+    private QueueSong findSongById(final int idOfSong) throws SongIdNotAvailable {
         for (final QueueSong votedSong : songList) {
             if (votedSong.getId() == idOfSong) {
-                voteForSong(votedSong);
-                found = true;
-                break;
+                return votedSong;
             }
         }
-        if (!found) {
-            throw new SongIdNotAvailable(idOfSong);
-        }
-    }
-
-    /**
-     * Increase vote for #votedSong and update list {@link #songList}.
-     *
-     * @param votedSong voted Song.
-     */
-    private void voteForSong(final QueueSong votedSong) {
-        votedSong.increaseVote();
-        while (isNotHighestVoted(songList.indexOf(votedSong))
-                && allowedReplay(votedSong) && nextSongLessVotes(votedSong)) {
-            forwardSwap(votedSong);
-        }
-        correctNextPlay();
-        propertyChangeSupport.firePropertyChange(PLAYLIST_CHANGE, null, this);
-    }
-
-    private boolean allowedReplay(final QueueSong queueSong) {
-        return queueSong.getPlaysBeforeReplay() < songList.indexOf(queueSong);
-    }
-
-    private void backwardSwap(final QueueSong votedSong) {
-        Collections.swap(songList, songList.indexOf(votedSong), songList.indexOf(votedSong) + 1);
-    }
-
-    private void forwardSwap(final QueueSong votedSong) {
-        Collections.swap(songList, songList.indexOf(votedSong), songList.indexOf(votedSong) - 1);
-    }
-
-    private boolean nextSongLessVotes(final QueueSong votedSong) {
-        return getNext(votedSong).getVoteCount() < votedSong.getVoteCount();
-    }
-
-    private QueueSong getNext(final QueueSong queueSong) {
-        return songList.get(songList.indexOf(queueSong) - 1);
-    }
-
-    private boolean isNotHighestVoted(final int oldIdxOfSong) {
-        return oldIdxOfSong > 0;
+        throw new SongIdNotAvailable(idOfSong);
     }
 
     @Override
@@ -116,37 +90,17 @@ public class VoteList extends Playlist {
     }
 
     @Override
-    public QueueSong getNextSong() {
-        final QueueSong song = songList.get(0);
-        song.setPlaysBeforeReplay(playsBeforeReplay);
-        song.resetVote();
-        propertyChangeSupport.firePropertyChange(NEW_SONG, songList.get(songList.size() - 1), song);
-        songList.remove(song);
-        songList.add(song);
-        propertyChangeSupport.firePropertyChange(PLAYLIST_CHANGE, null, this);
+    public void skipToNext() {
+        final QueueSong old = songList.get(0);
+        old.setPlaysBeforeReplay(playsBeforeReplay);
+        old.resetVote();
+        songList.remove(old);
+        songList.add(old);
+        currentSong = songList.get(0);
+        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
         for (int i = 0; i < songList.size() - 1; i++) {
             songList.get(i).decReplayCount();
         }
-        correctNextPlay();
-        return song;
-    }
-
-    private void correctNextPlay() {
-        for (int i = 0; i < songList.size() - 2; i++) {
-            QueueSong temp = songList.get(i);
-            while (temp.getVoteCount() < songList.get(songList.indexOf(temp) + 1).getVoteCount()
-                    && allowedReplay(songList.get(songList.indexOf(temp) + 1))) {
-                backwardSwap(temp);
-            }
-        }
-    }
-
-    @Override
-    public QueueSong getCurrentSong() {
-        propertyChangeSupport.firePropertyChange(
-                NEW_SONG, null, songList.get(0));
-        propertyChangeSupport.firePropertyChange(PLAYLIST_CHANGE, null, this);
-        return songList.get(songList.size() - 1);
     }
 
     public List<QueueSong> getVotedPlaylist() {
@@ -154,15 +108,29 @@ public class VoteList extends Playlist {
     }
 
     @Override
+    public Song getCurrentSong() {
+        return songList.get(0);
+    }
+
+    @Override
     public String toString() {
-        // final StringBuilder result = new StringBuilder();
-        // result.append("Current Song: \n");
-        // result.append(getNextSong().toString()).append('\n');
-        // result.append('\n');
-        // for (int i = 0; i < songList.size() - 1; i++) {
-        //     result.append(songList.get(i).toString()).append('\n');
-        // }
-        // result.append("End of Playlist\n");
-        return null;
+        final StringBuilder result = new StringBuilder();
+        for (final Song song : songList) {
+            result.append(song.toString()).append('\n');
+        }
+        result.append(" -- End of Playlist");
+        return result.toString();
+    }
+
+    class VoteComparator implements Comparator<QueueSong> {
+
+        @Override
+        public int compare(final QueueSong queueSong, final QueueSong t1) {
+            if (t1.equals(currentSong)) {
+                return Integer.MAX_VALUE;
+            } else {
+                return t1.getVoteCount() - queueSong.getVoteCount();
+            }
+        }
     }
 }

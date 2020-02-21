@@ -1,10 +1,13 @@
 package de.techfak.gse.tjohanndeiter.controller.cmd;
 
+import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Scanner;
 
-public class TerminalController implements AutoCloseable {
+public class TerminalController implements AutoCloseable, PropertyChangeListener {
 
 
     private static final String EXIT_CMD = "exit";
@@ -13,10 +16,21 @@ public class TerminalController implements AutoCloseable {
     private static final String HELP_CMD = "help";
 
     private final Scanner scanner = new Scanner(System.in);
-    private final Playlist playlist;
+    private String currentPlaylist;
+    private String currentSong;
 
-    public TerminalController(final Playlist playlist) {
-        this.playlist = playlist;
+    @Override
+    public void propertyChange(final PropertyChangeEvent event) {
+        switch (event.getPropertyName()) {
+            case MusicPlayer.NEW_SONG:
+                currentSong = event.getNewValue().toString();
+                break;
+            case Playlist.PLAYLIST_CHANGE:
+                currentPlaylist = event.getNewValue().toString();
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -64,11 +78,10 @@ public class TerminalController implements AutoCloseable {
     }
 
     private void printPlayList() {
-        System.out.println(playlist.toString()); //NOPMD
+        System.out.println(currentPlaylist); //NOPMD
     }
 
     private void printSongInfo() {
-        //System.out.println(playlist.getCurrentSong().toString()); //NOPMD
+        System.out.println(currentSong); //NOPMD
     }
-
 }

@@ -31,9 +31,11 @@ public class StreamPlayer extends MusicPlayer {
                 listPlayer.submit(() -> {
                     endTimeTracker();
                     listPlayer.list().media().clear();
-                    currentSong = playlist.getNextSong();
+                    playlist.skipToNext();
+                    currentSong = playlist.getCurrentSong();
                     listPlayer.list().media().add(currentSong.getFilepath(), address);
                     listPlayer.controls().play();
+                    propertyChangeSupport.firePropertyChange(NEW_SONG, null, currentSong);
                     setUpTimeTracker();
                 });
             }
@@ -42,16 +44,17 @@ public class StreamPlayer extends MusicPlayer {
 
     @Override
     public void startPlay() {
-        currentSong = playlist.getNextSong();
+        currentSong = playlist.getCurrentSong();
         listPlayer.list().media().add(currentSong.getFilepath(), address);
         listPlayer.controls().play();
+        propertyChangeSupport.firePropertyChange(NEW_SONG, null, currentSong);
+        propertyChangeSupport.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
         setUpTimeTracker();
     }
 
     @Override
     public TimeBean createPlayTimeBean() {
-        return new TimeBean(currentSong.getLength(), timeCounter
-        );
+        return new TimeBean(currentSong.getLength(), timeCounter);
     }
 
     private String formatRtpStream(final String multicastAddress, final int musicPort) {

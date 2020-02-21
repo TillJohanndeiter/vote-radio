@@ -15,9 +15,10 @@ public abstract class MusicPlayer {
     public static final String PAUSE_PLAYER = "pausePlayer";
     public static final String RESUME_PLAYER = "resumePlayer";
     public static final String START_PLAYER = "startPlayer";
+    public static final String NEW_SONG = "NEW_SONG";
 
     MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
-    private PropertyChangeSupport propertyChangeSupport;
+    PropertyChangeSupport propertyChangeSupport;
     MediaPlayer mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
 
     MusicPlayer() {
@@ -25,6 +26,7 @@ public abstract class MusicPlayer {
     }
 
     public void startPlay() {
+        mediaPlayer.controls().play();
         propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
     }

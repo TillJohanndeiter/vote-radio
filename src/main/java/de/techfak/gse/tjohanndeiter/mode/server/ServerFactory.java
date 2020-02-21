@@ -1,6 +1,7 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.controller.cmd.ServerController;
+import de.techfak.gse.tjohanndeiter.controller.cmd.TerminalController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
@@ -32,7 +33,6 @@ public class ServerFactory extends ProgramModeFactory {
     @Override
     public ProgramMode createProgramMode(final String... args) throws ShutdownException {
         checkIfIllegalArgCombination(args);
-        final ProgramMode programMode;
         boolean streamPlay = false;
         String filepath = System.getProperty(CURRENT_DIR);
         String multicast = MULTICAST_DEFAULT;
@@ -55,8 +55,39 @@ public class ServerFactory extends ProgramModeFactory {
 
         final SongLibrary songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
         final VoteList voteList = new VoteList(songLibrary, 0);
+        final VoteStrategy voteStrategy = new JukeBoxStrategy(voteList);
+        final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
 
-        MusicPlayer musicPlayer;
+        final MusicPlayer musicPlayer = createMusicPlayer(streamPlay, multicast, streamPort, voteList, args);
+        final StreamUrl streamLocation = new StreamUrl(multicast, streamPort);
+        final ModelConnector modelObserver = new ModelConnector(musicPlayer);
+        final SessionHandler sessionHandler = new SessionHandler(streamLocation, voteStrategy,
+                uploadRequester, modelObserver);
+
+        final SocketRestServer socketRestServer = new SocketRestServer(LOCALHOST, restPort, sessionHandler);
+        final TerminalController controller = new ServerController(socketRestServer);
+        addObservers(voteList, musicPlayer, modelObserver, socketRestServer, controller);
+        final Thread controllerThread = new Thread(controller::inputLoop);
+
+        return new ServerMode(socketRestServer, musicPlayer, controllerThread);
+    }
+
+    private void addObservers(final VoteList voteList, final MusicPlayer musicPlayer,
+                              final ModelConnector modelObserver, final SocketRestServer socketRestServer,
+                              final TerminalController controller) {
+        voteList.addPropertyChangeListener(controller);
+        voteList.addPropertyChangeListener(socketRestServer);
+        voteList.addPropertyChangeListener(modelObserver);
+        musicPlayer.addPropertyChangeListener(modelObserver);
+        musicPlayer.addPropertyChangeListener(controller);
+        musicPlayer.addPropertyChangeListener(socketRestServer);
+    }
+
+    private MusicPlayer createMusicPlayer(final boolean streamPlay, final String multicast,
+                                          final int streamPort, final VoteList voteList, final String[] args)
+            throws InvalidArgsException {
+
+        final MusicPlayer musicPlayer;
         if (streamPlay) {
             try {
                 musicPlayer = new StreamPlayer(voteList, multicast, streamPort);
@@ -66,22 +97,7 @@ public class ServerFactory extends ProgramModeFactory {
         } else {
             musicPlayer = new OfflinePlayer(voteList);
         }
-
-
-
-        final StreamUrl streamLocation = new StreamUrl(multicast, streamPort);
-        final VoteStrategy voteStrategy = new JukeBoxStrategy(voteList);
-        final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
-        final ModelConnector modelObserver = new ModelConnector(musicPlayer);
-        voteList.addPropertyChangeListener(modelObserver);
-        final SessionHandler sessionHandler = new SessionHandler(streamLocation, voteStrategy,
-                uploadRequester, modelObserver);
-        final SocketRestServer socketRestServer = new SocketRestServer(LOCALHOST, restPort, sessionHandler);
-        final ServerController controller = new ServerController(voteList, socketRestServer);
-        final Thread controllerThread = new Thread(controller::inputLoop);
-
-        programMode = new ServerMode(socketRestServer, musicPlayer, controllerThread);
-        return programMode;
+        return musicPlayer;
     }
 
 

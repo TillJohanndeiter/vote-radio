@@ -84,7 +84,7 @@ public class QueueSong extends Song {
             return false; //NOPMD
         }
         final QueueSong queueSong = (QueueSong) o;
-        return id == queueSong.id && voteCount == queueSong.voteCount;
+        return id == queueSong.id;
     }
 
     @Override
