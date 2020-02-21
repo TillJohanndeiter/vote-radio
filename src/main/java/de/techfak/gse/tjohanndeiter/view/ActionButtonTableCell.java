@@ -22,9 +22,7 @@ public final class ActionButtonTableCell<S> extends TableCell<S, Button> {
         this.getStyleClass().add("action-button-table-cell");
 
         this.actionButton = new Button(label);
-        this.actionButton.setOnAction((ActionEvent e) -> {
-            function.apply(getCurrentItem());
-        });
+        this.actionButton.setOnAction((ActionEvent e) -> function.apply(getCurrentItem()));
         this.actionButton.setMaxWidth(Double.MAX_VALUE);
     }
 
@@ -43,7 +41,10 @@ public final class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
         if (empty) {
             setGraphic(null);
+        } else if (getIndex() != 0) {
+            setGraphic(actionButton);
         } else {
+            actionButton.setDisable(true);
             setGraphic(actionButton);
         }
     }

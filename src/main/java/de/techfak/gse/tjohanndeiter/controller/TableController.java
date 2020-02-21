@@ -32,8 +32,6 @@ public class TableController implements PropertyChangeListener {
     private static final String VOTE_CLICK = "voteClick";
     private static final int COLUMN_COUNT = 6;
 
-    //TODO: Own Controller for current song
-
     @FXML
     private TableView<QueueSong> table = new TableView<>();
 
@@ -70,8 +68,7 @@ public class TableController implements PropertyChangeListener {
     @Override
     public void propertyChange(final PropertyChangeEvent event) {
         switch (event.getPropertyName()) {
-            case Playlist.NEW_SONG:
-            case VoteList.VOTE_CHANGED:
+            case MusicPlayer.NEW_SONG:
                 table.refresh();
                 break;
             case Playlist.PLAYLIST_CHANGE:
