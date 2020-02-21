@@ -2,6 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.player;
 
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
+import de.techfak.gse.tjohanndeiter.model.server.StreamUrl;
 import uk.co.caprica.vlcj.medialist.MediaListRef;
 import uk.co.caprica.vlcj.player.list.MediaListPlayer;
 import uk.co.caprica.vlcj.player.list.MediaListPlayerEventAdapter;
@@ -13,29 +14,27 @@ public class StreamPlayer extends MusicPlayer {
 
     private String address;
     private MediaListPlayer listPlayer = mediaPlayerFactory.mediaPlayers().newMediaListPlayer();
-    private Playlist playlist;
     private Song currentSong;
     private Timer timer = new Timer();
     private TimerTask timerTask;
     private long timeCounter = 0;
 
 
-    public StreamPlayer(final Playlist playlist, final String multicastAddress, final int port) {
-        this.playlist = playlist;
+    public StreamPlayer(final Playlist playlist, final StreamUrl streamUrl) {
+        super(playlist);
         final MediaListRef mediaList = mediaPlayerFactory.media().newMediaListRef();
         listPlayer.list().setMediaList(mediaList);
-        address = formatRtpStream(multicastAddress, port);
+        address = formatRtpStream(streamUrl.getMulticastAddress(), streamUrl.getPort());
         this.listPlayer.events().addMediaListPlayerEventListener(new MediaListPlayerEventAdapter() {
             @Override
             public void mediaListPlayerFinished(final MediaListPlayer listPlayer) {
                 listPlayer.submit(() -> {
                     endTimeTracker();
                     listPlayer.list().media().clear();
-                    playlist.skipToNext();
+                    new EndEvent().run();
                     currentSong = playlist.getCurrentSong();
                     listPlayer.list().media().add(currentSong.getFilepath(), address);
                     listPlayer.controls().play();
-                    propertyChangeSupport.firePropertyChange(NEW_SONG, null, currentSong);
                     setUpTimeTracker();
                 });
             }
@@ -46,9 +45,14 @@ public class StreamPlayer extends MusicPlayer {
     public void startPlay() {
         currentSong = playlist.getCurrentSong();
         listPlayer.list().media().add(currentSong.getFilepath(), address);
-        listPlayer.controls().play();
-        propertyChangeSupport.firePropertyChange(NEW_SONG, null, currentSong);
+
+        final Song song = playlist.getCurrentSong();
+        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
         propertyChangeSupport.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
+        listPlayer.controls().play();
+        propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
+                mediaPlayer.status().isPlaying());
+
         setUpTimeTracker();
     }
 
@@ -57,7 +61,7 @@ public class StreamPlayer extends MusicPlayer {
         return new TimeBean(currentSong.getLength(), timeCounter);
     }
 
-    private String formatRtpStream(final String multicastAddress, final int musicPort) {
+    private String formatRtpStream(final String multicastAddress, final String musicPort) {
         return ":sout=#rtp{dst="
                 + multicastAddress
                 + ",port="

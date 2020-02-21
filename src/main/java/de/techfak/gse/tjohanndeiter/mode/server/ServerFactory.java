@@ -56,10 +56,11 @@ public class ServerFactory extends ProgramModeFactory {
         final SongLibrary songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
         final VoteList voteList = new VoteList(songLibrary, 0);
         final VoteStrategy voteStrategy = new JukeBoxStrategy(voteList);
+        StreamUrl streamLocation;
+        streamLocation = createStreamUrl(streamPlay, multicast, streamPort);
         final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
 
-        final MusicPlayer musicPlayer = createMusicPlayer(streamPlay, multicast, streamPort, voteList, args);
-        final StreamUrl streamLocation = new StreamUrl(multicast, streamPort);
+        final MusicPlayer musicPlayer = createMusicPlayer(streamPlay, streamLocation, voteList, args);
         final ModelConnector modelObserver = new ModelConnector(musicPlayer);
         final SessionHandler sessionHandler = new SessionHandler(streamLocation, voteStrategy,
                 uploadRequester, modelObserver);
@@ -70,6 +71,14 @@ public class ServerFactory extends ProgramModeFactory {
         final Thread controllerThread = new Thread(controller::inputLoop);
 
         return new ServerMode(socketRestServer, musicPlayer, controllerThread);
+    }
+
+    private StreamUrl createStreamUrl(final boolean streamPlay, final String multicast, final int streamPort) {
+        if (streamPlay) {
+            return new StreamUrl(multicast, streamPort);
+        } else {
+            return new StreamUrl("none", "none");
+        }
     }
 
     private void addObservers(final VoteList voteList, final MusicPlayer musicPlayer,
@@ -83,14 +92,13 @@ public class ServerFactory extends ProgramModeFactory {
         musicPlayer.addPropertyChangeListener(socketRestServer);
     }
 
-    private MusicPlayer createMusicPlayer(final boolean streamPlay, final String multicast,
-                                          final int streamPort, final VoteList voteList, final String[] args)
+    private MusicPlayer createMusicPlayer(final boolean streamPlay, final StreamUrl streamUrl, final VoteList voteList, final String[] args)
             throws InvalidArgsException {
 
         final MusicPlayer musicPlayer;
         if (streamPlay) {
             try {
-                musicPlayer = new StreamPlayer(voteList, multicast, streamPort);
+                musicPlayer = new StreamPlayer(voteList, streamUrl);
             } catch (NumberFormatException e) {
                 throw new InvalidArgsException(e, args);
             }

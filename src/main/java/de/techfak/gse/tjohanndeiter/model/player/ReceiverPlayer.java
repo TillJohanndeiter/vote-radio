@@ -5,6 +5,7 @@ public class ReceiverPlayer extends MusicPlayer {
     private String completeAdress;
 
     public ReceiverPlayer(final String serverAdress, final String port) {
+        super(null);
         completeAdress = "rtp://@" + serverAdress + ':' + port;
     }
 
@@ -19,7 +20,8 @@ public class ReceiverPlayer extends MusicPlayer {
 
     @Override
     public void startPlay() {
-        super.startPlay();
+        propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
+                mediaPlayer.status().isPlaying());
         mediaPlayer.submit(() -> mediaPlayer.media().play(completeAdress));
     }
 }

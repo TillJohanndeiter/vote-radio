@@ -3,9 +3,14 @@ package de.techfak.gse.tjohanndeiter.model.server;
 public class StreamUrl {
 
     private String multicastAddress;
-    private int port;
+    private String port;
 
     public StreamUrl(final String multicastAddress, final int port) {
+        this.multicastAddress = multicastAddress;
+        this.port = String.valueOf(port);
+    }
+
+    public StreamUrl(final String multicastAddress, final String port) {
         this.multicastAddress = multicastAddress;
         this.port = port;
     }
@@ -14,7 +19,7 @@ public class StreamUrl {
         return multicastAddress;
     }
 
-    public int getPort() {
+    public String getPort() {
         return port;
     }
 }

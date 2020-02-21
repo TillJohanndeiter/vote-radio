@@ -18,12 +18,11 @@ public class OldStreamPlayer extends MusicPlayer {
 
     private static final int TIMEOUT = 1000;
     private static final int BUFFER = 2048;
-    private Playlist playlist;
     private String streamAddress;
 
     public OldStreamPlayer(final Playlist playlist, final String multicastAddress, final int port)
             throws StartPlayerException {
-        this.playlist = playlist;
+        super(playlist);
         if (portUsed(port)) {
             throw new MusicStreamPortInUseException(multicastAddress, port);
         }

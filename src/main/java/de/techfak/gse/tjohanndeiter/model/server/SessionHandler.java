@@ -89,7 +89,7 @@ public class SessionHandler {
     }
 
     private Response getPortStream() {
-        return newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, Integer.toString(portBean.getPort()));
+        return newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, portBean.getPort());
     }
 
     private Response getStreamingAddress() {

@@ -1,5 +1,7 @@
 package de.techfak.gse.tjohanndeiter.model.player;
 
+import de.techfak.gse.tjohanndeiter.model.database.Song;
+import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
@@ -18,14 +20,18 @@ public abstract class MusicPlayer {
     public static final String NEW_SONG = "NEW_SONG";
 
     MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
-    PropertyChangeSupport propertyChangeSupport;
     MediaPlayer mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
+    PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    Playlist playlist;
 
-    MusicPlayer() {
-        propertyChangeSupport = new PropertyChangeSupport(this);
+    MusicPlayer(final Playlist playlist) {
+        this.playlist = playlist;
     }
 
     public void startPlay() {
+        final Song song = playlist.getCurrentSong();
+        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
+        propertyChangeSupport.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
         mediaPlayer.controls().play();
         propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
@@ -60,6 +66,12 @@ public abstract class MusicPlayer {
         return new TimeBean(mediaPlayer.status().length(), mediaPlayer.status().time());
     }
 
+    void afterSongEvent() {
+        playlist.skipToNext();
+        final Song song = playlist.getCurrentSong();
+        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
+    }
+
     private void resume() {
         mediaPlayer.controls().play();
         propertyChangeSupport.firePropertyChange(RESUME_PLAYER, null, createPlayTimeBean());
@@ -69,5 +81,15 @@ public abstract class MusicPlayer {
         mediaPlayer.controls().pause();
         propertyChangeSupport.firePropertyChange(PAUSE_PLAYER, mediaPlayer.status().isPlaying(),
                 !mediaPlayer.status().isPlaying());
+    }
+
+    class EndEvent implements Runnable {
+
+        @Override
+        public void run() {
+            playlist.skipToNext();
+            final Song song = playlist.getCurrentSong();
+            propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
+        }
     }
 }
