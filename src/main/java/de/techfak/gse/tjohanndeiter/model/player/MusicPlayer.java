@@ -16,7 +16,7 @@ public abstract class MusicPlayer {
     public static final String RESUME_PLAYER = "resumePlayer";
     public static final String START_PLAYER = "startPlayer";
 
-    private MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
+    MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
     private PropertyChangeSupport propertyChangeSupport;
     MediaPlayer mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
 
@@ -54,10 +54,13 @@ public abstract class MusicPlayer {
         }
     }
 
+    public TimeBean createPlayTimeBean() {
+        return new TimeBean(mediaPlayer.status().length(), mediaPlayer.status().time());
+    }
+
     private void resume() {
         mediaPlayer.controls().play();
-        propertyChangeSupport.firePropertyChange(RESUME_PLAYER, !mediaPlayer.status().isPlaying(),
-                mediaPlayer.status().isPlaying());
+        propertyChangeSupport.firePropertyChange(RESUME_PLAYER, null, createPlayTimeBean());
     }
 
     private void pause() {

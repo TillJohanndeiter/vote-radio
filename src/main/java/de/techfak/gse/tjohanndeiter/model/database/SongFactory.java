@@ -15,6 +15,8 @@ import java.time.Duration;
 public class SongFactory {
 
 
+    private static final int BEGIN_OF_PATH = 7;
+
     public Song createSong(final File songFile) throws VlcJException {
         final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
         final Song song = createSong(songFile, mediaPlayerFactory);
@@ -42,7 +44,7 @@ public class SongFactory {
         }
 
         final MetaData metaData = media.meta().asMetaData();
-        final int length = (int) Duration.ofMillis(media.info().duration()).toSeconds();
+        final long length = Duration.ofMillis(media.info().duration()).toMillis();
         final Song song = createSong(songFile.getAbsolutePath(), length, metaData);
         media.release();
         return song;
@@ -57,15 +59,15 @@ public class SongFactory {
      * @return song object with metadata
      */
 
-    private Song createSong(final String filepath, final int length, final MetaData metaData) {
-        final String title = metaData.get(Meta.TITLE);
+    private Song createSong(final String filepath, final long length, final MetaData metaData) {
+        final String title = removeSpaceAtBegin(metaData.get(Meta.TITLE));
         final String artist = metaData.get(Meta.ARTIST);
         final String album = metaData.get(Meta.ALBUM);
         final String genre = metaData.get(Meta.GENRE);
         String coverPath = metaData.get(Meta.ARTWORK_URL);
         byte[] cover = null;
         if (coverPath != null) {
-            coverPath = coverPath.substring(7);
+            coverPath = coverPath.substring(BEGIN_OF_PATH);
             coverPath = coverPath.replace("%20", " ");
             File coverFile = new File(coverPath);
             try {
@@ -75,5 +77,17 @@ public class SongFactory {
             }
         }
         return new Song(filepath, title, artist, album, genre, length, cover);
+    }
+
+
+    private String removeSpaceAtBegin(String string) {
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) != ' ') {
+                break;
+            } else {
+                string = string.substring(i + 2);
+            }
+        }
+        return string;
     }
 }

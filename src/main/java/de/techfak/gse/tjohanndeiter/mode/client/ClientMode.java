@@ -1,11 +1,13 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
+import de.techfak.gse.tjohanndeiter.controller.CurrentSongController;
 import de.techfak.gse.tjohanndeiter.controller.NetworkController;
+import de.techfak.gse.tjohanndeiter.controller.TableController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.client.Client;
 import de.techfak.gse.tjohanndeiter.model.voting.ClientStrategy;
-import de.techfak.gse.tjohanndeiter.controller.TableController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -30,11 +32,22 @@ public class ClientMode extends Application implements ProgramMode {
         final Pane root = fxmlLoader.load();
         final TableController tableController = fxmlLoader.getController();
         tableController.init(clientStrategy);
-        tableController.changePanelPane(networkRoot);
+        tableController.setControlPane(networkRoot);
         client.addPropertyChangeListener(tableController);
         networkController.init(client);
+
+        final FXMLLoader currentSongLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("CurrentSong.fxml"));
+        final Pane currentSongPane = currentSongLoader.load();
+        final CurrentSongController currentSongController = currentSongLoader.getController();
+        tableController.setCurrentSongPane(currentSongPane);
+        client.addPropertyChangeListener(currentSongController);
         final Scene scene = new Scene(root);
-        stage.setOnCloseRequest(windowEvent -> client.endConnection());
+        stage.setOnCloseRequest(windowEvent -> {
+            client.kill();
+            currentSongController.end();
+            Platform.exit();
+        });
         stage.setTitle("GSERadio Client mode");
         stage.setScene(scene);
         stage.show();

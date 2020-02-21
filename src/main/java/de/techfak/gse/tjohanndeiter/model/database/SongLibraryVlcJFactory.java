@@ -1,7 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.database;
 
 import de.techfak.gse.tjohanndeiter.model.exception.database.SongAlreadyExitsException;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ParseException;
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.exception.shutdown.NoMp3FilesException;
 import de.techfak.gse.tjohanndeiter.model.exception.shutdown.VlcJException;
@@ -23,7 +22,7 @@ public class SongLibraryVlcJFactory implements SongLibraryFactory {
      * metadata and creates {@linkplain SongLibrary} with {@linkplain Song} objects.
      *
      * @return {@linkplain SongLibrary} with song objects
-     * @throws ParseException if no mp3 files in folder
+     * @throws NoMp3FilesException if no mp3 files in folder
      */
 
     @Override
@@ -62,8 +61,7 @@ public class SongLibraryVlcJFactory implements SongLibraryFactory {
         for (final File file : mp3FilesInFolder) {
             try {
                 songLibrary.addSong(songFactory.createSong(file, mediaPlayerFactory));
-            } catch (SongAlreadyExitsException e) {
-                continue;
+            } catch (SongAlreadyExitsException ignored) {
             }
         }
 

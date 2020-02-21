@@ -12,8 +12,11 @@ import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.SongUploadJSonParser;
 import de.techfak.gse.tjohanndeiter.model.json.SongUploadParser;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParser;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
@@ -41,6 +44,7 @@ public class SessionHandler implements PropertyChangeListener {
     public static final String STREAMING_ADDRESS = "/streamingAddress";
     public static final String STREAMING_PORT = "/streamingPort";
     public static final String HANDSHAKE = "/handshake";
+    public static final String PLAY_TIME = "/playTime";
     public static final String RESPONSE_HANDSHAKE = "GSERadio!";
     public static final String VOTED_SONG_PARAM = "votedSong";
 
@@ -50,20 +54,25 @@ public class SessionHandler implements PropertyChangeListener {
     private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
     private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
     private SongUploadJSonParser songUploadJSonParser = new SongUploadParser();
+    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
     private SongFactory songFactory = new SongFactory();
+
     private String addressStream;
     private String playlistJson;
     private String currentSongJson;
+
     private int portStream;
     private VoteList voteList;
     private SongLibrary songLibrary;
+    private MusicPlayer musicPlayer;
 
     public SessionHandler(final String addressStream, final int portStream,
-                          final SongLibrary songLibrary, final VoteList voteList) {
+                          final SongLibrary songLibrary, final VoteList voteList, final MusicPlayer musicPlayer) {
         this.addressStream = addressStream;
         this.portStream = portStream;
         this.songLibrary = songLibrary;
         this.voteList = voteList;
+        this.musicPlayer = musicPlayer;
         voteList.addPropertyChangeListener(this);
     }
 
@@ -77,6 +86,8 @@ public class SessionHandler implements PropertyChangeListener {
                     break;
                 case Playlist.NEW_SONG:
                     currentSongJson = songJsonParser.toJson((QueueSong) propertyChangeEvent.getNewValue());
+                    break;
+                default:
                     break;
             }
         } catch (JsonProcessingException e) {
@@ -107,6 +118,9 @@ public class SessionHandler implements PropertyChangeListener {
             case HANDSHAKE:
                 response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, RESPONSE_HANDSHAKE);
                 break;
+            case PLAY_TIME:
+                response = getTimeBean();
+                break;
             default:
                 if (session.getParameters().get(VOTED_SONG_PARAM) != null) {
                     response = handleVoteForSong(session);
@@ -114,6 +128,15 @@ public class SessionHandler implements PropertyChangeListener {
                 break;
         }
         return response;
+    }
+
+    private Response getTimeBean() {
+        try {
+            return newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_PLAINTEXT,
+                    timeBeanJsonParser.toJson(musicPlayer.createPlayTimeBean()));
+        } catch (JsonProcessingException e) {
+            return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "Json failed");
+        }
     }
 
     private Response getPortStream() {

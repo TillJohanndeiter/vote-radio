@@ -17,7 +17,6 @@ public class ReceiverPlayer extends MusicPlayer {
         }
     }
 
-
     @Override
     public void startPlay() {
         super.startPlay();

@@ -60,7 +60,7 @@ public class ServerFactory extends ProgramModeFactory {
             musicPlayer = new OfflinePlayer(voteList);
         }
         programMode = new ServerMode(LOCALHOST, restPort, musicPlayer,
-                new SessionHandler(multicast, streamPort, songLibrary, voteList));
+                new SessionHandler(multicast, streamPort, songLibrary, voteList, musicPlayer));
         return programMode;
     }
 

@@ -1,10 +1,13 @@
 package de.techfak.gse.tjohanndeiter.model.client;
 
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParser;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
+import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.server.SessionHandler;
 
@@ -22,6 +25,7 @@ class HttpRequester {
     private HttpClient client = HttpClient.newHttpClient();
     private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
     private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
+    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
 
     private String restAddress;
     private String port;
@@ -84,5 +88,9 @@ class HttpRequester {
     void voteById(final int id) throws IOException, InterruptedException {
         final HttpRequest httpRequest = getRequest("/?" + SessionHandler.VOTED_SONG_PARAM + "=" + id);
         client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public TimeBean getPlayedTime() throws IOException, InterruptedException {
+        return timeBeanJsonParser.toTimeBean(getRequestBody(SessionHandler.PLAY_TIME));
     }
 }

@@ -38,7 +38,7 @@ public class TerminalController implements AutoCloseable {
     }
 
     void interpretUserInput(final String currentInput) {
-        switch (currentInput) {//NOPMD
+        switch (currentInput) { //NOPMD
             case SONG_INF_CMD:
                 printSongInfo();
                 break;

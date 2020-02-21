@@ -18,9 +18,9 @@ public class Song { //NOPMD
     private String artist;
     private String album;
     private String genre;
-    private int length;
+    private long length;
     private byte[] cover;
-    
+
     public Song() {
 
     }
@@ -36,7 +36,7 @@ public class Song { //NOPMD
      * @param length   length of song
      */
     public Song(final String filepath, final String title, final String artist, final String album,
-                final String genre, final int length, final byte[] cover) {
+                final String genre, final long length, final byte[] cover) {
         this.filepath = (filepath == null) ? NO_METADATA : filepath;
         this.title = (title == null) ? NO_METADATA : title;
         this.artist = (artist == null) ? NO_METADATA : artist;
@@ -112,7 +112,7 @@ public class Song { //NOPMD
         return artist;
     }
 
-    public int getLength() {
+    public long getLength() {
         return length;
     }
 

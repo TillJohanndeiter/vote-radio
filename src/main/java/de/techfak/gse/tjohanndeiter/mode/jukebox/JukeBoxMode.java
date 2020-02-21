@@ -1,18 +1,18 @@
 package de.techfak.gse.tjohanndeiter.mode.jukebox;
 
+import de.techfak.gse.tjohanndeiter.controller.CurrentSongController;
 import de.techfak.gse.tjohanndeiter.controller.JukeBoxController;
-import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
-import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
-import de.techfak.gse.tjohanndeiter.model.voting.JukeBoxStrategy;
 import de.techfak.gse.tjohanndeiter.controller.TableController;
+import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
+import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-
+import de.techfak.gse.tjohanndeiter.model.voting.JukeBoxStrategy;
+import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -35,6 +35,8 @@ public class JukeBoxMode extends Application implements ProgramMode {
 
     }
 
+    //TODO: change to static setter instead of rape constructor
+
     JukeBoxMode(final String fp) {
         filepath = fp;
     }
@@ -54,10 +56,22 @@ public class JukeBoxMode extends Application implements ProgramMode {
         final Pane panelRoot = controlPanelLoader.load();
         final JukeBoxController jukeBoxController = controlPanelLoader.getController();
         jukeBoxController.init(musicPlayer);
-        tableController.changePanelPane(panelRoot);
+        tableController.setControlPane(panelRoot);
+
+
+        final FXMLLoader currentSongLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("CurrentSong.fxml"));
+        final Pane currentSongPane = currentSongLoader.load();
+        final CurrentSongController  currentSongController = currentSongLoader.getController();
+        tableController.setCurrentSongPane(currentSongPane);
+        musicPlayer.addPropertyChangeListener(currentSongController);
+        voteList.addPropertyChangeListener(currentSongController);
 
         final Scene scene = new Scene(root);
-        stage.setOnCloseRequest(we -> musicPlayer.end());
+        stage.setOnCloseRequest(windowEvent -> {
+            musicPlayer.end();
+            currentSongController.end();
+        });
         stage.setTitle("JukeBox Mode");
         stage.setScene(scene);
         stage.show();
@@ -67,7 +81,7 @@ public class JukeBoxMode extends Application implements ProgramMode {
     public void startProgram() throws ShutdownException {
         final SongLibraryFactory songLibraryFactory = new SongLibraryVlcJFactory();
         final SongLibrary songLibrary = songLibraryFactory.createSongLibrary(new File(filepath));
-        voteList = new VoteList(songLibrary, 4);
+        voteList = new VoteList(songLibrary, 1);
         voteStrategy = new JukeBoxStrategy(voteList);
         musicPlayer = new OfflinePlayer(voteList);
         Application.launch();

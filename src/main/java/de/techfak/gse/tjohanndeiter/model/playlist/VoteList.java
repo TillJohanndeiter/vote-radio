@@ -134,7 +134,8 @@ public class VoteList extends Playlist {
     private void correctNextPlay() {
         for (int i = 0; i < songList.size() - 2; i++) {
             QueueSong temp = songList.get(i);
-            while (temp.getVoteCount() < songList.get(songList.indexOf(temp) + 1).getVoteCount() && allowedReplay(songList.get(songList.indexOf(temp) + 1))) {
+            while (temp.getVoteCount() < songList.get(songList.indexOf(temp) + 1).getVoteCount()
+                    && allowedReplay(songList.get(songList.indexOf(temp) + 1))) {
                 backwardSwap(temp);
             }
         }

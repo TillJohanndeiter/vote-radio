@@ -15,6 +15,7 @@ public class Client {
     public static final String INVALID_SERVER = "invalidServer";
     public static final String CONNECTED = "successfulConnection";
     public static final String CANCELED_CONNECTION = "canceledConnection";
+    public static final String NEW_SONG = "newReceivedSong";
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private HttpRequester httpRequester;
@@ -48,16 +49,7 @@ public class Client {
         try {
             httpRequester = new HttpRequester(restAddress, port);
             if (httpRequester.validConnection()) {
-                receiverPlayer = new ReceiverPlayer(httpRequester.getMusicAddress(), httpRequester.getMusicPort());
-                requesterStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
-                for (final PropertyChangeListener listener : listeners) {
-                    receiverPlayer.addPropertyChangeListener(listener);
-                    requesterStrategy.addPropertyChangeListener(listener);
-                }
-                receiverPlayer.startPlay();
-                connected = true;
-                support.firePropertyChange(CONNECTED, null, restAddress);
-
+                establishConnection();
             } else {
                 connected = false;
                 support.firePropertyChange(INVALID_URL, null, restAddress);
@@ -68,6 +60,22 @@ public class Client {
         }  catch (IOException | InterruptedException e) {
             connected = false;
             support.firePropertyChange(INVALID_SERVER, null, restAddress);
+        }
+    }
+
+    private void establishConnection() throws IOException, InterruptedException, URISyntaxException {
+        receiverPlayer = new ReceiverPlayer(httpRequester.getMusicAddress(), httpRequester.getMusicPort());
+        requesterStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
+        addObservers();
+        receiverPlayer.startPlay();
+        connected = true;
+        support.firePropertyChange(CONNECTED, null, restAddress);
+    }
+
+    private void addObservers() {
+        for (final PropertyChangeListener listener : listeners) {
+            receiverPlayer.addPropertyChangeListener(listener);
+            requesterStrategy.addPropertyChangeListener(listener);
         }
     }
 
@@ -85,5 +93,10 @@ public class Client {
         }
         connected = false;
         support.firePropertyChange(CANCELED_CONNECTION, false, true);
+    }
+
+    public void kill() {
+        endConnection();
+        receiverPlayer.end();
     }
 }

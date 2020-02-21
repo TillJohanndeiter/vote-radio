@@ -1,9 +1,10 @@
 package de.techfak.gse.tjohanndeiter.model.client;
 
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
+import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-import de.techfak.gse.tjohanndeiter.model.server.SocketServer;
+import de.techfak.gse.tjohanndeiter.model.server.ServerSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -12,13 +13,14 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 
 public class SocketStrategy extends WebSocketClient implements RequesterStrategy {
 
 
     private static final String REGISTER_MESSAGE = "reg";
-    private static final int WAIT_INTERVAL = 250;
+    private static final int WAIT_INTERVAL = 50;
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private HttpRequester httpRequester;
@@ -38,6 +40,11 @@ public class SocketStrategy extends WebSocketClient implements RequesterStrategy
     @Override
     public void stop() {
         close();
+        try {
+            closeBlocking();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -48,17 +55,33 @@ public class SocketStrategy extends WebSocketClient implements RequesterStrategy
     @Override
     public void onMessage(final String message) {
         try {
-            if (message.equals(SocketServer.CHANGED_PLAYLIST)) {
+            if (message.equals(ServerSocket.CHANGED_PLAYLIST)) {
                 final VoteList voteList = httpRequester.getPlaylist();
                 support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, voteList);
-            } else if (message.equals(SocketServer.CHANGED_SONG)) {
-                final QueueSong queueSong = httpRequester.getCurrentSong();
-                support.firePropertyChange(Playlist.NEW_SONG, null, queueSong);
+            } else if (message.equals(ServerSocket.CHANGED_SONG)) {
+                fireNewSong();
+
             }
         } catch (IOException | InterruptedException e) {
             support.firePropertyChange(JSON_ERROR, REGISTER_MESSAGE, null);
+            e.printStackTrace();
         }
         answer(message);
+    }
+
+    private void fireNewSong() throws IOException, InterruptedException {
+        final QueueSong queueSong = httpRequester.getCurrentSong();
+        final TimeBean timeBean = httpRequester.getPlayedTime();
+        ServerResponse response = new ServerResponse(queueSong, timeBean);
+        Thread thread = new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            support.firePropertyChange(Client.NEW_SONG, null, response);
+        });
+        thread.start();
     }
 
     private void answer(final String message) {
@@ -77,11 +100,6 @@ public class SocketStrategy extends WebSocketClient implements RequesterStrategy
     public void onClose(final int i, final String s, final boolean b) {
         support.firePropertyChange(Client.CANCELED_CONNECTION, null, null);
         close();
-        try {
-            closeBlocking();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

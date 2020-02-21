@@ -34,7 +34,8 @@ public abstract class ProgramModeFactory {
 
     private boolean invalidArgCombination(final String... args) {
         final List<String> argList = Arrays.asList(args);
-        final boolean containsServerArgs = argList.stream().anyMatch(s -> s.startsWith(STREAMING_PORT_ARG) || s.startsWith(PORT_ARG)
+        final boolean containsServerArgs = argList.stream().anyMatch(s -> s.startsWith(STREAMING_PORT_ARG)
+                || s.startsWith(PORT_ARG)
                 || s.startsWith(STREAMING_ADDRESS_ARG));
         return argList.contains(GSERadio.SERVER_ARG) && argList.contains(GSERadio.CLIENT_ARG)
                 || argList.contains(GSERadio.SERVER_ARG) && argList.contains(GSERadio.JUKEBOX_ARG)

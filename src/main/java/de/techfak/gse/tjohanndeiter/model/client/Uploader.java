@@ -28,7 +28,8 @@ public class Uploader {
         support.addPropertyChangeListener(listener);
     }
 
-    public void upload(final File file, final String ipAddress, final String restPort) throws IOException, InterruptedException {
+    public void upload(final File file, final String ipAddress, final String restPort)
+            throws IOException, InterruptedException {
 
         if (file != null && file.getAbsolutePath().toLowerCase().endsWith(".mp3")) {
 

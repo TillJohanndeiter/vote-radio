@@ -9,16 +9,16 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 
-public class SocketServer extends NanoWSD.WebSocket {
+public class ServerSocket extends NanoWSD.WebSocket {
 
     public static final String CHANGED_PLAYLIST = "plyCh";
     public static final String CHANGED_SONG = "songCh";
     private static final String DEFAULT_MESSAGE_SOCKET = "nth";
 
     private Queue<String> queue = new PriorityQueue<>();
-    private List<SocketServer> sockets;
+    private List<ServerSocket> sockets;
 
-    SocketServer(final NanoHTTPD.IHTTPSession handshakeRequest, final List<SocketServer> sockets) {
+    ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> sockets) {
         super(handshakeRequest);
         this.sockets = sockets;
     }

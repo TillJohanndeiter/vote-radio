@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class SocketRestServer extends NanoWSD implements RestServer, PropertyChangeListener {
 
     private SessionHandler sessionHandler;
-    private ArrayList<SocketServer> sockets = new ArrayList<>();
+    private ArrayList<ServerSocket> sockets = new ArrayList<>();
 
 
     public SocketRestServer(final String address, final int port, final SessionHandler sessionHandler) {
@@ -26,7 +26,7 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
 
     @Override
     protected WebSocket openWebSocket(final IHTTPSession ihttpSession) {
-        return new SocketServer(ihttpSession, sockets);
+        return new ServerSocket(ihttpSession, sockets);
     }
 
 
@@ -55,10 +55,10 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
         switch (name) {
             case Playlist.PLAYLIST_CHANGE:
             case VoteList.VOTE_CHANGED:
-                setNextMessageForAllSockets(SocketServer.CHANGED_PLAYLIST);
+                setNextMessageForAllSockets(ServerSocket.CHANGED_PLAYLIST);
                 break;
             case Playlist.NEW_SONG:
-                setNextMessageForAllSockets(SocketServer.CHANGED_SONG);
+                setNextMessageForAllSockets(ServerSocket.CHANGED_SONG);
                 break;
             default:
                 break;
@@ -76,7 +76,7 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
     }
 
     private void setNextMessageForAllSockets(final String message) {
-        for (final SocketServer socket : sockets) {
+        for (final ServerSocket socket : sockets) {
             socket.setNextSocketMessage(message);
         }
     }

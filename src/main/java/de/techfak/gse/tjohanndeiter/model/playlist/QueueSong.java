@@ -10,7 +10,7 @@ public class QueueSong extends Song {
     private int playsBeforeReplay;
     private int id;
 
-    private QueueSong() {
+    public QueueSong() {
         super();
     }
 
@@ -33,6 +33,7 @@ public class QueueSong extends Song {
         id = queueSong.id;
         playsBeforeReplay = queueSong.playsBeforeReplay;
     }
+
 
     public int getVoteCount() {
         return voteCount;

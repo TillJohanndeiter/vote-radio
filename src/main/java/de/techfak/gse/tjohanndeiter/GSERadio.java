@@ -42,7 +42,7 @@ public final class GSERadio {
             } else if (args.length > 0 && args[0].equals(SERVER_ARG)) {
                 factory = new ServerFactory();
             }
-        
+
             ProgramMode programMode = factory.createProgramMode(args);
             programMode.startProgram();
         } catch (final ShutdownException e) {
