@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
+import de.techfak.gse.tjohanndeiter.controller.cmd.ServerController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
@@ -10,7 +11,13 @@ import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.player.StreamPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import de.techfak.gse.tjohanndeiter.model.server.ModelConnector;
 import de.techfak.gse.tjohanndeiter.model.server.SessionHandler;
+import de.techfak.gse.tjohanndeiter.model.server.SocketRestServer;
+import de.techfak.gse.tjohanndeiter.model.server.StreamUrl;
+import de.techfak.gse.tjohanndeiter.model.server.UploadRequester;
+import de.techfak.gse.tjohanndeiter.model.voting.JukeBoxStrategy;
+import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 
 import java.io.File;
 
@@ -59,8 +66,21 @@ public class ServerFactory extends ProgramModeFactory {
         } else {
             musicPlayer = new OfflinePlayer(voteList);
         }
-        programMode = new ServerMode(LOCALHOST, restPort, musicPlayer,
-                new SessionHandler(multicast, streamPort, songLibrary, voteList, musicPlayer));
+
+
+
+        final StreamUrl streamLocation = new StreamUrl(multicast, streamPort);
+        final VoteStrategy voteStrategy = new JukeBoxStrategy(voteList);
+        final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
+        final ModelConnector modelObserver = new ModelConnector(musicPlayer);
+        voteList.addPropertyChangeListener(modelObserver);
+        final SessionHandler sessionHandler = new SessionHandler(streamLocation, voteStrategy,
+                uploadRequester, modelObserver);
+        final SocketRestServer socketRestServer = new SocketRestServer(LOCALHOST, restPort, sessionHandler);
+        final ServerController controller = new ServerController(voteList, socketRestServer);
+        final Thread controllerThread = new Thread(controller::inputLoop);
+
+        programMode = new ServerMode(socketRestServer, musicPlayer, controllerThread);
         return programMode;
     }
 

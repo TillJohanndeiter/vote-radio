@@ -1,32 +1,30 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
-import de.techfak.gse.tjohanndeiter.controller.cmd.ServerController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
-import de.techfak.gse.tjohanndeiter.model.server.SessionHandler;
-import de.techfak.gse.tjohanndeiter.model.server.SocketRestServer;
+import de.techfak.gse.tjohanndeiter.model.server.RestServer;
 
 /**
  * Mode for server.
  */
 public class ServerMode implements ProgramMode {
 
-    private SocketRestServer server;
+    private RestServer restServer;
     private MusicPlayer musicPlayer;
+    private Thread controllerThread;
 
 
-    ServerMode(final String address, final int restPort, final MusicPlayer musicPlayer,
-               final SessionHandler sessionHandler) {
+    ServerMode(final RestServer restServer, final MusicPlayer musicPlayer, final Thread controllerThread) {
         this.musicPlayer = musicPlayer;
-        server = new SocketRestServer(address, restPort, sessionHandler);
-        sessionHandler.getVoteList().addPropertyChangeListener(server);
-        new Thread(() -> new ServerController(sessionHandler.getVoteList(), server).inputLoop()).start();
+        this.restServer = restServer;
+        this.controllerThread = controllerThread;
     }
 
     @Override
     public void startProgram() throws ShutdownException {
-        server.startServer();
+        restServer.startServer();
         musicPlayer.startPlay();
+        controllerThread.start();
     }
 }

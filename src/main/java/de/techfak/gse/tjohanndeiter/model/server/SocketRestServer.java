@@ -20,7 +20,6 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
     public SocketRestServer(final String address, final int port, final SessionHandler sessionHandler) {
         super(address, port);
         this.sessionHandler = sessionHandler;
-        sessionHandler.getVoteList().addPropertyChangeListener(this);
     }
 
 

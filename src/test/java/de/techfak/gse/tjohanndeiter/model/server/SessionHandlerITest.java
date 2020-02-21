@@ -19,12 +19,14 @@ class SessionHandlerITest {
 
     private Song song = new Song("test", "test", "test", "test", "test", 3);
     private VoteList voteList = new VoteList(List.of(new QueueSong(song, 1,0)));
+    private ModelConnector modelObserver = new ModelConnector(null);
     private PollingRestServer pollingServer = new PollingRestServer(LOCALHOST, 8080,
-            new SessionHandler(null, 5050, null, voteList, null));
+            new SessionHandler(null,null, null, modelObserver));
 
     @BeforeEach
     private void startServer() throws IOException { //NOPMD
         pollingServer.start();
+        voteList.addPropertyChangeListener(modelObserver);
 
     }
 
