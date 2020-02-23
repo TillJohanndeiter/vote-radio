@@ -14,18 +14,22 @@ import java.util.ArrayList;
 public class SocketRestServer extends NanoWSD implements RestServer, PropertyChangeListener {
 
     private SessionHandler sessionHandler;
+    private UserManger userManger;
     private ArrayList<ServerSocket> sockets = new ArrayList<>();
 
 
-    public SocketRestServer(final String address, final int port, final SessionHandler sessionHandler) {
-        super(address, port);
+    //TODO: May wrap address and port into own class or look for classes in standard library
+    public SocketRestServer(final String address, final int port, final SessionHandler sessionHandler,
+                            final UserManger userManger) {
+        super(port);
         this.sessionHandler = sessionHandler;
+        this.userManger = userManger;
     }
 
 
     @Override
     protected WebSocket openWebSocket(final IHTTPSession ihttpSession) {
-        return new ServerSocket(ihttpSession, sockets);
+        return new ServerSocket(ihttpSession, sockets, userManger);
     }
 
 

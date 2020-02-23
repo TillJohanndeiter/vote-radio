@@ -4,12 +4,15 @@ import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.json.UserJsonParser;
+import de.techfak.gse.tjohanndeiter.model.json.UserJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.server.SessionHandler;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,10 +25,11 @@ class HttpRequester {
     private static final String HTTP = "http://";
     private static final int STATUS_OK = 200;
 
-    private HttpClient client = HttpClient.newHttpClient();
+    private HttpClient httpClient = HttpClient.newHttpClient();
     private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
     private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
     private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
+    private UserJsonParser userJsonParser = new UserJsonParserImpl();
 
     private String restAddress;
     private String port;
@@ -47,7 +51,7 @@ class HttpRequester {
     private String getJsonString(final String subAddress) throws IOException, InterruptedException {
         final HttpRequest httpRequest = HttpRequest.newBuilder().uri(
                 URI.create(HTTP + restAddress + ':' + port + subAddress)).GET().build();
-        return client.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
+        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
     }
 
     VoteList getPlaylist() throws IOException, InterruptedException {
@@ -61,7 +65,7 @@ class HttpRequester {
 
     boolean validConnection() throws IOException, InterruptedException, IllegalArgumentException {
         final HttpRequest httpRequest = getRequest(SessionHandler.HANDSHAKE);
-        final HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        final HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         return response.statusCode() == STATUS_OK && response.body().equals(SessionHandler.RESPONSE_HANDSHAKE);
     }
 
@@ -81,16 +85,20 @@ class HttpRequester {
 
     private String getRequestBody(final String subAddress) throws IOException, InterruptedException {
         final HttpRequest httpRequest = getRequest(subAddress);
-        final HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        final HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         return response.body();
     }
 
-    void voteById(final int id) throws IOException, InterruptedException {
+    int voteById(final int id) throws IOException, InterruptedException {
         final HttpRequest httpRequest = getRequest("/?" + SessionHandler.VOTED_SONG_PARAM + "=" + id);
-        client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).statusCode();
     }
 
     public TimeBean getPlayedTime() throws IOException, InterruptedException {
         return timeBeanJsonParser.toTimeBean(getRequestBody(SessionHandler.PLAY_TIME));
+    }
+
+    User getUser() throws IOException, InterruptedException {
+        return userJsonParser.toUser(getRequestBody(SessionHandler.USER));
     }
 }

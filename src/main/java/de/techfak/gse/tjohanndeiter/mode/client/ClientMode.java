@@ -3,8 +3,10 @@ package de.techfak.gse.tjohanndeiter.mode.client;
 import de.techfak.gse.tjohanndeiter.controller.CurrentSongController;
 import de.techfak.gse.tjohanndeiter.controller.NetworkController;
 import de.techfak.gse.tjohanndeiter.controller.TableController;
+import de.techfak.gse.tjohanndeiter.controller.VolumeController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.client.Client;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.ClientStrategy;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ClientMode extends Application implements ProgramMode {
+
 
     @Override
     public void start(final Stage stage) throws IOException {
@@ -31,7 +34,7 @@ public class ClientMode extends Application implements ProgramMode {
                 getContextClassLoader().getResource("Table.fxml"));
         final Pane root = fxmlLoader.load();
         final TableController tableController = fxmlLoader.getController();
-        tableController.init(clientStrategy);
+        tableController.init(clientStrategy, User.CLIENT);
         tableController.setControlPane(networkRoot);
         client.addPropertyChangeListener(tableController);
         networkController.init(client);
@@ -42,6 +45,16 @@ public class ClientMode extends Application implements ProgramMode {
         final CurrentSongController currentSongController = currentSongLoader.getController();
         tableController.setCurrentSongPane(currentSongPane);
         client.addPropertyChangeListener(currentSongController);
+
+        final FXMLLoader volumePanelLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("VolumePanel.fxml"));
+        final Pane volumePane = volumePanelLoader.load();
+        final VolumeController volumeController = volumePanelLoader.getController();
+        tableController.setVolumePane(volumePane);
+        volumeController.init(client.getReceiverPlayer());
+        client.addPropertyChangeListener(volumeController);
+
+
         final Scene scene = new Scene(root);
         stage.setOnCloseRequest(windowEvent -> {
             client.kill();

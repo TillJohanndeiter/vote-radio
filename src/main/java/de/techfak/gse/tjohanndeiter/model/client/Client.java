@@ -16,6 +16,10 @@ public class Client {
     public static final String CONNECTED = "successfulConnection";
     public static final String CANCELED_CONNECTION = "canceledConnection";
     public static final String NEW_SONG = "newReceivedSong";
+    public static final String NEW_PLAYER = "newPlayer";
+    public static final String SUCCESS_VOTED = "sucVoted";
+    public static final String USER_INIT = "newUser";
+    private static final int STATUS_OK = 200;
 
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private HttpRequester httpRequester;
@@ -39,7 +43,10 @@ public class Client {
 
     public void voteById(final int id) {
         try {
-            httpRequester.voteById(id);
+            int code = httpRequester.voteById(id);
+            if (code == STATUS_OK) {
+                support.firePropertyChange(SUCCESS_VOTED, null, id);
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace(); //NOPMD
         }
@@ -68,6 +75,7 @@ public class Client {
         requesterStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
         addObservers();
         receiverPlayer.startPlay();
+        support.firePropertyChange(NEW_PLAYER, null, receiverPlayer);
         connected = true;
         support.firePropertyChange(CONNECTED, null, restAddress);
     }
@@ -98,5 +106,9 @@ public class Client {
     public void kill() {
         endConnection();
         receiverPlayer.end();
+    }
+
+    public ReceiverPlayer getReceiverPlayer() {
+        return receiverPlayer;
     }
 }

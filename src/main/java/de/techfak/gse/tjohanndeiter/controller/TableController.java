@@ -1,10 +1,13 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
+import de.techfak.gse.tjohanndeiter.model.client.Client;
+import de.techfak.gse.tjohanndeiter.model.exception.client.UserVotedAlreadyException;
 import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import de.techfak.gse.tjohanndeiter.view.ActionButtonTableCell;
 import javafx.beans.property.SimpleStringProperty;
@@ -45,7 +48,7 @@ public class TableController implements PropertyChangeListener {
     private TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
 
     @FXML
-    private TableColumn<QueueSong, String> voteColumn = new TableColumn<>(VOTE_COUNT);
+    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<QueueSong, Button>(VOTE_COUNT);
 
     @FXML
     private TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
@@ -60,10 +63,13 @@ public class TableController implements PropertyChangeListener {
     @FXML
     private AnchorPane currentSongPane = new AnchorPane();
 
+    @FXML
+    private AnchorPane volumePane = new AnchorPane();
+
     private ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
 
     private VoteStrategy voteStrategy;
-
+    private User user;
 
     @Override
     public void propertyChange(final PropertyChangeEvent event) {
@@ -80,6 +86,10 @@ public class TableController implements PropertyChangeListener {
             case MusicPlayer.END_PLAYER:
                 observedSongs.clear();
                 break;
+            case Client.USER_INIT:
+                user = (User) event.getNewValue();
+                ActionButtonTableCell.setUser(user);
+                break;
             default:
                 break;
         }
@@ -91,8 +101,9 @@ public class TableController implements PropertyChangeListener {
      *
      * @param voteStrategy voteStrategy
      */
-    public void init(final VoteStrategy voteStrategy) {
+    public void init(final VoteStrategy voteStrategy, final User user) {
         this.voteStrategy = voteStrategy;
+        this.user = user;
         tableViewInit();
     }
 
@@ -108,12 +119,13 @@ public class TableController implements PropertyChangeListener {
     private void setCellValueFactories() {
         tileColumn.setCellValueFactory(new PropertyValueFactory<>(TITLE));
         artistColumn.setCellValueFactory(new PropertyValueFactory<>(ARTIST));
-        voteColumn.setCellValueFactory(new PropertyValueFactory<>(VOTE_COUNT));
+        voteColumn.setCellValueFactory(new PropertyValueFactory<QueueSong, Button>(VOTE_COUNT));
         playableInColumn.setCellValueFactory(new PropertyValueFactory<>(PLAYABLE_IN_COUNT));
         voteButtonColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Click to vote", (QueueSong song) -> {
             voteForSong(song);
             return song;
         }));
+
         lengthColumn.setCellValueFactory(songCallback ->
                 new SimpleStringProperty(Controllers.generateTimeFormat(songCallback.getValue().getLength())));
     }
@@ -129,8 +141,8 @@ public class TableController implements PropertyChangeListener {
 
     private void voteForSong(final QueueSong song) {
         try {
-            voteStrategy.voteById(song.getId());
-        } catch (SongIdNotAvailable e) {
+            voteStrategy.voteById(song.getId(), user);
+        } catch (SongIdNotAvailable | UserVotedAlreadyException e) {
             System.out.print(e.getMessage()); //NOPMD
         }
     }
@@ -141,6 +153,10 @@ public class TableController implements PropertyChangeListener {
 
     public void setCurrentSongPane(final Pane pane) {
         currentSongPane.getChildren().add(pane);
+    }
+
+    public void setVolumePane(final Pane pane) {
+        volumePane.getChildren().add(pane);
     }
 
 }

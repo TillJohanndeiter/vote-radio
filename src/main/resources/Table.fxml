@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane prefHeight="650.0" prefWidth="987.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.TableController">
+<GridPane prefHeight="650.0" prefWidth="1023.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.TableController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="910.0" minWidth="10.0" prefWidth="823.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="315.0" minWidth="10.0" prefWidth="161.0" />
@@ -13,31 +13,30 @@
     </rowConstraints>
     <GridPane prefHeight="625.0" prefWidth="823.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints maxHeight="471.0" minHeight="10.0" prefHeight="434.0" vgrow="ALWAYS"/>
-            <RowConstraints maxHeight="285.0" minHeight="10.0" prefHeight="148.0" vgrow="ALWAYS"/>
+            <RowConstraints maxHeight="471.0" minHeight="10.0" prefHeight="434.0" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="285.0" minHeight="10.0" prefHeight="148.0" vgrow="ALWAYS" />
         </rowConstraints>
         <Pane prefHeight="450.0" prefWidth="823.0">
             <TableView fx:id="table" minWidth="48.0" prefHeight="443.0" prefWidth="823.0">
                 <columns>
-                    <TableColumn id="tileColumn" fx:id="tileColumn" prefWidth="272.0" text="Title"/>
-                    <TableColumn id="artistColumn" fx:id="artistColumn" prefWidth="166.0" text="Artist"/>
-                    <TableColumn id="lengthColumn" fx:id="lengthColumn" prefWidth="162.0" text="Length"/>
-                    <TableColumn id="voteColumn" fx:id="playableInColumn" minWidth="0.0" prefWidth="75.0"
-                                 text="Playable"/>
-                    <TableColumn id="voteColumn" fx:id="voteColumn" minWidth="0.0" prefWidth="58.0" text="Votes"/>
-                    <TableColumn id="voteColumn" fx:id="voteButtonColumn" minWidth="0.0" prefWidth="91.0"
-                                 text="Click To Vote"/>
+                    <TableColumn id="tileColumn" fx:id="tileColumn" prefWidth="272.0" text="Title" />
+                    <TableColumn id="artistColumn" fx:id="artistColumn" prefWidth="166.0" text="Artist" />
+                    <TableColumn id="lengthColumn" fx:id="lengthColumn" prefWidth="162.0" text="Length" />
+                    <TableColumn id="voteColumn" fx:id="playableInColumn" minWidth="0.0" prefWidth="75.0" text="Playable" />
+                    <TableColumn id="voteColumn" fx:id="voteColumn" minWidth="0.0" prefWidth="58.0" text="Votes" />
+                    <TableColumn id="voteColumn" fx:id="voteButtonColumn" minWidth="0.0" prefWidth="91.0" text="Click To Vote" />
                 </columns>
             </TableView>
         </Pane>
         <Pane prefHeight="176.0" prefWidth="823.0" GridPane.rowIndex="1">
-            <AnchorPane fx:id="currentSongPane" prefHeight="148.0" prefWidth="823.0"/>
+            <AnchorPane fx:id="currentSongPane" prefHeight="148.0" prefWidth="823.0" />
         </Pane>
     </GridPane>
-    <Pane prefHeight="631.0" prefWidth="162.0" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
-       <AnchorPane fx:id="controlPane" layoutX="5.0" layoutY="123.0" prefHeight="148.0" prefWidth="154.0" />
+    <Pane prefHeight="600.0" prefWidth="210.0" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+      <AnchorPane fx:id="volumePane" layoutX="160.0" layoutY="14.0" prefHeight="148.0" prefWidth="26.0" />
+       <AnchorPane fx:id="controlPane" layoutX="8.0" layoutY="26.0" prefHeight="148.0" prefWidth="112.0" />
     </Pane>
 </GridPane>

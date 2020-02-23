@@ -1,12 +1,16 @@
 package de.techfak.gse.tjohanndeiter.model.playlist;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class QueueSong extends Song {
 
-    private int voteCount;
+    private List<Vote> votes = new ArrayList<>();
     private int playsBeforeReplay;
     private int id;
 
@@ -22,21 +26,24 @@ public class QueueSong extends Song {
      */
     public QueueSong(final Song song, final int id, final int playsBeforeReplay) {
         super(song);
-        voteCount = 0;
         this.id = id;
         this.playsBeforeReplay = playsBeforeReplay;
     }
 
     public QueueSong(final QueueSong queueSong) {
         super(queueSong);
-        voteCount = queueSong.voteCount;
+        votes = queueSong.votes;
         id = queueSong.id;
         playsBeforeReplay = queueSong.playsBeforeReplay;
     }
 
+    public List<Vote> getVotes() {
+        return votes;
+    }
 
+    @JsonIgnore
     public int getVoteCount() {
-        return voteCount;
+        return votes.size();
     }
 
     public int getPlaysBeforeReplay() {
@@ -53,12 +60,12 @@ public class QueueSong extends Song {
         }
     }
 
-    void increaseVote() {
-        voteCount++;
+    void increaseVote(final User user) {
+        votes.add(new Vote(user));
     }
 
     void resetVote() {
-        voteCount = 0;
+        votes.clear();
     }
 
 
@@ -68,7 +75,7 @@ public class QueueSong extends Song {
 
     @Override
     public String toString() {
-        return "voteCount=" + voteCount
+        return "voteCount=" + votes.toString()
                 + "ID=" + id + '}' + super.toString();
     }
 

@@ -2,43 +2,41 @@ package de.techfak.gse.tjohanndeiter.controller;
 
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class JukeBoxController implements PropertyChangeListener {
 
-    //TODO: Icons for stop and play
-
-    private static final String PAUSE_BUTTON_TEXT = "Pause";
+    private static final Image PAUSE_ICON = new Image("/pause.png");
+    private static final Image PLAY_ICON = new Image("/play.png");
 
     @FXML
-    private Button pauseOrResumeButton = new Button();
+    private ImageView startOrResume;
 
     private MusicPlayer musicPlayer;
 
     @Override
     public void propertyChange(final PropertyChangeEvent event) {
         switch (event.getPropertyName()) { //NOPMD
+            case MusicPlayer.END_PLAYER:
             case MusicPlayer.PAUSE_PLAYER:
-                pauseOrResumeButton.setText("Resume");
+                startOrResume.setImage(PLAY_ICON);
                 break;
             case MusicPlayer.RESUME_PLAYER:
-                pauseOrResumeButton.setText(PAUSE_BUTTON_TEXT);
+            case MusicPlayer.START_PLAYER:
+                startOrResume.setImage(PAUSE_ICON);
                 break;
             default:
+                break;
         }
     }
 
 
     public void init(final MusicPlayer musicPlayer) {
         this.musicPlayer = musicPlayer;
-    }
-
-    @FXML
-    public void startPlay() {
-        musicPlayer.startPlay();
     }
 
     @FXML
@@ -50,7 +48,7 @@ public class JukeBoxController implements PropertyChangeListener {
      * Set the play and resume button to pause or resume.
      */
     @FXML
-    public void pauseOrResume() {
+    public void changePlayState() {
         musicPlayer.changePlayingState();
     }
 }

@@ -47,10 +47,10 @@ public class StreamPlayer extends MusicPlayer {
         listPlayer.list().media().add(currentSong.getFilepath(), address);
 
         final Song song = playlist.getCurrentSong();
-        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
-        propertyChangeSupport.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
+        support.firePropertyChange(NEW_SONG, null, song);
+        support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
         listPlayer.controls().play();
-        propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
+        support.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
 
         setUpTimeTracker();

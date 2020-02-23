@@ -20,7 +20,7 @@ public class ReceiverPlayer extends MusicPlayer {
 
     @Override
     public void startPlay() {
-        propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
+        support.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
         mediaPlayer.submit(() -> mediaPlayer.media().play(completeAdress));
     }

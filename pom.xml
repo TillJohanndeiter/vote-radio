@@ -171,6 +171,9 @@
                         <version>5.6.0</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
             </plugin>
 
             <!-- Generate checkstyle warnings and report in validation phase -->

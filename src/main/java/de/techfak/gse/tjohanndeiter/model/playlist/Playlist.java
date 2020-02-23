@@ -44,6 +44,7 @@ public abstract class Playlist {
 
     public void addSong(final Song song) {
         songList.add(song);
+        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
 }

@@ -17,11 +17,12 @@ public abstract class MusicPlayer {
     public static final String PAUSE_PLAYER = "pausePlayer";
     public static final String RESUME_PLAYER = "resumePlayer";
     public static final String START_PLAYER = "startPlayer";
-    public static final String NEW_SONG = "NEW_SONG";
+    public static final String NEW_SONG = "newSong";
+    public static final String VOLUME_CHANGED = "volumeChanged";
 
     MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
     MediaPlayer mediaPlayer = mediaPlayerFactory.mediaPlayers().newMediaPlayer();
-    PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    PropertyChangeSupport support = new PropertyChangeSupport(this);
     Playlist playlist;
 
     MusicPlayer(final Playlist playlist) {
@@ -30,10 +31,10 @@ public abstract class MusicPlayer {
 
     public void startPlay() {
         final Song song = playlist.getCurrentSong();
-        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
-        propertyChangeSupport.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
+        support.firePropertyChange(NEW_SONG, null, song);
+        support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, playlist);
         mediaPlayer.controls().play();
-        propertyChangeSupport.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
+        support.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
     }
 
@@ -45,18 +46,20 @@ public abstract class MusicPlayer {
 
     public void stop() {
         mediaPlayer.controls().stop();
-        propertyChangeSupport.firePropertyChange(END_PLAYER, mediaPlayer.status().isPlaying(),
+        support.firePropertyChange(END_PLAYER, mediaPlayer.status().isPlaying(),
                 !mediaPlayer.status().isPlaying());
     }
 
     public void addPropertyChangeListener(final PropertyChangeListener observer) {
-        propertyChangeSupport.addPropertyChangeListener(observer);
+        support.addPropertyChangeListener(observer);
     }
 
 
     public void changePlayingState() {
         if (mediaPlayer.status().isPlaying()) {
             pause();
+        } else if (!mediaPlayer.status().isPlayable()) {
+            startPlay();
         } else {
             resume();
         }
@@ -66,20 +69,19 @@ public abstract class MusicPlayer {
         return new TimeBean(mediaPlayer.status().length(), mediaPlayer.status().time());
     }
 
-    void afterSongEvent() {
-        playlist.skipToNext();
-        final Song song = playlist.getCurrentSong();
-        propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
+    public void setVolume(final int volumen) {
+        mediaPlayer.audio().setVolume(volumen);
+        support.firePropertyChange(VOLUME_CHANGED, null, mediaPlayer.audio().volume());
     }
 
     private void resume() {
         mediaPlayer.controls().play();
-        propertyChangeSupport.firePropertyChange(RESUME_PLAYER, null, createPlayTimeBean());
+        support.firePropertyChange(RESUME_PLAYER, null, createPlayTimeBean());
     }
 
     private void pause() {
         mediaPlayer.controls().pause();
-        propertyChangeSupport.firePropertyChange(PAUSE_PLAYER, mediaPlayer.status().isPlaying(),
+        support.firePropertyChange(PAUSE_PLAYER, mediaPlayer.status().isPlaying(),
                 !mediaPlayer.status().isPlaying());
     }
 
@@ -89,7 +91,8 @@ public abstract class MusicPlayer {
         public void run() {
             playlist.skipToNext();
             final Song song = playlist.getCurrentSong();
-            propertyChangeSupport.firePropertyChange(NEW_SONG, null, song);
+            support.firePropertyChange(NEW_SONG, null, song);
+            System.out.println("test");
         }
     }
 }

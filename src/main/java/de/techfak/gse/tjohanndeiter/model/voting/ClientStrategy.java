@@ -1,6 +1,7 @@
 package de.techfak.gse.tjohanndeiter.model.voting;
 
 import de.techfak.gse.tjohanndeiter.model.client.Client;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 
 public class ClientStrategy implements VoteStrategy {
 
@@ -11,7 +12,7 @@ public class ClientStrategy implements VoteStrategy {
     }
 
     @Override
-    public void voteById(final int id) {
+    public void voteById(final int id, final User user) {
         client.voteById(id);
     }
 }

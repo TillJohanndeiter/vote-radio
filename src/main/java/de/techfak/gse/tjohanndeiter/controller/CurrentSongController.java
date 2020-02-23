@@ -5,6 +5,7 @@ import de.techfak.gse.tjohanndeiter.model.client.ServerResponse;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
@@ -55,7 +56,6 @@ public class CurrentSongController implements PropertyChangeListener {
     @Override
     public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
         switch (propertyChangeEvent.getPropertyName()) {
-
             case MusicPlayer.END_PLAYER:
                 resetCurrentSong();
                 break;
@@ -68,7 +68,7 @@ public class CurrentSongController implements PropertyChangeListener {
                 break;
             case MusicPlayer.NEW_SONG:
                 final Song newSong = (Song) propertyChangeEvent.getNewValue();
-                updateCurrentSong(newSong, new TimeBean(newSong.getLength(), 0));
+                Platform.runLater(() -> updateCurrentSong(newSong, new TimeBean(newSong.getLength(), 0)));
                 break;
             case Client.NEW_SONG:
                 final ServerResponse response = (ServerResponse) propertyChangeEvent.getNewValue();
@@ -146,7 +146,6 @@ public class CurrentSongController implements PropertyChangeListener {
         if (task != null) {
             task.cancel();
         }
-        duration.setText(DEFAULT_TIME_STAMP);
         playedTime.setText(DEFAULT_TIME_STAMP);
         timeSlider.setValue(timeSlider.getMin());
     }

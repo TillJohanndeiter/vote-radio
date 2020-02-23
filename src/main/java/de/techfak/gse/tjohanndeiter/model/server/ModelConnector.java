@@ -28,9 +28,11 @@ public class ModelConnector implements PropertyChangeListener {
 
     private String playlistJson;
     private String currentSongJson;
+    private UserManger userManger;
 
-    public ModelConnector(final MusicPlayer musicPlayer) {
+    public ModelConnector(final MusicPlayer musicPlayer, final UserManger userManger) {
         this.musicPlayer = musicPlayer;
+        this.userManger = userManger;
     }
 
     @Override
@@ -71,4 +73,7 @@ public class ModelConnector implements PropertyChangeListener {
         return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, currentSongJson);
     }
 
+    public UserManger getUserManger() {
+        return userManger;
+    }
 }

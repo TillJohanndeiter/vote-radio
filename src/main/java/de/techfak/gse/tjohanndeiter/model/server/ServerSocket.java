@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.server;
 
+import de.techfak.gse.tjohanndeiter.model.exception.client.UserDoesntExits;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoWSD;
 
@@ -13,14 +14,18 @@ public class ServerSocket extends NanoWSD.WebSocket {
 
     public static final String CHANGED_PLAYLIST = "plyCh";
     public static final String CHANGED_SONG = "songCh";
+    public static final String INIT_USER = "userInit";
     private static final String DEFAULT_MESSAGE_SOCKET = "nth";
 
     private Queue<String> queue = new PriorityQueue<>();
     private List<ServerSocket> sockets;
+    private UserManger userManger;
 
-    ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> sockets) {
+    ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> sockets,
+                 final UserManger userManger) {
         super(handshakeRequest);
         this.sockets = sockets;
+        this.userManger = userManger;
     }
 
     void setNextSocketMessage(final String nextSocketMessage) {
@@ -32,9 +37,11 @@ public class ServerSocket extends NanoWSD.WebSocket {
     @Override
     protected void onOpen() {
         try {
+            userManger.addUser(new User(super.getHandshakeRequest().getRemoteIpAddress()));
             send(DEFAULT_MESSAGE_SOCKET);
             queue.add(CHANGED_SONG);
             queue.add(CHANGED_PLAYLIST);
+            queue.add(INIT_USER);
         } catch (IOException e) {
             e.printStackTrace();  //NOPMD
         }
@@ -44,7 +51,12 @@ public class ServerSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onClose(final NanoWSD.WebSocketFrame.CloseCode closeCode, final String s, final boolean b) {
-        sockets.remove(this);
+        try {
+            userManger.removeUserByIp(super.getHandshakeRequest().getRemoteIpAddress());
+            sockets.remove(this);
+        } catch (final UserDoesntExits e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

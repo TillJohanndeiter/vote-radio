@@ -58,7 +58,10 @@ public class SocketStrategy extends WebSocketClient implements RequesterStrategy
             if (message.equals(ServerSocket.CHANGED_PLAYLIST)) {
                 final VoteList voteList = httpRequester.getPlaylist();
                 support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, voteList);
-            } else if (message.equals(ServerSocket.CHANGED_SONG)) {
+            } else if (message.equals(ServerSocket.INIT_USER)) {
+                support.firePropertyChange(Client.USER_INIT, null, httpRequester.getUser());
+            }
+            else if (message.equals(ServerSocket.CHANGED_SONG)) {
                 fireNewSong();
 
             }

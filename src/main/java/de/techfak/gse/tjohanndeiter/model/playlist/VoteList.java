@@ -3,7 +3,9 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,21 +63,22 @@ public class VoteList extends Playlist {
      * @param idOfSong idOfSong
      * @throws SongIdNotAvailable in case if not song with #idOfSong is available
      */
-    public void voteForSongById(final int idOfSong) throws SongIdNotAvailable {
+    public void voteForSongById(final int idOfSong, final User user) throws SongIdNotAvailable {
         QueueSong foundSong = findSongById(idOfSong);
-        updatePlaylist(foundSong);
+        updatePlaylist(foundSong, user);
     }
 
-    private void updatePlaylist(final QueueSong foundSong) {
+    private void updatePlaylist(final QueueSong foundSong, final User user) {
         if (!currentSong.equals(foundSong)) {
-            foundSong.increaseVote();
+            foundSong.increaseVote(user);
             songList.sort(new VoteComparator());
+            correction();
             support.firePropertyChange(PLAYLIST_CHANGE, null, this);
         }
     }
 
 
-    private QueueSong findSongById(final int idOfSong) throws SongIdNotAvailable {
+    public QueueSong findSongById(final int idOfSong) throws SongIdNotAvailable {
         for (final QueueSong votedSong : songList) {
             if (votedSong.getId() == idOfSong) {
                 return votedSong;
@@ -84,9 +87,36 @@ public class VoteList extends Playlist {
         throw new SongIdNotAvailable(idOfSong);
     }
 
+
+    private void correction() {
+        for (QueueSong queueSong : songList) {
+                while (isNotHighest(queueSong) && couldBeHigher(queueSong) && nextSongLessVotes(queueSong)) {
+                    forwardSwap(queueSong);
+                }
+        }
+    }
+
+    private boolean couldBeHigher(final QueueSong queueSong) {
+        return queueSong.getPlaysBeforeReplay() < songList.indexOf(queueSong);
+    }
+
+    private boolean isNotHighest(final QueueSong queueSong) {
+        return songList.indexOf(queueSong) > 1;
+    }
+
+    private void forwardSwap(final QueueSong queueSong) {
+        final int pos = songList.indexOf(queueSong);
+        Collections.swap(songList, pos, pos - 1);
+    }
+
+    private boolean nextSongLessVotes(final QueueSong queueSong) {
+        return queueSong.getVoteCount() > songList.get(songList.indexOf(queueSong) - 1).getVoteCount();
+    }
+
     @Override
     public void addSong(final Song song) {
-        songList.add(new QueueSong(song, songList.size(), playsBeforeReplay));
+        songList.addLast(new QueueSong(song, songList.size(), playsBeforeReplay));
+        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
     @Override
@@ -101,6 +131,7 @@ public class VoteList extends Playlist {
         for (int i = 0; i < songList.size() - 1; i++) {
             songList.get(i).decReplayCount();
         }
+        songList.sort(new VoteComparator());
     }
 
     public List<QueueSong> getVotedPlaylist() {
@@ -114,11 +145,11 @@ public class VoteList extends Playlist {
 
     @Override
     public String toString() {
-        final StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder(" --Start of playlist");
         for (final Song song : songList) {
             result.append(song.toString()).append('\n');
         }
-        result.append(" -- End of Playlist");
+        result.append(" -- End of playlist");
         return result.toString();
     }
 
@@ -127,6 +158,8 @@ public class VoteList extends Playlist {
         @Override
         public int compare(final QueueSong queueSong, final QueueSong t1) {
             if (t1.equals(currentSong)) {
+                return Integer.MAX_VALUE;
+            } else if (songList.indexOf(t1) <= queueSong.getPlaysBeforeReplay()) {
                 return Integer.MAX_VALUE;
             } else {
                 return t1.getVoteCount() - queueSong.getVoteCount();

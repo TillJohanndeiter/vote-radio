@@ -3,6 +3,7 @@ package de.techfak.gse.tjohanndeiter.mode.jukebox;
 import de.techfak.gse.tjohanndeiter.controller.CurrentSongController;
 import de.techfak.gse.tjohanndeiter.controller.JukeBoxController;
 import de.techfak.gse.tjohanndeiter.controller.TableController;
+import de.techfak.gse.tjohanndeiter.controller.VolumeController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
@@ -11,6 +12,7 @@ import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import de.techfak.gse.tjohanndeiter.model.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.JukeBoxStrategy;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import javafx.application.Application;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class JukeBoxMode extends Application implements ProgramMode {
+
 
     private static VoteList voteList;
     private static MusicPlayer musicPlayer;
@@ -47,7 +50,7 @@ public class JukeBoxMode extends Application implements ProgramMode {
                 getContextClassLoader().getResource("Table.fxml"));
         final Pane root = fxmlLoader.load();
         final TableController tableController = fxmlLoader.getController();
-        tableController.init(voteStrategy);
+        tableController.init(voteStrategy, User.JUKEBOX);
         musicPlayer.addPropertyChangeListener(tableController);
         voteList.addPropertyChangeListener(tableController);
 
@@ -56,6 +59,7 @@ public class JukeBoxMode extends Application implements ProgramMode {
         final Pane panelRoot = controlPanelLoader.load();
         final JukeBoxController jukeBoxController = controlPanelLoader.getController();
         jukeBoxController.init(musicPlayer);
+        musicPlayer.addPropertyChangeListener(jukeBoxController);
         tableController.setControlPane(panelRoot);
 
 
@@ -66,6 +70,15 @@ public class JukeBoxMode extends Application implements ProgramMode {
         tableController.setCurrentSongPane(currentSongPane);
         musicPlayer.addPropertyChangeListener(currentSongController);
         voteList.addPropertyChangeListener(currentSongController);
+
+        final FXMLLoader volumePanelLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("VolumePanel.fxml"));
+        final Pane volumePane = volumePanelLoader.load();
+        final VolumeController volumeController = volumePanelLoader.getController();
+        tableController.setVolumePane(volumePane);
+        volumeController.init(musicPlayer);
+        musicPlayer.addPropertyChangeListener(volumeController);
+
 
         final Scene scene = new Scene(root);
         stage.setOnCloseRequest(windowEvent -> {
@@ -81,7 +94,7 @@ public class JukeBoxMode extends Application implements ProgramMode {
     public void startProgram() throws ShutdownException {
         final SongLibraryFactory songLibraryFactory = new SongLibraryVlcJFactory();
         final SongLibrary songLibrary = songLibraryFactory.createSongLibrary(new File(filepath));
-        voteList = new VoteList(songLibrary, 1);
+        voteList = new VoteList(songLibrary, 3);
         voteStrategy = new JukeBoxStrategy(voteList);
         musicPlayer = new OfflinePlayer(voteList);
         Application.launch();
