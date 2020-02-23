@@ -5,7 +5,7 @@ import de.techfak.gse.tjohanndeiter.model.exception.database.SongAlreadyExitsExc
 import java.util.List;
 
 /**
- * Storage of all songs int the selected folder.
+ * Storage of all parsed songs.
  */
 public interface SongLibrary {
 

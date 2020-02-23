@@ -28,8 +28,9 @@ public class VoteList extends Playlist {
      * Make a save copy of {@link de.techfak.gse.tjohanndeiter.model.database.Song} in #songLibrary.
      * Set up {@link #songList} with ids.
      *
-     * @param songLibrary songLibrary contains all {@link de.techfak.gse.tjohanndeiter.model.database.Song}
-     *                    used in playlist.
+     * @param songLibrary       songLibrary contains all {@link de.techfak.gse.tjohanndeiter.model.database.Song}
+     *                          used in playlist.
+     * @param playsBeforeReplay counter of how many songs have to be played minimum after a replay.
      */
     public VoteList(final SongLibrary songLibrary, final int playsBeforeReplay) {
         super();
@@ -45,7 +46,8 @@ public class VoteList extends Playlist {
 
 
     /**
-     * Only for tests
+     * Only for tests.
+     *
      * @param songList test list
      */
 
@@ -58,15 +60,17 @@ public class VoteList extends Playlist {
     }
 
     /**
-     * Vote for song by his id.
+     * Vote for song by his id. Then resort it with {@link VoteComparator}, correct order and notify observers.
      *
      * @param idOfSong idOfSong
+     * @param user user who created vote
      * @throws SongIdNotAvailable in case if not song with #idOfSong is available
      */
     public void voteForSongById(final int idOfSong, final User user) throws SongIdNotAvailable {
         QueueSong foundSong = findSongById(idOfSong);
         updatePlaylist(foundSong, user);
     }
+
 
     private void updatePlaylist(final QueueSong foundSong, final User user) {
         if (!currentSong.equals(foundSong)) {
@@ -78,6 +82,12 @@ public class VoteList extends Playlist {
     }
 
 
+    /**
+     * Returns {@link QueueSong} by id.
+     * @param idOfSong id to lookup
+     * @return song by #idOfSong
+     * @throws SongIdNotAvailable in case of id that doesn't belong to any song
+     */
     public QueueSong findSongById(final int idOfSong) throws SongIdNotAvailable {
         for (final QueueSong votedSong : songList) {
             if (votedSong.getId() == idOfSong) {
@@ -88,11 +98,15 @@ public class VoteList extends Playlist {
     }
 
 
+    /**
+     * After list get resorted by {@link VoteComparator} songs with less votes could be ranked higher caused by
+     * playedBeforeReplay. Method bring it back to the correct order.
+     */
     private void correction() {
         for (QueueSong queueSong : songList) {
-                while (isNotHighest(queueSong) && couldBeHigher(queueSong) && nextSongLessVotes(queueSong)) {
-                    forwardSwap(queueSong);
-                }
+            while (isNotHighest(queueSong) && couldBeHigher(queueSong) && nextSongLessVotes(queueSong)) {
+                forwardSwap(queueSong);
+            }
         }
     }
 
@@ -119,6 +133,10 @@ public class VoteList extends Playlist {
         support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
+    /**
+     * Put first song to last position in {@link #songList}, reset Votes and decrease playsBeforeReplay for every
+     * {@link Song} in {@link #songList} then resort {@link #songList}.
+     */
     @Override
     public void skipToNext() {
         final QueueSong old = songList.get(0);
@@ -132,6 +150,7 @@ public class VoteList extends Playlist {
             songList.get(i).decReplayCount();
         }
         songList.sort(new VoteComparator());
+        correction();
     }
 
     public List<QueueSong> getVotedPlaylist() {

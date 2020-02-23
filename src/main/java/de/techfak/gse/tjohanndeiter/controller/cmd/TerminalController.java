@@ -7,6 +7,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Scanner;
 
+
+/**
+ * Simple controller for cmd interaction in random mode. Currently you can get information about current playlist, song
+ * and a man page for information.
+ */
 public class TerminalController implements AutoCloseable, PropertyChangeListener {
 
 
@@ -34,6 +39,9 @@ public class TerminalController implements AutoCloseable, PropertyChangeListener
     }
 
 
+    /**
+     * Starts the input Loop with commands form the user.
+     */
     public void inputLoop() {
         printHelp();
 

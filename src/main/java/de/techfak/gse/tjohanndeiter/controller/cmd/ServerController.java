@@ -2,6 +2,9 @@ package de.techfak.gse.tjohanndeiter.controller.cmd;
 
 import de.techfak.gse.tjohanndeiter.model.server.RestServer;
 
+/**
+ * Simple controller for cmd interaction in server mode. Additional commands are information about port and address.
+ */
 public class ServerController extends TerminalController {
 
 

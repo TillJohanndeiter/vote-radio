@@ -2,11 +2,11 @@ package de.techfak.gse.tjohanndeiter.model.player;
 
 public class ReceiverPlayer extends MusicPlayer {
 
-    private String completeAdress;
+    private String rtpAddress;
 
     public ReceiverPlayer(final String serverAdress, final String port) {
         super(null);
-        completeAdress = "rtp://@" + serverAdress + ':' + port;
+        rtpAddress = "rtp://@" + serverAdress + ':' + port;
     }
 
     @Override
@@ -22,6 +22,6 @@ public class ReceiverPlayer extends MusicPlayer {
     public void startPlay() {
         support.firePropertyChange(START_PLAYER, !mediaPlayer.status().isPlaying(),
                 mediaPlayer.status().isPlaying());
-        mediaPlayer.submit(() -> mediaPlayer.media().play(completeAdress));
+        mediaPlayer.submit(() -> mediaPlayer.media().play(rtpAddress));
     }
 }

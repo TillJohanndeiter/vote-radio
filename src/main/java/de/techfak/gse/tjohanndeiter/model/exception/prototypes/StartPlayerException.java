@@ -1,5 +1,9 @@
 package de.techfak.gse.tjohanndeiter.model.exception.prototypes;
 
+
+/**
+ * Throw in case of {@link de.techfak.gse.tjohanndeiter.model.player.MusicPlayer} cannot start to play.
+ */
 public abstract class StartPlayerException extends ShutdownException {
 
     private static final long serialVersionUID = 1L;

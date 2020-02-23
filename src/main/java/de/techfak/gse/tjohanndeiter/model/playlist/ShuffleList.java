@@ -22,6 +22,10 @@ public class ShuffleList extends Playlist {
         shuffle();
     }
 
+
+    /**
+     * Takes last element of list and moves it to first position in {@link #songList}.
+     */
     @Override
     public void skipToNext() {
         songList.add(songList.remove());

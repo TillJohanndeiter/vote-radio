@@ -1,7 +1,7 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
 import de.techfak.gse.tjohanndeiter.model.client.Client;
-import de.techfak.gse.tjohanndeiter.model.client.RequesterStrategy;
+import de.techfak.gse.tjohanndeiter.model.client.UpdateStrategy;
 import de.techfak.gse.tjohanndeiter.model.client.Uploader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -15,9 +15,11 @@ import javafx.stage.FileChooser;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.IOException;
 
 
+/**
+ * Controller responsible for user interaction to connect or disconnect client to server.
+ */
 public class NetworkController implements PropertyChangeListener {
 
     private static final Color NOT_CONNECTED_COLOR = Color.web("#c9c9c9");
@@ -60,13 +62,13 @@ public class NetworkController implements PropertyChangeListener {
             case Client.CONNECTED:
                 Platform.runLater(this::connectedNotify);
                 break;
-            case RequesterStrategy.LOST_CONNECTION:
+            case UpdateStrategy.LOST_CONNECTION:
                 Platform.runLater(this::lostConnectionNotify);
                 break;
             case Client.CANCELED_CONNECTION:
                 Platform.runLater(this::disconnectNotify);
                 break;
-            case RequesterStrategy.JSON_ERROR:
+            case UpdateStrategy.JSON_ERROR:
                 Platform.runLater(this::jsonErrorNotify);
                 break;
             case Uploader.SUCCESS_UPLOAD:
@@ -86,15 +88,18 @@ public class NetworkController implements PropertyChangeListener {
     }
 
 
+    /**
+     * Opens file chooser and give file to {@link Uploader} to make and upload.
+     */
     @FXML
-    public void uploadFile() throws IOException, InterruptedException {
+    public void uploadFile() {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Files to SongUpload");
         fileChooser.setInitialFileName(".mp3");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         fileChooser.setInitialDirectory(new File("/"));
         final File file = fileChooser.showOpenDialog(null);
-        uploader.upload(file, ipAddressField.getText(), restPortField.getText());
+        uploader.uploadAndCheckSuccess(file, ipAddressField.getText(), restPortField.getText());
     }
 
     //TODO: Implement methods
@@ -145,6 +150,10 @@ public class NetworkController implements PropertyChangeListener {
     }
 
 
+    /**
+     * Initialize default values for localhost and port 8080.
+     * @param client client used for server communication
+     */
     public void init(final Client client) {
         ipAddressField.setText("127.0.0.1"); //NOPMD
         restPortField.setText("8080");

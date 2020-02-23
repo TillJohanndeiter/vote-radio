@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Objects;
 
 /**
- * Data class represents a mp3 file.
+ * Bean represents a mp3 file. Contains parsed metadata {@link #title}, {@link #artist}, {@link #album}, {@link #genre}
+ * and {@link #length}. Also contains a {@link #cover}.
  */
-
 public class Song { //NOPMD
 
 
@@ -26,7 +26,7 @@ public class Song { //NOPMD
     }
 
     /**
-     * Set Metadata of the parsed Song.
+     * Set Metadata of the parsed Song. If metadata is null {@link #NO_METADATA} is used as default.
      *
      * @param filepath filepath of the parsed *.mp3 file
      * @param title    title in metadata
@@ -34,10 +34,11 @@ public class Song { //NOPMD
      * @param album    album in metadata
      * @param genre    genre in metadata
      * @param length   length of song
+     * @param cover    cover of song
      */
     public Song(final String filepath, final String title, final String artist, final String album,
                 final String genre, final long length, final byte[] cover) {
-        this.filepath = (filepath == null) ? NO_METADATA : filepath;
+        this.filepath = filepath;
         this.title = (title == null) ? NO_METADATA : title;
         this.artist = (artist == null) ? NO_METADATA : artist;
         this.album = (album == null) ? NO_METADATA : album;

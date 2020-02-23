@@ -23,6 +23,10 @@ import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 
 import java.io.File;
 
+/**
+ * Factory for {@link ServerMode}. Parse command lines for address and port of music stream and port of rest server.
+ *  If no filepath is available in #args the current path of program is selected as music folder.
+ */
 public class ServerFactory extends ProgramModeFactory {
 
     private static final String LOCAL_STREAM_ADDRESS = "none";
@@ -68,7 +72,7 @@ public class ServerFactory extends ProgramModeFactory {
                 uploadRequester, modelObserver);
 
 
-        final SocketRestServer socketRestServer = new SocketRestServer(LOCALHOST, restPort, sessionHandler, userManger);
+        final SocketRestServer socketRestServer = new SocketRestServer(restPort, sessionHandler, userManger);
         final TerminalController controller = new ServerController(socketRestServer);
         addObservers(voteList, musicPlayer, modelObserver, socketRestServer, controller);
         final Thread controllerThread = new Thread(controller::inputLoop);
@@ -95,7 +99,8 @@ public class ServerFactory extends ProgramModeFactory {
         musicPlayer.addPropertyChangeListener(socketRestServer);
     }
 
-    private MusicPlayer createMusicPlayer(final boolean streamPlay, final StreamUrl streamUrl, final VoteList voteList, final String[] args)
+    private MusicPlayer createMusicPlayer(final boolean streamPlay, final StreamUrl streamUrl,
+                                          final VoteList voteList, final String[] args)
             throws InvalidArgsException {
 
         final MusicPlayer musicPlayer;

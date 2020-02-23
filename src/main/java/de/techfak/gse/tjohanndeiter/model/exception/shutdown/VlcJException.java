@@ -2,6 +2,9 @@ package de.techfak.gse.tjohanndeiter.model.exception.shutdown;
 
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 
+/**
+ * Exception if any kind of VLCJ exceptions thrown.
+ */
 public class VlcJException extends ShutdownException {
 
     private static final long serialVersionUID = 42L;

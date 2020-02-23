@@ -18,6 +18,10 @@ import java.io.ByteArrayInputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+
+/**
+ * Responsible for refreshing metadata and cover of current song.
+ */
 public class CurrentSongController implements PropertyChangeListener {
 
     private static final String DEFAULT_COVER = "/blankCdIcon.png";
@@ -118,7 +122,7 @@ public class CurrentSongController implements PropertyChangeListener {
     }
 
     private void startTimeCounter(final TimeBean timeBean) {
-        startTimeCounter(timeBean.getLength(), timeBean.getPlayed());
+        startTimeCounter(timeBean.getLength(), timeBean.getPlayedTime());
     }
 
     private void startTimeCounter(final long lengthOfSong, final long played) {
@@ -151,6 +155,9 @@ public class CurrentSongController implements PropertyChangeListener {
     }
 
 
+    /**
+     * Kills the timer task and the task itself.
+     */
     public void end() {
         if (timer != null) {
             timer.cancel();

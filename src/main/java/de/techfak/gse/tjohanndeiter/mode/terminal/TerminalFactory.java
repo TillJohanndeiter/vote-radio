@@ -14,10 +14,20 @@ import de.techfak.gse.tjohanndeiter.model.playlist.ShuffleList;
 
 import java.io.File;
 
+/**
+ * Factory for {@link TerminalMode}. Parse filepath an creates random play with it.
+ * If no filepath is available in #args the current path of program is selected as music folder.
+ */
 public class TerminalFactory extends ProgramModeFactory {
 
     private SongLibraryFactory factory = new SongLibraryVlcJFactory();
 
+    /**
+     * Parse filepath and creates Terminal mode.
+     * @param args args from cmd optional contains a
+     * @return created terminal mode
+     * @throws ShutdownException if folder doesn't contain mp3 files or argument combination is illegal
+     */
     @Override
     public ProgramMode createProgramMode(final String... args) throws ShutdownException {
         checkIfIllegalArgCombination(args);

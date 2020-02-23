@@ -16,7 +16,11 @@ import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
 
 
-public class SocketStrategy extends WebSocketClient implements RequesterStrategy {
+/**
+ * Implementation of {@link UpdateStrategy}. Uses websocket communication to recognize when changes occurred in
+ * playlist. Uses {@link WebSocketClient} for connection.
+ */
+public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
 
 
     private static final String REGISTER_MESSAGE = "reg";
@@ -55,15 +59,19 @@ public class SocketStrategy extends WebSocketClient implements RequesterStrategy
     @Override
     public void onMessage(final String message) {
         try {
-            if (message.equals(ServerSocket.CHANGED_PLAYLIST)) {
-                final VoteList voteList = httpRequester.getPlaylist();
-                support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, voteList);
-            } else if (message.equals(ServerSocket.INIT_USER)) {
-                support.firePropertyChange(Client.USER_INIT, null, httpRequester.getUser());
-            }
-            else if (message.equals(ServerSocket.CHANGED_SONG)) {
-                fireNewSong();
-
+            switch (message) {
+                case ServerSocket.CHANGED_PLAYLIST:
+                    final VoteList voteList = httpRequester.getPlaylist();
+                    support.firePropertyChange(Playlist.PLAYLIST_CHANGE, null, voteList);
+                    break;
+                case ServerSocket.INIT_USER:
+                    support.firePropertyChange(Client.USER_INIT, null, httpRequester.getUser());
+                    break;
+                case ServerSocket.CHANGED_SONG:
+                    fireNewSong();
+                    break;
+                default:
+                    break;
             }
         } catch (IOException | InterruptedException e) {
             support.firePropertyChange(JSON_ERROR, REGISTER_MESSAGE, null);

@@ -20,6 +20,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+/**
+ * Responsible for make http rest requests to the server and parse them from json to the object.
+ */
 class HttpRequester {
 
     private static final String HTTP = "http://";

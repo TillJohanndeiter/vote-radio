@@ -1,6 +1,8 @@
 package de.techfak.gse.tjohanndeiter.model.exception.prototypes;
 
-
+/**
+ * Abstract class for all Exception on client side.
+ */
 public abstract class ClientException extends GSERadioException {
 
     private static final long serialVersionUID = 42L;

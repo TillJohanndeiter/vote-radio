@@ -3,7 +3,7 @@ package de.techfak.gse.tjohanndeiter.model.exception.shutdown;
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ParseException;
 
 /**
- * Project exception for an selected music folder without *.mp3 files.
+ * Exception for an selected music folder without *.mp3 files.
  */
 public class NoMp3FilesException extends ParseException {
 

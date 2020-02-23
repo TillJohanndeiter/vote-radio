@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Extends {@link Song} form database with an unique id, voteCount and needed replays before next time gets played.
+ */
 public class QueueSong extends Song {
 
     private List<Vote> votes = new ArrayList<>();
@@ -19,10 +22,11 @@ public class QueueSong extends Song {
     }
 
     /**
-     * Set {@link #voteCount} to zero and set the id.
+     * Set {@link #votes} to zero/empty and set {@link #id} and {@link #playsBeforeReplay}.
      *
      * @param song copy song
      * @param id   id of Song
+     * @param playsBeforeReplay counter how many songs must be played before replay
      */
     public QueueSong(final Song song, final int id, final int playsBeforeReplay) {
         super(song);
@@ -30,11 +34,12 @@ public class QueueSong extends Song {
         this.playsBeforeReplay = playsBeforeReplay;
     }
 
+    /**
+     * Copy Constructor.
+     * @param queueSong queueSong to copy
+     */
     public QueueSong(final QueueSong queueSong) {
-        super(queueSong);
-        votes = queueSong.votes;
-        id = queueSong.id;
-        playsBeforeReplay = queueSong.playsBeforeReplay;
+        this(queueSong, queueSong.getId(), queueSong.getPlaysBeforeReplay());
     }
 
     public List<Vote> getVotes() {

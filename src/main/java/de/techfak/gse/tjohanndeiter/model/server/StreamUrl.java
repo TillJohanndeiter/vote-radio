@@ -1,5 +1,10 @@
 package de.techfak.gse.tjohanndeiter.model.server;
 
+
+/**
+ * Bean for {@link #multicastAddress} and {@link #port} for multicast stream of
+ * {@link de.techfak.gse.tjohanndeiter.model.player.StreamPlayer}.
+ */
 public class StreamUrl {
 
     private String multicastAddress;

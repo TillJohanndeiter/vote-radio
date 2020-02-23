@@ -9,6 +9,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Representation of client. Includes a {@link #updateStrategy} for way to know when changed occurred on the server.
+ * Use {@link #receiverPlayer} for receiving stream and {@link #httpRequester} to make http Requests to the server.
+ */
 public class Client {
 
     public static final String INVALID_URL = "invalidURL";
@@ -24,13 +29,17 @@ public class Client {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private HttpRequester httpRequester;
     private List<PropertyChangeListener> listeners = new ArrayList<>();
-    private RequesterStrategy requesterStrategy;
+    private UpdateStrategy updateStrategy;
     private ReceiverPlayer receiverPlayer;
     private String restAddress;
     private String port;
     private boolean connected;
 
-
+    /**
+     * Method for switch the state of the client between connected and disconnected.
+     * @param restAddress ipAddress of server
+     * @param port port of sever
+     */
     public void changeConnection(String restAddress, final String port) {
         if (connected) {
             endConnection();
@@ -41,6 +50,11 @@ public class Client {
         }
     }
 
+
+    /**
+     * Sends a vote for a song by id to server.
+     * @param id id of song to vote
+     */
     public void voteById(final int id) {
         try {
             int code = httpRequester.voteById(id);
@@ -72,7 +86,7 @@ public class Client {
 
     private void establishConnection() throws IOException, InterruptedException, URISyntaxException {
         receiverPlayer = new ReceiverPlayer(httpRequester.getMusicAddress(), httpRequester.getMusicPort());
-        requesterStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
+        updateStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
         addObservers();
         receiverPlayer.startPlay();
         support.firePropertyChange(NEW_PLAYER, null, receiverPlayer);
@@ -83,7 +97,7 @@ public class Client {
     private void addObservers() {
         for (final PropertyChangeListener listener : listeners) {
             receiverPlayer.addPropertyChangeListener(listener);
-            requesterStrategy.addPropertyChangeListener(listener);
+            updateStrategy.addPropertyChangeListener(listener);
         }
     }
 
@@ -92,12 +106,15 @@ public class Client {
         listeners.add(observer);
     }
 
+    /**
+     * End connection for {@link #updateStrategy} and music stream  {@link #receiverPlayer}.
+     */
     public void endConnection() {
         if (receiverPlayer != null) {
             receiverPlayer.stop();
         }
-        if (requesterStrategy != null) {
-            requesterStrategy.stop();
+        if (updateStrategy != null) {
+            updateStrategy.stop();
         }
         connected = false;
         support.firePropertyChange(CANCELED_CONNECTION, false, true);

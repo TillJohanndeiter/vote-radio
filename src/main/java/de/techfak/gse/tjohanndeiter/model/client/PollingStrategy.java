@@ -12,8 +12,12 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * UpdateStrategy use simple polling to rest server. Every five seconds client make request to server.
+ * @deprecated because sockets are way better.
+ */
 @Deprecated
-public class PollingStrategy implements RequesterStrategy {
+public class PollingStrategy implements UpdateStrategy {
 
     private static final int REQUEST_PERIOD = 5000;
     private PropertyChangeSupport support = new PropertyChangeSupport(this);

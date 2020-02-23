@@ -21,6 +21,9 @@ import java.util.concurrent.ConcurrentMap;
 import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
 import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
+/**
+ * Requester for mp3 uploads form client.
+ */
 public class UploadRequester {
 
     private SongFactory songFactory = new SongFactory();
@@ -33,25 +36,31 @@ public class UploadRequester {
         this.voteList = voteList;
     }
 
+
+    /**
+     * Parse base64 string from request body. Checks if file does exits. Write file to music folder of
+     * {@link #songLibrary} and add Song to {@link #voteList}
+     * @param session upload session
+     * @return response contains about success of upload
+     */
     NanoHTTPD.Response handleFileUpload(final NanoHTTPD.IHTTPSession session) {
         try {
             final String postData = getPostBody(session);
             final SongUpload songUpload = songUploadJSonParser.toSongUpload(postData);
-            final File fileSong = new File(songLibrary.getAbsoluteFilepath() + '/' + songUpload.getName());
+            final File fileSong = new File(songLibrary.getAbsoluteFilepath() + '/' + songUpload.getFileName());
 
             if (fileSong.exists()) {
-                return newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT,
-                        songUpload.getName() + "already exits");
+                return internalErrorResponse(songUpload.getFileName() + "already exits");
             }
 
             writeToMusicFolder(songUpload, fileSong);
             addSongToLibraryAndPlaylist(fileSong);
 
-            return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, "Uploaded :" + songUpload.getName());
+            return plainTextOKResponse("Uploaded :" + songUpload.getFileName());
         } catch (IOException | NanoHTTPD.ResponseException | VlcJException e) {
-            return newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, "SongUpload Failed!");
+            return internalErrorResponse("SongUpload Failed!");
         } catch (SongAlreadyExitsException e) {
-            return newFixedLengthResponse(NanoHTTPD.Response.Status.NOT_ACCEPTABLE, MIME_PLAINTEXT, "Song already Exits");
+            return internalErrorResponse("Song already Exits");
         }
     }
 
@@ -73,5 +82,13 @@ public class UploadRequester {
         final ConcurrentMap<String, String> body = new ConcurrentHashMap<>();
         session.parseBody(body);
         return body.get("postData");
+    }
+
+    private NanoHTTPD.Response plainTextOKResponse(final String text) {
+        return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, text);
+    }
+
+    private NanoHTTPD.Response internalErrorResponse(final String text) {
+        return newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, text);
     }
 }

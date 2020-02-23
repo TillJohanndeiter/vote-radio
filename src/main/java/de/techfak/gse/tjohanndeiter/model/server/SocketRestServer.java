@@ -10,16 +10,23 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
+/**
+ * {@link RestServer} with socket support for better communication with client.
+ */
 public class SocketRestServer extends NanoWSD implements RestServer, PropertyChangeListener {
 
     private SessionHandler sessionHandler;
     private UserManger userManger;
-    private ArrayList<ServerSocket> sockets = new ArrayList<>();
+    private ArrayList<ServerSocket> allConnectedSockets = new ArrayList<>();
 
 
-    //TODO: May wrap address and port into own class or look for classes in standard library
-    public SocketRestServer(final String address, final int port, final SessionHandler sessionHandler,
+    /**
+     * Initialize server at #port.
+     * @param port port of server
+     * @param sessionHandler handel http requests
+     * @param userManger manages
+     */
+    public SocketRestServer(final int port, final SessionHandler sessionHandler,
                             final UserManger userManger) {
         super(port);
         this.sessionHandler = sessionHandler;
@@ -27,12 +34,22 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
     }
 
 
+    /**
+     *
+     * @param ihttpSession of new socket connection
+     * @return #ServerSocket for new connection
+     */
     @Override
     protected WebSocket openWebSocket(final IHTTPSession ihttpSession) {
-        return new ServerSocket(ihttpSession, sockets, userManger);
+        return new ServerSocket(ihttpSession, allConnectedSockets, userManger);
     }
 
 
+    /**
+     * Use {@link #sessionHandler} for normal requests and serve form {@link NanoWSD} for websocket requests.
+     * @param session incoming session form client
+     * @return response
+     */
     @Override
     public Response serve(final IHTTPSession session) {
         if (isWebsocketRequested(session)) {
@@ -47,10 +64,14 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
         try {
             start();
         } catch (IOException e) {
-            throw new RestServerException("Rest-Server failed", e);
+            throw new RestServerException("Rest-Server initialization failed", e);
         }
     }
 
+    /**
+     * Add update messages to all sockets in {@link #allConnectedSockets}.
+     * @param evt event in model
+     */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         final String name = evt.getPropertyName();
@@ -77,8 +98,13 @@ public class SocketRestServer extends NanoWSD implements RestServer, PropertyCha
         return super.getHostname();
     }
 
+
+    /**
+     * Add to all {@link ServerSocket} in {@link #allConnectedSockets} message to nextMessages.
+     * @param message next message for all sockets
+     */
     private void setNextMessageForAllSockets(final String message) {
-        for (final ServerSocket socket : sockets) {
+        for (final ServerSocket socket : allConnectedSockets) {
             socket.setNextSocketMessage(message);
         }
     }

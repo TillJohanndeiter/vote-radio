@@ -25,6 +25,12 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
+
+/**
+ * Responsible for update playlist including metadata, votes and needed replay for each {@link QueueSong} in playlist.
+ * Also send a vote to {@link #voteStrategy} if user give a vote by click on #ActionButtonTableCell in
+ * {@link #buttonColumn}.
+ */
 public class TableController implements PropertyChangeListener {
 
     private static final String LENGTH = "length";
@@ -48,13 +54,13 @@ public class TableController implements PropertyChangeListener {
     private TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
 
     @FXML
-    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<QueueSong, Button>(VOTE_COUNT);
+    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
 
     @FXML
     private TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
 
     @FXML
-    private TableColumn<QueueSong, Button> voteButtonColumn = new TableColumn<>(VOTE_CLICK);
+    private TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
 
 
     @FXML
@@ -100,6 +106,7 @@ public class TableController implements PropertyChangeListener {
      * relation.
      *
      * @param voteStrategy voteStrategy
+     * @param user user who manipulate playlist
      */
     public void init(final VoteStrategy voteStrategy, final User user) {
         this.voteStrategy = voteStrategy;
@@ -107,21 +114,28 @@ public class TableController implements PropertyChangeListener {
         tableViewInit();
     }
 
+    /**
+     * Initialize {@link #table} as a observer of playlist.
+     */
     private void tableViewInit() {
         table.setItems(observedSongs);
         setCellValueFactories();
         setTableColumnProperties();
         voteColumn.setSortable(false);
         voteColumn.setSortType(TableColumn.SortType.ASCENDING);
-        voteButtonColumn.setSortable(false);
+        buttonColumn.setSortable(false);
     }
 
+
+    /**
+     * Set values for each column in {@link #table}.
+     */
     private void setCellValueFactories() {
         tileColumn.setCellValueFactory(new PropertyValueFactory<>(TITLE));
         artistColumn.setCellValueFactory(new PropertyValueFactory<>(ARTIST));
-        voteColumn.setCellValueFactory(new PropertyValueFactory<QueueSong, Button>(VOTE_COUNT));
+        voteColumn.setCellValueFactory(new PropertyValueFactory<>(VOTE_COUNT));
         playableInColumn.setCellValueFactory(new PropertyValueFactory<>(PLAYABLE_IN_COUNT));
-        voteButtonColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Click to vote", (QueueSong song) -> {
+        buttonColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Click to vote", (QueueSong song) -> {
             voteForSong(song);
             return song;
         }));
@@ -130,12 +144,15 @@ public class TableController implements PropertyChangeListener {
                 new SimpleStringProperty(Controllers.generateTimeFormat(songCallback.getValue().getLength())));
     }
 
+    /**
+     * Set size of each column in {@link #table} to have same relation if user resize window.
+     */
     private void setTableColumnProperties() {
         tileColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         artistColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         lengthColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         voteColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
-        voteButtonColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
+        buttonColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         playableInColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
     }
 

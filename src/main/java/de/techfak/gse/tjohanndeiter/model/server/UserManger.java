@@ -5,6 +5,9 @@ import de.techfak.gse.tjohanndeiter.model.exception.client.UserDoesntExits;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Storage of all currently active users and clients.
+ */
 public class UserManger {
 
     private List<User> users = new ArrayList<>();
@@ -24,7 +27,7 @@ public class UserManger {
 
     private User findUserByIp(final String ipAddress) throws UserDoesntExits {
         for (final User user : users) {
-            if (user.getIpAddress().equals(ipAddress)){
+            if (user.getIpAddress().equals(ipAddress)) {
                 return user;
             }
         }

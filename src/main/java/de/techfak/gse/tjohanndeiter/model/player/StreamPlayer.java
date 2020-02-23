@@ -20,6 +20,11 @@ public class StreamPlayer extends MusicPlayer {
     private long timeCounter = 0;
 
 
+    /**
+     * Stet up {@link #listPlayer} and set end event.
+     * @param playlist contains {@link Song}
+     * @param streamUrl address and port of stream
+     */
     public StreamPlayer(final Playlist playlist, final StreamUrl streamUrl) {
         super(playlist);
         final MediaListRef mediaList = mediaPlayerFactory.media().newMediaListRef();

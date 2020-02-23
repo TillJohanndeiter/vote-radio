@@ -14,8 +14,6 @@ public class TerminalMode implements ProgramMode {
     private MusicPlayer musicPlayer;
 
 
-    /* default */
-
     public TerminalMode(final MusicPlayer musicPlayer, final TerminalController terminalController) {
         this.musicPlayer = musicPlayer;
         this.terminalController = terminalController;

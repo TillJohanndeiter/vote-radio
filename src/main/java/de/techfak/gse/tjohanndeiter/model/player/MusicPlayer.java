@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * Abstract representations of a musicPlayer.
+ * Abstract representations of a musicPlayer. Use VlcJ Library for play music itself.
  */
 public abstract class MusicPlayer {
 
@@ -29,6 +29,9 @@ public abstract class MusicPlayer {
         this.playlist = playlist;
     }
 
+    /**
+     * Start the music with current/first song in {@link #playlist} and inform observers about event.
+     */
     public void startPlay() {
         final Song song = playlist.getCurrentSong();
         support.firePropertyChange(NEW_SONG, null, song);
@@ -38,23 +41,29 @@ public abstract class MusicPlayer {
                 mediaPlayer.status().isPlaying());
     }
 
+    /**
+     * Ends the music and releases all c bindings.
+     */
     public void end() {
         mediaPlayer.controls().stop();
         mediaPlayerFactory.release();
         mediaPlayer.release();
     }
 
+    /**
+     * Stop the music and informs observers about event.
+     */
     public void stop() {
         mediaPlayer.controls().stop();
         support.firePropertyChange(END_PLAYER, mediaPlayer.status().isPlaying(),
                 !mediaPlayer.status().isPlaying());
     }
 
-    public void addPropertyChangeListener(final PropertyChangeListener observer) {
-        support.addPropertyChangeListener(observer);
-    }
 
-
+    /**
+     * Stop music if is currently playing otherwise it will start playing. Method is an interface for controllers to
+     * keep low-coupling between controller and model.
+     */
     public void changePlayingState() {
         if (mediaPlayer.status().isPlaying()) {
             pause();
@@ -69,9 +78,17 @@ public abstract class MusicPlayer {
         return new TimeBean(mediaPlayer.status().length(), mediaPlayer.status().time());
     }
 
-    public void setVolume(final int volumen) {
-        mediaPlayer.audio().setVolume(volumen);
+    /**
+     * Change volume of music.
+     * @param volume new volume to set
+     */
+    public void setVolume(final int volume) {
+        mediaPlayer.audio().setVolume(volume);
         support.firePropertyChange(VOLUME_CHANGED, null, mediaPlayer.audio().volume());
+    }
+
+    public void addPropertyChangeListener(final PropertyChangeListener observer) {
+        support.addPropertyChangeListener(observer);
     }
 
     private void resume() {

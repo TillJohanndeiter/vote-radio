@@ -10,6 +10,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 
+/**
+ * Socket for server side. Communicate with client about changes of current song or
+ * {@link de.techfak.gse.tjohanndeiter.model.playlist.Playlist}.
+ */
 public class ServerSocket extends NanoWSD.WebSocket {
 
     public static final String CHANGED_PLAYLIST = "plyCh";
@@ -17,55 +21,70 @@ public class ServerSocket extends NanoWSD.WebSocket {
     public static final String INIT_USER = "userInit";
     private static final String DEFAULT_MESSAGE_SOCKET = "nth";
 
-    private Queue<String> queue = new PriorityQueue<>();
-    private List<ServerSocket> sockets;
+    private Queue<String> nextMessages = new PriorityQueue<>();
+    private List<ServerSocket> allServerSockets;
     private UserManger userManger;
 
-    ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> sockets,
+    ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> allServerSockets,
                  final UserManger userManger) {
         super(handshakeRequest);
-        this.sockets = sockets;
+        this.allServerSockets = allServerSockets;
         this.userManger = userManger;
     }
 
     void setNextSocketMessage(final String nextSocketMessage) {
-        if (!queue.contains(nextSocketMessage)) {
-            queue.add(nextSocketMessage);
+        if (!nextMessages.contains(nextSocketMessage)) {
+            nextMessages.add(nextSocketMessage);
         }
     }
 
+
+    /**
+     * Add new client to user manger and set message for current sing playlist and that user
+     * has been created. Also add server to {@link #allServerSockets}.
+     */
     @Override
     protected void onOpen() {
         try {
             userManger.addUser(new User(super.getHandshakeRequest().getRemoteIpAddress()));
             send(DEFAULT_MESSAGE_SOCKET);
-            queue.add(CHANGED_SONG);
-            queue.add(CHANGED_PLAYLIST);
-            queue.add(INIT_USER);
+            nextMessages.add(CHANGED_SONG);
+            nextMessages.add(CHANGED_PLAYLIST);
+            nextMessages.add(INIT_USER);
         } catch (IOException e) {
             e.printStackTrace();  //NOPMD
         }
-        sockets.add(this);
+        allServerSockets.add(this);
     }
 
 
+    /**
+     * Remove user form {@link #userManger} and #ServerSocket form {@link #allServerSockets}.
+     * @param closeCode close code
+     * @param s message form client
+     * @param b boolean
+     */
     @Override
     protected void onClose(final NanoWSD.WebSocketFrame.CloseCode closeCode, final String s, final boolean b) {
         try {
             userManger.removeUserByIp(super.getHandshakeRequest().getRemoteIpAddress());
-            sockets.remove(this);
+            allServerSockets.remove(this);
         } catch (final UserDoesntExits e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Answer client with next message from {@link #nextMessages}.
+     * @param webSocketFrame webSocketFrame
+     */
     @Override
     protected void onMessage(final NanoWSD.WebSocketFrame webSocketFrame) {
         try {
-            if (queue.isEmpty()) {
+            if (nextMessages.isEmpty()) {
                 send(DEFAULT_MESSAGE_SOCKET);
             } else {
-                send(queue.poll());
+                send(nextMessages.poll());
             }
         } catch (IOException e) {
             e.printStackTrace();  //NOPMD

@@ -8,6 +8,10 @@ import javafx.scene.image.ImageView;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
+/**
+ * Responsible for user interaction in offline/jukebox mode so to start and end music.
+ */
 public class JukeBoxController implements PropertyChangeListener {
 
     private static final Image PAUSE_ICON = new Image("/pause.png");
@@ -34,7 +38,10 @@ public class JukeBoxController implements PropertyChangeListener {
         }
     }
 
-
+    /**
+     * Initialize the controller and set music player.
+     * @param musicPlayer musicPlayer to set
+     */
     public void init(final MusicPlayer musicPlayer) {
         this.musicPlayer = musicPlayer;
     }

@@ -1,28 +1,37 @@
 package de.techfak.gse.tjohanndeiter.model.server;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.techfak.gse.tjohanndeiter.model.exception.client.UserDoesntExits;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.QueueSongJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParser;
+import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.model.json.UserJsonParser;
+import de.techfak.gse.tjohanndeiter.model.json.UserJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParser;
 import de.techfak.gse.tjohanndeiter.model.json.VoteListJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
-import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-import fi.iki.elonen.NanoHTTPD;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import static fi.iki.elonen.NanoHTTPD.MIME_PLAINTEXT;
-import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
-
+/**
+ * Responsible for Connection between server layer especially {@link SessionHandler} and model. Communicate with model
+ * via observer structure for {@link #currentSongJson} and {@link #playlistJson} and directly
+ * {@link #getJsonPlayTimeBean()}.
+ */
 public class ModelConnector implements PropertyChangeListener {
+
+    private static final String JSON = "application/json";
 
     private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
     private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
+    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
+    private UserJsonParser userJsonParser = new UserJsonParserImpl();
 
     private MusicPlayer musicPlayer;
 
@@ -53,8 +62,16 @@ public class ModelConnector implements PropertyChangeListener {
         }
     }
 
-    TimeBean createPlayTimeBean() {
-        return musicPlayer.createPlayTimeBean();
+    String getJsonPlayTimeBean() throws JsonProcessingException {
+        return timeBeanJsonParser.toJson(musicPlayer.createPlayTimeBean());
+    }
+
+    String getJsonUser(final String ipAddress) throws UserDoesntExits, JsonProcessingException {
+        return userJsonParser.toJson(userManger.getUserByIp(ipAddress));
+    }
+
+    User getUser(final String ipAddress) throws UserDoesntExits {
+        return userManger.getUserByIp(ipAddress);
     }
 
     private void refreshSongJson(final PropertyChangeEvent propertyChangeEvent) throws JsonProcessingException {
@@ -65,15 +82,11 @@ public class ModelConnector implements PropertyChangeListener {
         playlistJson = voteListJsonParser.toJson((VoteList) propertyChangeEvent.getNewValue());
     }
 
-    NanoHTTPD.Response getPlaylistResponse() {
-        return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, playlistJson);
+    String getPlaylistJson() {
+        return playlistJson;
     }
 
-    NanoHTTPD.Response getCurrentSongResponse() {
-        return newFixedLengthResponse(NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, currentSongJson);
-    }
-
-    public UserManger getUserManger() {
-        return userManger;
+    String getCurrentSongJson() {
+        return currentSongJson;
     }
 }

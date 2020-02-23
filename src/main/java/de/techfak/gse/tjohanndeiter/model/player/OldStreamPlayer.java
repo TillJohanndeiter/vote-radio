@@ -13,6 +13,9 @@ import java.net.DatagramSocket;
 import java.net.ServerSocket;
 
 
+/**
+ * @deprecated #MediaPlayer from VlcJ library stops two seconds if callback plays new song.
+ */
 @Deprecated
 public class OldStreamPlayer extends MusicPlayer {
 
@@ -20,6 +23,13 @@ public class OldStreamPlayer extends MusicPlayer {
     private static final int BUFFER = 2048;
     private String streamAddress;
 
+    /**
+     * Checks if port is in use and and set up finished event.
+     * @param playlist playlist of songs
+     * @param multicastAddress address of stream
+     * @param port port of stream
+     * @throws StartPlayerException in case if port is already in use
+     */
     public OldStreamPlayer(final Playlist playlist, final String multicastAddress, final int port)
             throws StartPlayerException {
         super(playlist);

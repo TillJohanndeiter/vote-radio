@@ -11,10 +11,6 @@ import java.util.LinkedList;
 /**
  * Abstract representation for a list of {@link Song} objects.
  */
-
-/**
- * Abstract representation for a list of {@link Song} objects.
- */
 public abstract class Playlist {
 
     public static final String PLAYLIST_CHANGE = "PLAYLIST_CHANGED";
@@ -30,6 +26,9 @@ public abstract class Playlist {
         songList = new LinkedList<>(songLibrary.getSongs());
     }
 
+    /**
+     * Defines action to skip to the next song.
+     */
     @JsonIgnore
     public abstract void skipToNext();
 

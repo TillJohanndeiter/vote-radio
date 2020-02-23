@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Program mode as client. Use java fx for graphic presentation.
+ */
 public class ClientMode extends Application implements ProgramMode {
 
 
@@ -26,35 +29,20 @@ public class ClientMode extends Application implements ProgramMode {
         final Client client = new Client();
         final ClientStrategy clientStrategy = new ClientStrategy(client);
 
-        final FXMLLoader networkFxmlLoader = new FXMLLoader(Thread.currentThread().
-                getContextClassLoader().getResource("NetworkControlPanel.fxml"));
-        final Pane networkRoot = networkFxmlLoader.load();
-        final NetworkController networkController = networkFxmlLoader.getController();
+        final Pane networkRoot = setUpNetworkController(client);
+
         final FXMLLoader fxmlLoader = new FXMLLoader(Thread.currentThread().
                 getContextClassLoader().getResource("Table.fxml"));
         final Pane root = fxmlLoader.load();
         final TableController tableController = fxmlLoader.getController();
-        tableController.init(clientStrategy, User.CLIENT);
+        tableController.init(clientStrategy, User.getClient());
         tableController.setControlPane(networkRoot);
+
+
         client.addPropertyChangeListener(tableController);
-        networkController.init(client);
 
-        final FXMLLoader currentSongLoader = new FXMLLoader(Thread.currentThread().
-                getContextClassLoader().getResource("CurrentSong.fxml"));
-        final Pane currentSongPane = currentSongLoader.load();
-        final CurrentSongController currentSongController = currentSongLoader.getController();
-        tableController.setCurrentSongPane(currentSongPane);
-        client.addPropertyChangeListener(currentSongController);
-
-        final FXMLLoader volumePanelLoader = new FXMLLoader(Thread.currentThread().
-                getContextClassLoader().getResource("VolumePanel.fxml"));
-        final Pane volumePane = volumePanelLoader.load();
-        final VolumeController volumeController = volumePanelLoader.getController();
-        tableController.setVolumePane(volumePane);
-        volumeController.init(client.getReceiverPlayer());
-        client.addPropertyChangeListener(volumeController);
-
-
+        final CurrentSongController currentSongController = setUpCurrentSongController(client, tableController);
+        setUpVolumeController(client, tableController);
         final Scene scene = new Scene(root);
         stage.setOnCloseRequest(windowEvent -> {
             client.kill();
@@ -64,6 +52,37 @@ public class ClientMode extends Application implements ProgramMode {
         stage.setTitle("GSERadio Client mode");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Pane setUpNetworkController(final Client client) throws IOException {
+        final FXMLLoader networkFxmlLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("NetworkControlPanel.fxml"));
+        final Pane networkRoot = networkFxmlLoader.load();
+        final NetworkController networkController = networkFxmlLoader.getController();
+        networkController.init(client);
+        return networkRoot;
+    }
+
+    private void setUpVolumeController(final Client client, final TableController tableController)
+            throws IOException {
+        final FXMLLoader volumePanelLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("VolumePanel.fxml"));
+        final Pane volumePane = volumePanelLoader.load();
+        final VolumeController volumeController = volumePanelLoader.getController();
+        tableController.setVolumePane(volumePane);
+        volumeController.init(client.getReceiverPlayer());
+        client.addPropertyChangeListener(volumeController);
+    }
+
+    private CurrentSongController setUpCurrentSongController(final Client client, final TableController tableController)
+            throws IOException {
+        final FXMLLoader currentSongLoader = new FXMLLoader(Thread.currentThread().
+                getContextClassLoader().getResource("CurrentSong.fxml"));
+        final Pane currentSongPane = currentSongLoader.load();
+        final CurrentSongController currentSongController = currentSongLoader.getController();
+        tableController.setCurrentSongPane(currentSongPane);
+        client.addPropertyChangeListener(currentSongController);
+        return currentSongController;
     }
 
     @Override

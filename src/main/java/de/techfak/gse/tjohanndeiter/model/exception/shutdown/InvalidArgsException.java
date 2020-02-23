@@ -5,6 +5,9 @@ import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException
 
 import java.util.Arrays;
 
+/**
+ * Throw in case of invalid command line arguments.
+ */
 public class InvalidArgsException extends ShutdownException {
 
     private static final long serialVersionUID = 1L;

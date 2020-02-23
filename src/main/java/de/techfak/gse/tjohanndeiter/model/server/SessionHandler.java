@@ -4,10 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import de.techfak.gse.tjohanndeiter.model.exception.client.UserDoesntExits;
 import de.techfak.gse.tjohanndeiter.model.exception.client.UserVotedAlreadyException;
 import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
-import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParser;
-import de.techfak.gse.tjohanndeiter.model.json.TimeBeanJsonParserImpl;
-import de.techfak.gse.tjohanndeiter.model.json.UserJsonParser;
-import de.techfak.gse.tjohanndeiter.model.json.UserJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -16,6 +12,10 @@ import static fi.iki.elonen.NanoHTTPD.Response;
 import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 
 
+/**
+ * Responsible for handling http rest requests form {@link de.techfak.gse.tjohanndeiter.model.client.Client}.
+ * Use {@link ModelConnector} to connect to model classes.
+ */
 public class SessionHandler {
 
     public static final String CURRENT_SONG = "/current-song";
@@ -28,41 +28,49 @@ public class SessionHandler {
     public static final String USER = "/userInformation";
     public static final String RESPONSE_HANDSHAKE = "GSERadio!";
     public static final String VOTED_SONG_PARAM = "votedSong";
-
+    private static final String JSON = "application/json";
     private static final String MIME_PLAINTEXT = NanoHTTPD.MIME_PLAINTEXT;
     private static final int FIRST_PARAM = 0;
 
 
-    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
-    private UserJsonParser userJsonParser = new UserJsonParserImpl();
     private UploadRequester uploadRequester;
 
 
     private VoteStrategy voteStrategy;
     private StreamUrl portBean;
     private ModelConnector modelConnector;
-    private UserManger userManger;
 
+
+    /**
+     * Constructor of session handler.
+     * @param portBean information about address of music stream
+     * @param voteStrategy handel voting form server
+     * @param uploadRequester handel writing of uploaded mp3 files form server
+     * @param modelConnector connection to model classes
+     */
     public SessionHandler(final StreamUrl portBean, final VoteStrategy voteStrategy,
                           final UploadRequester uploadRequester, final ModelConnector modelConnector) {
         this.portBean = portBean;
         this.voteStrategy = voteStrategy;
         this.uploadRequester = uploadRequester;
         this.modelConnector = modelConnector;
-        this.userManger = modelConnector.getUserManger();
     }
 
-
+    /**
+     * Handel http requests.
+     * @param session session of a requests.
+     * @return response form server
+     */
     Response serve(final IHTTPSession session) {
         session.getRemoteIpAddress();
-        Response response = newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Invalid Request");
+        Response response = badRequestPlainText("Invalid Request");
         final String request = session.getUri();
         switch (request) {
             case CURRENT_SONG:
-                response = modelConnector.getCurrentSongResponse();
+                response = jsonOKResponse(modelConnector.getCurrentSongJson());
                 break;
             case PLAYLIST:
-                response = modelConnector.getPlaylistResponse();
+                response = jsonOKResponse(modelConnector.getPlaylistJson());
                 break;
             case UPLOAD_FILE:
                 response = uploadRequester.handleFileUpload(session);
@@ -74,7 +82,7 @@ public class SessionHandler {
                 response = getPortStream();
                 break;
             case HANDSHAKE:
-                response = newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, RESPONSE_HANDSHAKE);
+                response = jsonOKResponse(RESPONSE_HANDSHAKE);
                 break;
             case PLAY_TIME:
                 response = getTimeBean();
@@ -91,50 +99,59 @@ public class SessionHandler {
         return response;
     }
 
+
     private Response getUser(final IHTTPSession session) {
         String ip = session.getRemoteIpAddress();
         try {
-            return newFixedLengthResponse(Response.Status.OK,"application/json", userJsonParser.toJson(userManger.getUserByIp(ip)));
+            return jsonOKResponse(modelConnector.getJsonUser(ip));
         } catch (JsonProcessingException | UserDoesntExits e) {
-            return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, e.getMessage());
+            return internalErrorResponse(e.getMessage());
         }
     }
 
     private Response getTimeBean() {
         try {
-            return newFixedLengthResponse(Response.Status.OK, NanoHTTPD.MIME_PLAINTEXT,
-                    timeBeanJsonParser.toJson(modelConnector.createPlayTimeBean()));
+            return jsonOKResponse(modelConnector.getJsonPlayTimeBean());
         } catch (JsonProcessingException e) {
-            return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, e.getMessage());
+            return internalErrorResponse(e.getMessage());
         }
     }
 
     private Response getPortStream() {
-        return newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, portBean.getPort());
+        return jsonOKResponse(portBean.getPort());
     }
 
     private Response getStreamingAddress() {
-        return newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, portBean.getMulticastAddress());
+        return jsonOKResponse(portBean.getMulticastAddress());
     }
 
     private Response handleVoteForSong(final NanoHTTPD.IHTTPSession session) {
-        Response response;
         try {
             final int idToVote = Integer.parseInt(session.getParameters().get(VOTED_SONG_PARAM).get(FIRST_PARAM));
-            User user = userManger.getUserByIp(session.getRemoteIpAddress());
+            User user = modelConnector.getUser(session.getRemoteIpAddress());
             voteStrategy.voteById(idToVote, user);
-            response = newFixedLengthResponse(
-                    NanoHTTPD.Response.Status.OK, MIME_PLAINTEXT, "Voted For Song" + idToVote);
+            return plainTextOKResponse("Voted For Song" + idToVote);
         } catch (NumberFormatException n) {
-            response = newFixedLengthResponse(
-                    NanoHTTPD.Response.Status.BAD_REQUEST, MIME_PLAINTEXT, "Invalid voteRequest");
-        } catch (SongIdNotAvailable e) {
-            response = newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT,
-                    "Invalid Song id");
-        } catch (UserVotedAlreadyException | UserDoesntExits e) {
-            response = newFixedLengthResponse(Response.Status.FORBIDDEN, MIME_PLAINTEXT, e.getMessage());
+            return badRequestPlainText("Invalid voteRequest");
+        } catch (SongIdNotAvailable | UserVotedAlreadyException | UserDoesntExits e) {
+            return  badRequestPlainText(e.getMessage());
         }
 
-        return response;
+    }
+
+    private Response jsonOKResponse(final String json) {
+        return newFixedLengthResponse(Response.Status.OK, JSON, json);
+    }
+
+    private Response plainTextOKResponse(final String text) {
+        return newFixedLengthResponse(Response.Status.OK, MIME_PLAINTEXT, text);
+    }
+
+    private Response internalErrorResponse(final String text) {
+        return newFixedLengthResponse(Response.Status.INTERNAL_ERROR, MIME_PLAINTEXT, text);
+    }
+
+    private Response badRequestPlainText(final String text) {
+        return newFixedLengthResponse(Response.Status.BAD_REQUEST, MIME_PLAINTEXT, text);
     }
 }

@@ -7,6 +7,10 @@ import de.techfak.gse.tjohanndeiter.model.exception.shutdown.InvalidArgsExceptio
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Abstract factory for {@link ProgramMode}.
+ */
 public abstract class ProgramModeFactory {
 
     public static final String STREAMING_PORT_ARG = "--streamPort=";
@@ -16,6 +20,11 @@ public abstract class ProgramModeFactory {
 
     public abstract ProgramMode createProgramMode(String... args) throws ShutdownException;
 
+    /**
+     * Checks if args combinations contains a illegal combination.
+     * @param args args form cmd
+     * @throws InvalidArgsException in case of an illegal combination
+     */
     protected void checkIfIllegalArgCombination(final String... args) throws InvalidArgsException {
         if (invalidArgCombination(args)) {
             throw new InvalidArgsException(args);
@@ -23,6 +32,12 @@ public abstract class ProgramModeFactory {
     }
 
 
+    /**
+     * Parse filepath at index #posOfFilepath from #args.
+     * @param args cmd args
+     * @param posOfFilepath index of filepath
+     * @return parse filepath
+     */
     protected String parseFilepath(final String[] args, final int posOfFilepath) {
         String filepath = System.getProperty(CURRENT_DIR);
         if (args.length > posOfFilepath && !args[posOfFilepath].startsWith(STREAMING_PORT_ARG)

@@ -2,6 +2,9 @@ package de.techfak.gse.tjohanndeiter.model.exception.shutdown;
 
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
 
+/**
+ * Exception if rest port is already in use.
+ */
 public class RestServerException extends ShutdownException {
 
     private static final long serialVersionUID = 42L;

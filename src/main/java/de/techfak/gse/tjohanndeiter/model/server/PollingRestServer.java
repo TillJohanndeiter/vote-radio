@@ -5,6 +5,11 @@ import fi.iki.elonen.NanoHTTPD;
 
 import java.io.IOException;
 
+/**
+ * Server without socket structure. But better for testing especially {@link SessionHandler}.
+ * @deprecated because sockets are way better than polling
+ */
+@Deprecated
 public class PollingRestServer extends NanoHTTPD implements RestServer {
 
 

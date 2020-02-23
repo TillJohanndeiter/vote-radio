@@ -4,20 +4,35 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 
+/**
+ * Represents a user form a client. {@link #jukebox} and {@link #client} are dummy users. Every user is identified by
+ * {@link #ipAddress}.
+ */
 public class User {
 
     @JsonIgnore
-    public static User JUKEBOX = new User("LOCAL");
+    private static User jukebox = new User("LOCAL");
     @JsonIgnore
-    public static User CLIENT = new User("CLIENT");
+    private static User client = new User("CLIENT");
 
     private String ipAddress;
 
+    /**
+     * Required for json.
+     */
     private User() {
     }
 
     public User(final String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public static User getJukebox() {
+        return jukebox;
+    }
+
+    public static User getClient() {
+        return client;
     }
 
     public String getIpAddress() {
@@ -26,8 +41,12 @@ public class User {
 
     @Override
     public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
         final User user = (User) o;
         return Objects.equals(ipAddress, user.ipAddress);
     }
@@ -39,8 +58,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "ipAddress='" + ipAddress + '\'' +
-                '}';
+        return "User{"
+                + "ipAddress='" + ipAddress
+                + '\''
+                + '}';
     }
 }

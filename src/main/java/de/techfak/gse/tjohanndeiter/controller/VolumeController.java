@@ -8,6 +8,10 @@ import javafx.scene.control.Slider;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
+/**
+ * Responsible for user interaction referring the sound of played music. So to make it louder or less.
+ */
 public class VolumeController implements PropertyChangeListener {
 
     public static final int MAX_VOLUME = 100;
@@ -26,6 +30,11 @@ public class VolumeController implements PropertyChangeListener {
         }
     }
 
+
+    /**
+     * Initialize {@link #musicPlayer} and set up event if {@link #volumeSlider} is changed.
+     * @param mp musicPlayer to set
+     */
     public void init(final MusicPlayer mp) {
         this.musicPlayer = mp;
         volumeSlider.valueProperty().addListener((observableValue, number, t1) -> {
@@ -36,13 +45,4 @@ public class VolumeController implements PropertyChangeListener {
         );
         volumeSlider.setValue(MAX_VOLUME);
     }
-
-
-    public void changeVolume() {
-        musicPlayer.setVolume((int) volumeSlider.getValue());
-        volumeSlider.setMin(0);
-        volumeSlider.setMax(MAX_VOLUME);
-    }
-
-
 }

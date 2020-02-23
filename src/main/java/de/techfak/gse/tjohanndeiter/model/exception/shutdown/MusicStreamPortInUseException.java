@@ -2,6 +2,9 @@ package de.techfak.gse.tjohanndeiter.model.exception.shutdown;
 
 import de.techfak.gse.tjohanndeiter.model.exception.prototypes.StartPlayerException;
 
+/**
+ * Throw in case of a music port that is already in use.
+ */
 public class MusicStreamPortInUseException extends StartPlayerException {
 
     private static final long serialVersionUID = 1L;

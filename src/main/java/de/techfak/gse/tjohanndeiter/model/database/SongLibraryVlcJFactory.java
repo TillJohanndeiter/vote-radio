@@ -10,7 +10,8 @@ import java.io.File;
 import java.util.Objects;
 
 /**
- * Creates {@link SongLibrary} with *.mp3 files from a folder.
+ * Creates {@link SongLibrary} with *.mp3 files from a folder. Use VlcJ library for implementation. For creation
+ * of {@link Song} bean {@link SongFactory} is used.
  */
 public class SongLibraryVlcJFactory implements SongLibraryFactory {
 

@@ -5,8 +5,10 @@ import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.server.RestServer;
 
+
+
 /**
- * Mode for server.
+ * Program mode as rest server and additional music stream. Also contains a simple controller.
  */
 public class ServerMode implements ProgramMode {
 

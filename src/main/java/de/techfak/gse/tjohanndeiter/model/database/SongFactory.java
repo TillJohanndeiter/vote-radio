@@ -12,11 +12,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Duration;
 
+
+/**
+ * Factory for bean {@link Song}. Use VlcJ to parse metadata.
+ */
 public class SongFactory {
 
 
     private static final int BEGIN_OF_PATH = 7;
 
+
+    /**
+     * Creates {@link Song} from file #songFile. Use own #MediaPlayerFactory.
+     *
+     * @param songFile file of persistent mp3 file.
+     * @return created {@link Song} bean
+     * @throws VlcJException if #ParsedWaiter failed to parse metadata
+     */
     public Song createSong(final File songFile) throws VlcJException {
         final MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
         final Song song = createSong(songFile, mediaPlayerFactory);
@@ -25,6 +37,14 @@ public class SongFactory {
     }
 
 
+    /**
+     * Creates {@link Song} from file #songFile. Use #mediaPlayerFactory.
+     *
+     * @param songFile           file of persistent mp3 file.
+     * @param mediaPlayerFactory used for creation of #ParsedWaiter and #Media
+     * @return created {@link Song} bean
+     * @throws VlcJException if #ParsedWaiter failed to parse metadata
+     */
     Song createSong(final File songFile, final MediaPlayerFactory mediaPlayerFactory)
             throws VlcJException {
 
@@ -58,7 +78,6 @@ public class SongFactory {
      * @param length   length of song in ms
      * @return song object with metadata
      */
-
     private Song createSong(final String filepath, final long length, final MetaData metaData) {
         final String title = removeSpaceAtBegin(metaData.get(Meta.TITLE));
         final String artist = metaData.get(Meta.ARTIST);

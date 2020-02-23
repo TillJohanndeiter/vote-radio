@@ -7,7 +7,10 @@ import de.techfak.gse.tjohanndeiter.model.playlist.Vote;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.server.User;
 
-public class ServerStrategy implements VoteStrategy{
+/**
+ * VoteStrategy for server. Vote is only hand over to {@link VoteList} if user hasn't vote for song already.
+ */
+public class ServerStrategy implements VoteStrategy {
 
     private VoteList voteList;
 
@@ -15,6 +18,15 @@ public class ServerStrategy implements VoteStrategy{
         this.voteList = voteList;
     }
 
+    /**
+     * Only hand over vote to {@link VoteList} if #user didn't voted already for song with #id.
+     *
+     * @param id   of song
+     * @param user user who vote for song
+     * @throws SongIdNotAvailable        if id doesn't belong to any
+     *                                   {@link de.techfak.gse.tjohanndeiter.model.database.Song}
+     * @throws UserVotedAlreadyException if user voted already for song with id
+     */
     public void voteById(final int id, final User user) throws SongIdNotAvailable, UserVotedAlreadyException {
 
         QueueSong queueSong = voteList.findSongById(id);
