@@ -18,11 +18,13 @@ class JsonQueuedSongTest {
     private static final String ARTIST_TEST = "artistTest";
     private static final String ALBUM_TEST = "albumTest";
     private static final String GENRE_TEST = "genreTest";
-    private static final String JSON_DEFAULT_SONG = "{\"title\":\"---\",\"artist\":\"---\"," +
-            "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"cover\":null,\"voteCount\":0,\"playsBeforeReplay\":0,\"id\":3}";
+    private static final String JSON_DEFAULT_SONG = "{\"title\":\"---\",\"artist\":\"---\","
+            + "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"cover\":null,\"votes\":[],"
+            + "\"playsBeforeReplay\":0,\"id\":3}";
 
-    private static final String NORMAL_JSON_SONG = "{\"title\":\"titleTest\",\"artist\":\"artistTest\"," +
-            "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"cover\":null,\"voteCount\":0,\"playsBeforeReplay\":0,\"id\":1}";
+    private static final String NORMAL_JSON_SONG = "{\"title\":\"titleTest\",\"artist\":\"artistTest\","
+            + "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"cover\":null,"
+            + "\"votes\":[],\"playsBeforeReplay\":0,\"id\":1}";
 
 
     private QueueSong queueSong = new QueueSong(
