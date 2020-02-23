@@ -13,13 +13,14 @@ class JukeBoxFactoryTest {
 
     @Test
     void createProgramMode() throws ShutdownException {
-        final ProgramMode programMode = factory.createProgramMode(GSERadio.JUKEBOX_ARG);
+        final ProgramMode programMode = factory.createProgramMode(GSERadio.JUKEBOX_ARG,
+                Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
         Assertions.assertTrue(programMode instanceof JukeBoxMode);
     }
 
     @Test
     void jukeBoxModeAlternative() throws ShutdownException {
-        final ProgramMode programMode = factory.createProgramMode(GSERadio.ALT_JUKEBOX_ARG);
+        final ProgramMode programMode = factory.createProgramMode(GSERadio.ALT_JUKEBOX_ARG, Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
         Assertions.assertTrue(programMode instanceof JukeBoxMode);
     }
 }

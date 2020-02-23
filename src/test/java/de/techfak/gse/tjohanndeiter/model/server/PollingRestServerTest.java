@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+@SuppressWarnings("deprecation")
 class PollingRestServerTest {
 
     private static final String LOCALHOST = "127.0.0.1";//NOPMD
