@@ -20,7 +20,7 @@ import java.io.File;
  */
 public class TerminalFactory extends ProgramModeFactory {
 
-    private SongLibraryFactory factory = new SongLibraryVlcJFactory();
+    private final SongLibraryFactory factory = new SongLibraryVlcJFactory();
 
     /**
      * Parse filepath and creates Terminal mode.
@@ -35,7 +35,7 @@ public class TerminalFactory extends ProgramModeFactory {
         final SongLibrary songLibrary = factory.createSongLibrary(new File(filepath));
         final Playlist playlist = new ShuffleList(songLibrary);
         final MusicPlayer musicPlayer = new OfflinePlayer(playlist);
-        TerminalController terminalController = new TerminalController();
+        final TerminalController terminalController = new TerminalController();
         addObservers(playlist, musicPlayer, terminalController);
         Runtime.getRuntime().addShutdownHook(new Thread(musicPlayer::end));
         return new TerminalMode(musicPlayer, terminalController);

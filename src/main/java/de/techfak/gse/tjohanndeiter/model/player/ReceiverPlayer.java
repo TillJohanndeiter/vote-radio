@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.player;
 
 public class ReceiverPlayer extends MusicPlayer {
 
-    private String rtpAddress;
+    private final String rtpAddress;
 
     public ReceiverPlayer(final String serverAdress, final String port) {
         super(null);

@@ -8,7 +8,7 @@ public class UserJsonParserImpl implements UserJsonParser {
 
 
 
-    private ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
     public User toUser(final String json) throws JsonProcessingException {

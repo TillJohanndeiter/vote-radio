@@ -25,7 +25,7 @@ import java.io.File;
 
 /**
  * Factory for {@link ServerMode}. Parse command lines for address and port of music stream and port of rest server.
- *  If no filepath is available in #args the current path of program is selected as music folder.
+ * If no filepath is available in #args the current path of program is selected as music folder.
  */
 public class ServerFactory extends ProgramModeFactory {
 
@@ -100,7 +100,7 @@ public class ServerFactory extends ProgramModeFactory {
     }
 
     private MusicPlayer createMusicPlayer(final boolean streamPlay, final StreamUrl streamUrl,
-                                          final VoteList voteList, final String[] args)
+                                          final VoteList voteList, final String... args)
             throws InvalidArgsException {
 
         final MusicPlayer musicPlayer;

@@ -8,7 +8,7 @@ public class QueueSongJsonParserImpl implements QueueSongJsonParser {
 
 
 
-    private ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
     public QueueSong toSong(final String json) throws JsonProcessingException {

@@ -6,7 +6,7 @@ import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 
 public class TimeBeanJsonParserImpl implements TimeBeanJsonParser {
 
-    private ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
     public TimeBean toTimeBean(final String json) throws JsonProcessingException {

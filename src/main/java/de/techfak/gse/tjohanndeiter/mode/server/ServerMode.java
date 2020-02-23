@@ -12,9 +12,9 @@ import de.techfak.gse.tjohanndeiter.model.server.RestServer;
  */
 public class ServerMode implements ProgramMode {
 
-    private RestServer restServer;
-    private MusicPlayer musicPlayer;
-    private Thread controllerThread;
+    private final RestServer restServer;
+    private final MusicPlayer musicPlayer;
+    private final Thread controllerThread;
 
 
     ServerMode(final RestServer restServer, final MusicPlayer musicPlayer, final Thread controllerThread) {

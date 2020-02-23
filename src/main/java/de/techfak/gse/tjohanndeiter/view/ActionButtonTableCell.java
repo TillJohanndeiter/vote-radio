@@ -56,19 +56,20 @@ public final class ActionButtonTableCell<S> extends TableCell<S, Button> {
 
         if (empty) {
             setGraphic(null);
-        } else if (userVotedAlready()) {
+        } else if (userVotedAlready() || isFirstInList()) {
             actionButton.setDisable(true);
-            setGraphic(actionButton);
-        } else if (getIndex() != 0) {
             setGraphic(actionButton);
         } else {
-            actionButton.setDisable(true);
             setGraphic(actionButton);
         }
     }
 
+    private boolean isFirstInList() {
+        return getIndex() == 0;
+    }
+
     private boolean userVotedAlready() {
-        QueueSong queueSong = (QueueSong) getCurrentItem();
+        final QueueSong queueSong = (QueueSong) getCurrentItem();
         for (final Vote vote : queueSong.getVotes()) {
             if (vote.getUser().equals(user)) {
                 return true;

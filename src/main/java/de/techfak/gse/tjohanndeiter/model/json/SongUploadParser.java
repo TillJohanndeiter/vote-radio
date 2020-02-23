@@ -7,7 +7,7 @@ import de.techfak.gse.tjohanndeiter.model.client.SongUpload;
 public class SongUploadParser implements SongUploadJSonParser {
 
 
-    private ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
     public SongUpload toSongUpload(final String json) throws JsonProcessingException {

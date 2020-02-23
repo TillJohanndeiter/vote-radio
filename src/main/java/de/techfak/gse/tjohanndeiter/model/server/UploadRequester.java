@@ -26,10 +26,10 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
  */
 public class UploadRequester {
 
-    private SongFactory songFactory = new SongFactory();
-    private SongUploadJSonParser songUploadJSonParser = new SongUploadParser();
-    private SongLibrary songLibrary;
-    private VoteList voteList;
+    private final SongFactory songFactory = new SongFactory();
+    private final SongUploadJSonParser songUploadJSonParser = new SongUploadParser();
+    private final SongLibrary songLibrary;
+    private final VoteList voteList;
 
     public UploadRequester(final SongLibrary songLibrary, final VoteList voteList) {
         this.songLibrary = songLibrary;

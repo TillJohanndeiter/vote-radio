@@ -12,7 +12,7 @@ import de.techfak.gse.tjohanndeiter.model.server.User;
  */
 public class ServerStrategy implements VoteStrategy {
 
-    private VoteList voteList;
+    private final VoteList voteList;
 
     public ServerStrategy(final VoteList voteList) {
         this.voteList = voteList;
@@ -27,9 +27,10 @@ public class ServerStrategy implements VoteStrategy {
      *                                   {@link de.techfak.gse.tjohanndeiter.model.database.Song}
      * @throws UserVotedAlreadyException if user voted already for song with id
      */
+    @Override
     public void voteById(final int id, final User user) throws SongIdNotAvailable, UserVotedAlreadyException {
 
-        QueueSong queueSong = voteList.findSongById(id);
+        final QueueSong queueSong = voteList.findSongById(id);
 
         if (userNotVotedForSong(queueSong, user)) {
             voteList.voteForSongById(id, user);

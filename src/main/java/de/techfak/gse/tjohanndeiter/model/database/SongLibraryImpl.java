@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class SongLibraryImpl implements SongLibrary {
 
-    private List<Song> songs = new ArrayList<>();
+    private final List<Song> songs = new ArrayList<>();
 
-    private String absFilePath;
+    private final String absFilePath;
 
     SongLibraryImpl(final String absFilePath) {
         this.absFilePath = absFilePath;

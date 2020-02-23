@@ -16,14 +16,14 @@ public class VolumeController implements PropertyChangeListener {
 
     public static final int MAX_VOLUME = 100;
     @FXML
-    private Slider volumeSlider = new Slider();
+    private final Slider volumeSlider = new Slider();
 
     private MusicPlayer musicPlayer;
 
     @Override
     public void propertyChange(final PropertyChangeEvent event) {
         if (event.getPropertyName().equals(MusicPlayer.VOLUME_CHANGED)) {
-            int volume = (Integer) event.getNewValue();
+            final int volume = (Integer) event.getNewValue();
             volumeSlider.setValue(volume);
         } else if (event.getPropertyName().equals(Client.NEW_PLAYER)) {
             musicPlayer = (MusicPlayer) event.getNewValue();

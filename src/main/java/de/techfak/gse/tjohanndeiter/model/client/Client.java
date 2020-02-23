@@ -26,9 +26,9 @@ public class Client {
     public static final String USER_INIT = "newUser";
     private static final int STATUS_OK = 200;
 
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final List<PropertyChangeListener> listeners = new ArrayList<>();
     private HttpRequester httpRequester;
-    private List<PropertyChangeListener> listeners = new ArrayList<>();
     private UpdateStrategy updateStrategy;
     private ReceiverPlayer receiverPlayer;
     private String restAddress;
@@ -40,7 +40,7 @@ public class Client {
      * @param restAddress ipAddress of server
      * @param port port of sever
      */
-    public void changeConnection(String restAddress, final String port) {
+    public void changeConnection(final String restAddress, final String port) {
         if (connected) {
             endConnection();
         } else {
@@ -57,7 +57,7 @@ public class Client {
      */
     public void voteById(final int id) {
         try {
-            int code = httpRequester.voteById(id);
+            final int code = httpRequester.voteById(id);
             if (code == STATUS_OK) {
                 support.firePropertyChange(SUCCESS_VOTED, null, id);
             }

@@ -43,12 +43,12 @@ public final class GSERadio {
                 factory = new ServerFactory();
             }
 
-            ProgramMode programMode = factory.createProgramMode(args);
+            final ProgramMode programMode = factory.createProgramMode(args);
             programMode.startProgram();
         } catch (final ShutdownException e) {
             System.out.println("ERROR :" + e.getMessage()); //NOPMD
             e.printStackTrace(); //NOPMD
-            System.exit(e.getErrorCode());
+            System.exit(e.getErrorCode()); //NOPMD
         }
     }
 

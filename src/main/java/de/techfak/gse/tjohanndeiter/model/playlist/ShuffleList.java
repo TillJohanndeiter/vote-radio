@@ -10,8 +10,6 @@ import java.util.Collections;
  */
 public class ShuffleList extends Playlist {
 
-    private int idxCurrentSong;
-
     /**
      * Calls super an make a copy of {@link Song} in {@link SongLibrary}.
      *

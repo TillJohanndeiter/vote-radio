@@ -21,7 +21,7 @@ public class OldStreamPlayer extends MusicPlayer {
 
     private static final int TIMEOUT = 1000;
     private static final int BUFFER = 2048;
-    private String streamAddress;
+    private final String streamAddress;
 
     /**
      * Checks if port is in use and and set up finished event.
@@ -73,7 +73,7 @@ public class OldStreamPlayer extends MusicPlayer {
             udpOnPort = false;
         }
 
-        return (udpOnPort || tcpOnPort);
+        return (udpOnPort || tcpOnPort); //NOPMD
     }
 
     @Override

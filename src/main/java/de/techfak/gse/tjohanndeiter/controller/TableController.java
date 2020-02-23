@@ -42,37 +42,37 @@ public class TableController implements PropertyChangeListener {
     private static final int COLUMN_COUNT = 6;
 
     @FXML
-    private TableView<QueueSong> table = new TableView<>();
+    private final TableView<QueueSong> table = new TableView<>();
 
     @FXML
-    private TableColumn<QueueSong, String> tileColumn = new TableColumn<>(TITLE);
+    private final TableColumn<QueueSong, String> tileColumn = new TableColumn<>(TITLE);
 
     @FXML
-    private TableColumn<QueueSong, String> artistColumn = new TableColumn<>(ARTIST);
+    private final TableColumn<QueueSong, String> artistColumn = new TableColumn<>(ARTIST);
 
     @FXML
-    private TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
+    private final TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
 
     @FXML
-    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
+    private final TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
 
     @FXML
-    private TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
+    private final TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
 
     @FXML
-    private TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
+    private final TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
 
 
     @FXML
-    private AnchorPane controlPane = new AnchorPane();
+    private final AnchorPane controlPane = new AnchorPane();
 
     @FXML
-    private AnchorPane currentSongPane = new AnchorPane();
+    private final AnchorPane currentSongPane = new AnchorPane();
 
     @FXML
-    private AnchorPane volumePane = new AnchorPane();
+    private final AnchorPane volumePane = new AnchorPane();
 
-    private ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
+    private final ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
 
     private VoteStrategy voteStrategy;
     private User user;
@@ -141,7 +141,7 @@ public class TableController implements PropertyChangeListener {
         }));
 
         lengthColumn.setCellValueFactory(songCallback ->
-                new SimpleStringProperty(Controllers.generateTimeFormat(songCallback.getValue().getLength())));
+                new SimpleStringProperty(ControllerUtils.generateTimeFormat(songCallback.getValue().getLength())));
     }
 
     /**

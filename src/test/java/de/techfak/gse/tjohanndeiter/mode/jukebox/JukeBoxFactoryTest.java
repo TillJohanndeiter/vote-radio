@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class JukeBoxFactoryTest {
 
-    private ProgramModeFactory factory = new JukeBoxFactory();
+    private final ProgramModeFactory factory = new JukeBoxFactory();
 
     @Test
     void createProgramMode() throws ShutdownException {

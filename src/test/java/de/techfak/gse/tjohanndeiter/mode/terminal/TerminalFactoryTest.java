@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.mode.terminal;
 
 class TerminalFactoryTest {
 
-    private TerminalFactory factory = new TerminalFactory();
+    private final TerminalFactory factory = new TerminalFactory();
 
     //TODO: Find solution for ci tests with vlc
 

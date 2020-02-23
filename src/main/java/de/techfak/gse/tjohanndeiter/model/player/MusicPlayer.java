@@ -11,7 +11,7 @@ import java.beans.PropertyChangeSupport;
 /**
  * Abstract representations of a musicPlayer. Use VlcJ Library for play music itself.
  */
-public abstract class MusicPlayer {
+public abstract class MusicPlayer { //NOPMD
 
     public static final String END_PLAYER = "endPlayer";
     public static final String PAUSE_PLAYER = "pausePlayer";
@@ -67,10 +67,10 @@ public abstract class MusicPlayer {
     public void changePlayingState() {
         if (mediaPlayer.status().isPlaying()) {
             pause();
-        } else if (!mediaPlayer.status().isPlayable()) {
-            startPlay();
-        } else {
+        } else if (mediaPlayer.status().isPlayable()) {
             resume();
+        } else {
+            startPlay();
         }
     }
 
@@ -109,7 +109,6 @@ public abstract class MusicPlayer {
             playlist.skipToNext();
             final Song song = playlist.getCurrentSong();
             support.firePropertyChange(NEW_SONG, null, song);
-            System.out.println("test");
         }
     }
 }

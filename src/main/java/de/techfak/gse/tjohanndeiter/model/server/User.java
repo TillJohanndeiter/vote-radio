@@ -8,7 +8,7 @@ import java.util.Objects;
  * Represents a user form a client. {@link #jukebox} and {@link #client} are dummy users. Every user is identified by
  * {@link #ipAddress}.
  */
-public class User {
+public class User { //NOPMD
 
     @JsonIgnore
     private static User jukebox = new User("LOCAL");

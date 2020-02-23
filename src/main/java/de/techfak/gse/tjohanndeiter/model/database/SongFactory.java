@@ -88,11 +88,11 @@ public class SongFactory {
         if (coverPath != null) {
             coverPath = coverPath.substring(BEGIN_OF_PATH);
             coverPath = coverPath.replace("%20", " ");
-            File coverFile = new File(coverPath);
+            final File coverFile = new File(coverPath);
             try {
                 cover = Files.readAllBytes(coverFile.toPath().toAbsolutePath());
             } catch (IOException e) {
-                e.printStackTrace();
+                cover = null;
             }
         }
         return new Song(filepath, title, artist, album, genre, length, cover);
@@ -100,13 +100,14 @@ public class SongFactory {
 
 
     private String removeSpaceAtBegin(String string) {
+        String result = string;
         for (int i = 0; i < string.length(); i++) {
-            if (string.charAt(i) != ' ') {
-                break;
+            if (result.charAt(i) == ' ') {
+                result = string.substring(i + 2);
             } else {
-                string = string.substring(i + 2);
+                break;
             }
         }
-        return string;
+        return result;
     }
 }

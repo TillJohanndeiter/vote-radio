@@ -18,10 +18,10 @@ class SessionHandlerITest {
     private static final String LOCALHOST = "127.0.0.1";//NOPMD
 
 
-    private Song song = new Song("test", "test", "test", "test", "test", 3);
-    private VoteList voteList = new VoteList(List.of(new QueueSong(song, 1,0)));
-    private ModelConnector modelObserver = new ModelConnector(null, null);
-    private PollingRestServer pollingServer = new PollingRestServer(LOCALHOST, 8080,
+    private final Song song = new Song("test", "test", "test", "test", "test", 3);
+    private final VoteList voteList = new VoteList(List.of(new QueueSong(song, 1,0)));
+    private final ModelConnector modelObserver = new ModelConnector(null, null);
+    private final PollingRestServer pollingServer = new PollingRestServer(LOCALHOST, 8080,
             new SessionHandler(null,null, null, modelObserver));
 
     @BeforeEach
@@ -44,21 +44,21 @@ class SessionHandlerITest {
      */
     @Test
     void currentSongStatusCode() throws IOException {
-        int code = getCode("current-song");
+        final int code = getCode("current-song");
         Assertions.assertThat(code == 200).isTrue();
     }
 
 
     @Test
     void wrongCurrentSongRequestCode() throws IOException {
-        int code = getCode("curren-song");
+        final int code = getCode("curren-song");
         Assertions.assertThat(code != 200).isTrue();
     }
 
 
     @Test
     void playlistStatusCode() throws IOException {
-        int code = getCode("playlist");
+        final int code = getCode("playlist");
         Assertions.assertThat(code == 200).isTrue();
     }
 
@@ -66,7 +66,7 @@ class SessionHandlerITest {
     @Test
     void wrongPlaylistRequestStatusCode() throws IOException {
 
-        int code = getCode("plalist");
+        final int code = getCode("plalist");
         Assertions.assertThat(code != 200).isTrue();
     }
 

@@ -10,8 +10,8 @@ import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 public class TerminalMode implements ProgramMode {
 
 
-    private TerminalController terminalController;
-    private MusicPlayer musicPlayer;
+    private final TerminalController terminalController;
+    private final MusicPlayer musicPlayer;
 
 
     public TerminalMode(final MusicPlayer musicPlayer, final TerminalController terminalController) {

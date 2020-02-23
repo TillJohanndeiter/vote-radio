@@ -21,9 +21,9 @@ public class ServerSocket extends NanoWSD.WebSocket {
     public static final String INIT_USER = "userInit";
     private static final String DEFAULT_MESSAGE_SOCKET = "nth";
 
-    private Queue<String> nextMessages = new PriorityQueue<>();
-    private List<ServerSocket> allServerSockets;
-    private UserManger userManger;
+    private final Queue<String> nextMessages = new PriorityQueue<>();
+    private final List<ServerSocket> allServerSockets;
+    private final UserManger userManger;
 
     ServerSocket(final NanoHTTPD.IHTTPSession handshakeRequest, final List<ServerSocket> allServerSockets,
                  final UserManger userManger) {
@@ -70,7 +70,7 @@ public class ServerSocket extends NanoWSD.WebSocket {
             userManger.removeUserByIp(super.getHandshakeRequest().getRemoteIpAddress());
             allServerSockets.remove(this);
         } catch (final UserDoesntExits e) {
-            e.printStackTrace();
+            e.printStackTrace(); //NOPMD
         }
     }
 

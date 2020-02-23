@@ -27,12 +27,12 @@ class JsonQueuedSongTest {
             + "\"votes\":[],\"playsBeforeReplay\":0,\"id\":1}";
 
 
-    private QueueSong queueSong = new QueueSong(
+    private final QueueSong queueSong = new QueueSong(
             new Song(FP_TEST, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5), 1, 0);
-    private QueueSong defaultSong = new QueueSong(
+    private final QueueSong defaultSong = new QueueSong(
             new Song(NO_METADATA, NO_METADATA, NO_METADATA, NO_METADATA, NO_METADATA, 2), 3, 0);
 
-    private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
+    private final QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
 
     @Test
     void normalSerialization() {
@@ -54,19 +54,19 @@ class JsonQueuedSongTest {
 
     @Test
     void toJsonNormal() throws JsonProcessingException {
-        QueueSong result = songJsonParser.toSong(NORMAL_JSON_SONG);
+        final QueueSong result = songJsonParser.toSong(NORMAL_JSON_SONG);
         Assertions.assertEquals(result, queueSong);
     }
 
     @Test
     void toJsonDefault() throws JsonProcessingException {
-        QueueSong result = songJsonParser.toSong(JSON_DEFAULT_SONG);
+        final QueueSong result = songJsonParser.toSong(JSON_DEFAULT_SONG);
         Assertions.assertEquals(result, defaultSong);
     }
 
     @Test
     void notSerializable() throws JsonProcessingException {
-        String playlistJson = new VoteListJsonParserImpl().toJson(new VoteList(List.of(queueSong, defaultSong)));
+        final String playlistJson = new VoteListJsonParserImpl().toJson(new VoteList(List.of(queueSong, defaultSong)));
 
         Assertions.assertThrows(JsonProcessingException.class, () -> songJsonParser.toSong(playlistJson));
     }

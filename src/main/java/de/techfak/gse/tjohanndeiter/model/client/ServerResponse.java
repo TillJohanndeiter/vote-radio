@@ -9,8 +9,8 @@ import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
  */
 public class ServerResponse {
 
-    private QueueSong queueSong;
-    private TimeBean timeBean;
+    private final QueueSong queueSong;
+    private final TimeBean timeBean;
 
     ServerResponse(final QueueSong queueSong, final TimeBean timeBean) {
         this.queueSong = queueSong;

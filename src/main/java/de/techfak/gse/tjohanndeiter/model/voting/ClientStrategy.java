@@ -8,7 +8,7 @@ import de.techfak.gse.tjohanndeiter.model.server.User;
  */
 public class ClientStrategy implements VoteStrategy {
 
-    private Client client;
+    private final Client client;
 
     public ClientStrategy(final Client client) {
         this.client = client;

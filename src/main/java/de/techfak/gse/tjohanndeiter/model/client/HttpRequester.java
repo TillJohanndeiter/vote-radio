@@ -28,11 +28,11 @@ class HttpRequester {
     private static final String HTTP = "http://";
     private static final int STATUS_OK = 200;
 
-    private HttpClient httpClient = HttpClient.newHttpClient();
-    private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
-    private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
-    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
-    private UserJsonParser userJsonParser = new UserJsonParserImpl();
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
+    private final VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
+    private final TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
+    private final UserJsonParser userJsonParser = new UserJsonParserImpl();
 
     private String restAddress;
     private String port;

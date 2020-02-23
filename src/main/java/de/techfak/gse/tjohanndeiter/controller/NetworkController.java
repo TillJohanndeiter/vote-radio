@@ -20,7 +20,7 @@ import java.io.File;
 /**
  * Controller responsible for user interaction to connect or disconnect client to server.
  */
-public class NetworkController implements PropertyChangeListener {
+public class NetworkController implements PropertyChangeListener { //NOPMD
 
     private static final Color NOT_CONNECTED_COLOR = Color.web("#c9c9c9");
     private static final Color RECONNECT_COLOR = Color.web("#ffff97");
@@ -32,27 +32,27 @@ public class NetworkController implements PropertyChangeListener {
     private static final String NOT_CONNECTED = "Not Connected";
 
     @FXML
-    private TextField ipAddressField = new TextField();
+    private final TextField ipAddressField = new TextField();
 
     @FXML
-    private TextField restPortField = new TextField();
+    private final TextField restPortField = new TextField();
 
     @FXML
-    private Rectangle colorNetStatus = new Rectangle();
+    private final Rectangle colorNetStatus = new Rectangle();
 
     @FXML
-    private Text networkTextStatus = new Text();
+    private final Text networkTextStatus = new Text();
 
     @FXML
-    private Button connectButton = new Button();
+    private final Button connectButton = new Button();
 
-    private Uploader uploader = new Uploader(this);
+    private final Uploader uploader = new Uploader(this);
 
     private Client client;
 
     @Override
-    public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
-        switch (propertyChangeEvent.getPropertyName()) {
+    public void propertyChange(final PropertyChangeEvent event) {
+        switch (event.getPropertyName()) {
             case Client.INVALID_URL:
                 showInvalidURL();
                 break;

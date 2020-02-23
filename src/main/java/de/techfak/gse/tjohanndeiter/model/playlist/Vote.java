@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 
 import de.techfak.gse.tjohanndeiter.model.server.User;
 
-public class Vote {
+public class Vote { //NOPMD
 
     private User user;
 

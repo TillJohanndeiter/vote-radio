@@ -12,11 +12,12 @@ class SongTest {
     private static final String ARTIST_TEST = "artistTest";
     private static final String ALBUM_TEST = "albumTest";
     private static final String GENRE_TEST = "genreTest";
-    private Song song = new Song(null, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5);
+    private final Song song = new Song(null, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5);
+    private final Song defaultSong = new Song(null, null, null, null, null, 0);
 
     @Test
     void getFilepath() {
-        Assertions.assertNull(song.getFilepath());
+        Assertions.assertEquals(song.getFilepath(), FP_TEST);
     }
 
     @Test
@@ -43,9 +44,6 @@ class SongTest {
     void getGenre() {
         Assertions.assertEquals(song.getGenre(), GENRE_TEST);
     }
-
-
-    private Song defaultSong = new Song(null, null, null, null, null, 0);
 
     @Test
     void getTitleDefault() {

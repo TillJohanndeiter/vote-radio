@@ -26,8 +26,8 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
     private static final String REGISTER_MESSAGE = "reg";
     private static final int WAIT_INTERVAL = 50;
 
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private HttpRequester httpRequester;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final HttpRequester httpRequester;
 
     SocketStrategy(final HttpRequester httpRequester) throws URISyntaxException {
         super(new URI("ws://" + httpRequester.getRestAddress() + ':' + httpRequester.getPort()));
@@ -47,7 +47,7 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
         try {
             closeBlocking();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //NOPMD
         }
     }
 
@@ -75,7 +75,7 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
             }
         } catch (IOException | InterruptedException e) {
             support.firePropertyChange(JSON_ERROR, REGISTER_MESSAGE, null);
-            e.printStackTrace();
+            e.printStackTrace(); //NOPMD
         }
         answer(message);
     }
@@ -83,12 +83,12 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
     private void fireNewSong() throws IOException, InterruptedException {
         final QueueSong queueSong = httpRequester.getCurrentSong();
         final TimeBean timeBean = httpRequester.getPlayedTime();
-        ServerResponse response = new ServerResponse(queueSong, timeBean);
-        Thread thread = new Thread(() -> {
+        final ServerResponse response = new ServerResponse(queueSong, timeBean);
+        final Thread thread = new Thread(() -> {
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                e.printStackTrace(); //NOPMD
             }
             support.firePropertyChange(Client.NEW_SONG, null, response);
         });

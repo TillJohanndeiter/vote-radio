@@ -9,7 +9,7 @@ import de.techfak.gse.tjohanndeiter.model.server.User;
  */
 public class JukeBoxStrategy implements VoteStrategy {
 
-    private VoteList voteList;
+    private final VoteList voteList;
 
     public JukeBoxStrategy(final VoteList voteList) {
         this.voteList = voteList;

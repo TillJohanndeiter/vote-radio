@@ -9,15 +9,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link RestServer} with socket support for better communication with client.
  */
 public class SocketRestServer extends NanoWSD implements RestServer, PropertyChangeListener {
 
-    private SessionHandler sessionHandler;
-    private UserManger userManger;
-    private ArrayList<ServerSocket> allConnectedSockets = new ArrayList<>();
+    private final SessionHandler sessionHandler;
+    private final UserManger userManger;
+    private final List<ServerSocket> allConnectedSockets = new ArrayList<>();
 
 
     /**

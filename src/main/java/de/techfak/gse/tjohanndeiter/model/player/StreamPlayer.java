@@ -12,10 +12,10 @@ import java.util.TimerTask;
 
 public class StreamPlayer extends MusicPlayer {
 
-    private String address;
-    private MediaListPlayer listPlayer = mediaPlayerFactory.mediaPlayers().newMediaListPlayer();
+    private final String address;
+    private final MediaListPlayer listPlayer = mediaPlayerFactory.mediaPlayers().newMediaListPlayer();
+    private final Timer timer = new Timer();
     private Song currentSong;
-    private Timer timer = new Timer();
     private TimerTask timerTask;
     private long timeCounter = 0;
 

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class UserManger {
 
-    private List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     public void addUser(final User user) {
         users.add(user);
@@ -21,7 +21,7 @@ public class UserManger {
     }
 
     public void removeUserByIp(final String ipAddress) throws UserDoesntExits {
-        User toDelete = findUserByIp(ipAddress);
+        final User toDelete = findUserByIp(ipAddress);
         users.remove(toDelete);
     }
 

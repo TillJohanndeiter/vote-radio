@@ -1,20 +1,20 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
-final class Controllers {
+final class ControllerUtils {
 
     private static final String ZERO = "0";
     private static final int MIL_TO_SECONDS = 1000;
     private static final int MINUTE = 60;
     private static final int RANGE = 10;
 
-    private Controllers() {
+    private ControllerUtils() {
 
     }
 
 
-    static String generateTimeFormat(long length) {
+    static String generateTimeFormat(long lengthInMil) {
         String result = null;
-        length = length / MIL_TO_SECONDS;
+        long length = lengthInMil / MIL_TO_SECONDS;
         if (length / MINUTE < RANGE) {
             result = ZERO;
         }

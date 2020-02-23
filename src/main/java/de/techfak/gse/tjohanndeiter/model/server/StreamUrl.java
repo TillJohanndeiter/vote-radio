@@ -7,8 +7,8 @@ package de.techfak.gse.tjohanndeiter.model.server;
  */
 public class StreamUrl {
 
-    private String multicastAddress;
-    private String port;
+    private final String multicastAddress;
+    private final String port;
 
     public StreamUrl(final String multicastAddress, final int port) {
         this.multicastAddress = multicastAddress;

@@ -13,7 +13,7 @@ import java.io.IOException;
 public class PollingRestServer extends NanoHTTPD implements RestServer {
 
 
-    private SessionHandler sessionHandler;
+    private final SessionHandler sessionHandler;
 
     PollingRestServer(final String address, final int restPort, final SessionHandler sessionHandler) {
         super(address, restPort);

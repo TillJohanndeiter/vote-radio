@@ -20,8 +20,8 @@ import java.util.TimerTask;
 public class PollingStrategy implements UpdateStrategy {
 
     private static final int REQUEST_PERIOD = 5000;
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private HttpRequester requester;
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final HttpRequester requester;
 
     private QueueSong oldSong;
     private VoteList oldList;

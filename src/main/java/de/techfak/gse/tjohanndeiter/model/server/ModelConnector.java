@@ -26,12 +26,10 @@ import java.beans.PropertyChangeListener;
  */
 public class ModelConnector implements PropertyChangeListener {
 
-    private static final String JSON = "application/json";
-
-    private QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
-    private VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
-    private TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
-    private UserJsonParser userJsonParser = new UserJsonParserImpl();
+    private final QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
+    private final VoteListJsonParser voteListJsonParser = new VoteListJsonParserImpl();
+    private final TimeBeanJsonParser timeBeanJsonParser = new TimeBeanJsonParserImpl();
+    private final UserJsonParser userJsonParser = new UserJsonParserImpl();
 
     private MusicPlayer musicPlayer;
 

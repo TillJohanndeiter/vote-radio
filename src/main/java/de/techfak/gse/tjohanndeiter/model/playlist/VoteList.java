@@ -13,9 +13,9 @@ import java.util.List;
 
 public class VoteList extends Playlist {
 
+    private final LinkedList<QueueSong> songList = new LinkedList<>();
     private int playsBeforeReplay;
     private QueueSong currentSong;
-    private LinkedList<QueueSong> songList = new LinkedList<>();
 
     /**
      * Default constructor for serialization. Do not delete.
@@ -67,7 +67,7 @@ public class VoteList extends Playlist {
      * @throws SongIdNotAvailable in case if not song with #idOfSong is available
      */
     public void voteForSongById(final int idOfSong, final User user) throws SongIdNotAvailable {
-        QueueSong foundSong = findSongById(idOfSong);
+        final QueueSong foundSong = findSongById(idOfSong);
         updatePlaylist(foundSong, user);
     }
 
@@ -103,7 +103,7 @@ public class VoteList extends Playlist {
      * playedBeforeReplay. Method bring it back to the correct order.
      */
     private void correction() {
-        for (QueueSong queueSong : songList) {
+        for (final QueueSong queueSong : songList) {
             while (isNotHighest(queueSong) && couldBeHigher(queueSong) && nextSongLessVotes(queueSong)) {
                 forwardSwap(queueSong);
             }

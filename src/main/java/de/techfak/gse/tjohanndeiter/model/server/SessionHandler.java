@@ -16,7 +16,7 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
  * Responsible for handling http rest requests form {@link de.techfak.gse.tjohanndeiter.model.client.Client}.
  * Use {@link ModelConnector} to connect to model classes.
  */
-public class SessionHandler {
+public class SessionHandler { //NOPMD
 
     public static final String CURRENT_SONG = "/current-song";
     public static final String PLAYLIST = "/playlist";
@@ -33,12 +33,10 @@ public class SessionHandler {
     private static final int FIRST_PARAM = 0;
 
 
-    private UploadRequester uploadRequester;
-
-
-    private VoteStrategy voteStrategy;
-    private StreamUrl portBean;
-    private ModelConnector modelConnector;
+    private final UploadRequester uploadRequester;
+    private final VoteStrategy voteStrategy;
+    private final ModelConnector modelConnector;
+    private final StreamUrl portBean;
 
 
     /**
@@ -63,7 +61,7 @@ public class SessionHandler {
      */
     Response serve(final IHTTPSession session) {
         session.getRemoteIpAddress();
-        Response response = badRequestPlainText("Invalid Request");
+        Response response = badRequestPlainText("Invalid Request"); //NOPMD
         final String request = session.getUri();
         switch (request) {
             case CURRENT_SONG:
@@ -101,7 +99,7 @@ public class SessionHandler {
 
 
     private Response getUser(final IHTTPSession session) {
-        String ip = session.getRemoteIpAddress();
+        final String ip = session.getRemoteIpAddress();
         try {
             return jsonOKResponse(modelConnector.getJsonUser(ip));
         } catch (JsonProcessingException | UserDoesntExits e) {
@@ -125,10 +123,10 @@ public class SessionHandler {
         return jsonOKResponse(portBean.getMulticastAddress());
     }
 
-    private Response handleVoteForSong(final NanoHTTPD.IHTTPSession session) {
+    private Response handleVoteForSong(final IHTTPSession session) {
         try {
             final int idToVote = Integer.parseInt(session.getParameters().get(VOTED_SONG_PARAM).get(FIRST_PARAM));
-            User user = modelConnector.getUser(session.getRemoteIpAddress());
+            final User user = modelConnector.getUser(session.getRemoteIpAddress());
             voteStrategy.voteById(idToVote, user);
             return plainTextOKResponse("Voted For Song" + idToVote);
         } catch (NumberFormatException n) {

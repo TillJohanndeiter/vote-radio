@@ -25,8 +25,8 @@ public class Uploader {
     public static final String FAILED_UPLOAD = "FAILED_UPLOAD";
     private static final int OK_CODE = 200;
 
-    private PropertyChangeSupport support = new PropertyChangeSupport(this);
-    private SongUploadJSonParser songUploadJSonParser = new SongUploadParser();
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final SongUploadJSonParser songUploadJSonParser = new SongUploadParser();
 
     public Uploader(final PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -77,6 +77,6 @@ public class Uploader {
     }
 
     private boolean fileIsValidAndExits(final File file) {
-        return file != null && file.exists() && file.getAbsolutePath().toLowerCase().endsWith(".mp3");
+        return file != null && file.exists() && file.getAbsolutePath().toLowerCase().endsWith(".mp3"); //NOPMD
     }
 }

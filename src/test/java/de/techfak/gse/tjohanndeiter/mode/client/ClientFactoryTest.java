@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class ClientFactoryTest {
 
-    private ClientFactory factory = new ClientFactory();
+    private final ClientFactory factory = new ClientFactory();
 
     @Test
     void createProgramModeTest() throws ShutdownException {

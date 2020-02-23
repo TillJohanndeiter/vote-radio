@@ -16,7 +16,7 @@ import java.util.Objects;
 public class SongLibraryVlcJFactory implements SongLibraryFactory {
 
 
-    private SongFactory songFactory = new SongFactory();
+    private final SongFactory songFactory = new SongFactory();
 
     /**
      * Creates {@link SongLibrary}. Parse als .mp3 files form the folder with

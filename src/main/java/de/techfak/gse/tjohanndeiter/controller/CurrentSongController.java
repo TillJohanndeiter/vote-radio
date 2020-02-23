@@ -29,25 +29,25 @@ public class CurrentSongController implements PropertyChangeListener {
     private static final String DEFAULT_TIME_STAMP = "0:00";
 
     @FXML
-    private Text title = new Text();
+    private final Text title = new Text();
 
     @FXML
-    private Text artist = new Text();
+    private final Text artist = new Text();
 
     @FXML
-    private Text album = new Text();
+    private final Text album = new Text();
 
     @FXML
-    private Text duration = new Text();
+    private final Text duration = new Text();
 
     @FXML
-    private Text playedTime = new Text();
+    private final Text playedTime = new Text();
 
     @FXML
     private ImageView cover;
 
     @FXML
-    private Slider timeSlider = new Slider();
+    private final Slider timeSlider = new Slider();
 
     private TimerTask task;
     private Timer timer;
@@ -58,8 +58,8 @@ public class CurrentSongController implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
-        switch (propertyChangeEvent.getPropertyName()) {
+    public void propertyChange(final PropertyChangeEvent event) {
+        switch (event.getPropertyName()) {
             case MusicPlayer.END_PLAYER:
                 resetCurrentSong();
                 break;
@@ -67,15 +67,15 @@ public class CurrentSongController implements PropertyChangeListener {
                 task.cancel();
                 break;
             case MusicPlayer.RESUME_PLAYER:
-                final TimeBean timeBean = (TimeBean) propertyChangeEvent.getNewValue();
+                final TimeBean timeBean = (TimeBean) event.getNewValue();
                 startTimeCounter(timeBean);
                 break;
             case MusicPlayer.NEW_SONG:
-                final Song newSong = (Song) propertyChangeEvent.getNewValue();
+                final Song newSong = (Song) event.getNewValue();
                 Platform.runLater(() -> updateCurrentSong(newSong, new TimeBean(newSong.getLength(), 0)));
                 break;
             case Client.NEW_SONG:
-                final ServerResponse response = (ServerResponse) propertyChangeEvent.getNewValue();
+                final ServerResponse response = (ServerResponse) event.getNewValue();
                 final Song song = response.getQueueSong();
                 updateCurrentSong(song, response.getTimeBean());
                 startTimeCounter(response.getTimeBean());
@@ -108,15 +108,15 @@ public class CurrentSongController implements PropertyChangeListener {
     }
 
     private void setCover(final Song newSong) {
-        if (newSong.getCover() != null) {
-            cover.setImage(new Image(new ByteArrayInputStream(newSong.getCover())));
-        } else {
+        if (newSong.getCover() == null) {
             cover.setImage(new Image(DEFAULT_COVER));
+        } else {
+            cover.setImage(new Image(new ByteArrayInputStream(newSong.getCover())));
         }
     }
 
     private void setInitialTime(final Song newSong) {
-        final String timeFormat = Controllers.generateTimeFormat(newSong.getLength());
+        final String timeFormat = ControllerUtils.generateTimeFormat(newSong.getLength());
         duration.setText(timeFormat);
         playedTime.setText(timeFormat);
     }
@@ -135,7 +135,7 @@ public class CurrentSongController implements PropertyChangeListener {
             @Override
             public void run() {
                 if (counter <= lengthOfSong) {
-                    playedTime.setText(Controllers.generateTimeFormat(lengthOfSong - counter));
+                    playedTime.setText(ControllerUtils.generateTimeFormat(lengthOfSong - counter));
                     timeSlider.setValue(timeSlider.getMin() + counter);
                     counter = counter + PERIOD;
                 }

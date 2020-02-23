@@ -12,9 +12,10 @@ public class ServerController extends TerminalController {
     private static final String ADDRESS_CMD = "adress";
 
 
-    private RestServer server;
+    private final RestServer server;
 
     public ServerController(final RestServer server) {
+        super();
         this.server = server;
     }
 

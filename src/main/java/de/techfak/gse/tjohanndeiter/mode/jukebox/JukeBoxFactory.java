@@ -26,6 +26,7 @@ public class JukeBoxFactory extends ProgramModeFactory {
 
     /**
      * Checks if #args are contradictory and if not creates {@link JukeBoxMode}.
+     *
      * @param args Cmd args
      * @return created {@link JukeBoxMode}
      * @throws ShutdownException if #args contains contradictory combinations.
@@ -56,7 +57,7 @@ public class JukeBoxFactory extends ProgramModeFactory {
         JukeBoxMode.setVoteStrategy(voteStrategy);
     }
 
-    private SongLibrary createSongLibrary(final String[] args) throws ShutdownException {
+    private SongLibrary createSongLibrary(final String... args) throws ShutdownException {
         final String filepath = parseFilepath(args, 1);
         final SongLibraryFactory songLibraryFactory = new SongLibraryVlcJFactory();
         return songLibraryFactory.createSongLibrary(new File(filepath));

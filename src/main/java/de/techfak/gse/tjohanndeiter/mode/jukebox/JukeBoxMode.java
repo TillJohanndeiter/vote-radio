@@ -28,7 +28,6 @@ public class JukeBoxMode extends Application implements ProgramMode {
     private static VoteStrategy voteStrategy;
 
     public JukeBoxMode() {
-
     }
 
     public static void setVoteList(final VoteList voteList) {

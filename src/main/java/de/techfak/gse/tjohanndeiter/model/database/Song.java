@@ -44,7 +44,9 @@ public class Song { //NOPMD
         this.album = (album == null) ? NO_METADATA : album;
         this.genre = (genre == null) ? NO_METADATA : genre;
         this.length = length;
-        this.cover = cover;
+        if (cover != null) {
+            this.cover = cover.clone();
+        }
     }
 
 
@@ -126,6 +128,6 @@ public class Song { //NOPMD
     }
 
     public byte[] getCover() {
-        return cover;
+        return cover.clone();
     }
 }
