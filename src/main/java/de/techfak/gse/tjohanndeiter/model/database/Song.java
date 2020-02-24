@@ -128,6 +128,6 @@ public class Song { //NOPMD
     }
 
     public byte[] getCover() {
-        return cover.clone();
+        return cover; //NOPMD
     }
 }
