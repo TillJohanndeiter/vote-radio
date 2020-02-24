@@ -23,6 +23,9 @@ import java.io.IOException;
 public class ClientMode extends Application implements ProgramMode {
 
 
+    private static final int MIN_HEIGHT = 610;
+    private static final int MIN_WIDTH = 1000;
+
     @Override
     public void start(final Stage stage) throws IOException {
 
@@ -44,6 +47,8 @@ public class ClientMode extends Application implements ProgramMode {
         final CurrentSongController currentSongController = setUpCurrentSongController(client, tableController);
         setUpVolumeController(client, tableController);
         final Scene scene = new Scene(root);
+        stage.setMinHeight(MIN_HEIGHT);
+        stage.setMinWidth(MIN_WIDTH);
         stage.setOnCloseRequest(windowEvent -> {
             client.kill();
             currentSongController.end();

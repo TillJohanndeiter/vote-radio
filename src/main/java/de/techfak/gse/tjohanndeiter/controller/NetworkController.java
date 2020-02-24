@@ -149,7 +149,6 @@ public class NetworkController implements PropertyChangeListener { //NOPMD
         colorNetStatus.setFill(ERROR_COLOR);
     }
 
-
     /**
      * Initialize default values for localhost and port 8080.
      * @param client client used for server communication

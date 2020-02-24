@@ -10,6 +10,7 @@ import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -22,6 +23,9 @@ import java.io.IOException;
  */
 public class JukeBoxMode extends Application implements ProgramMode {
 
+
+    private static final int MIN_HEIGHT = 610;
+    private static final int MIN_WIDTH = 950;
 
     private static VoteList voteList;
     private static MusicPlayer musicPlayer;
@@ -64,9 +68,12 @@ public class JukeBoxMode extends Application implements ProgramMode {
         stage.setOnCloseRequest(windowEvent -> {
             musicPlayer.end();
             currentSongController.end();
+            Platform.exit();
         });
         stage.setTitle("JukeBox Mode");
         stage.setScene(scene);
+        stage.setMinHeight(MIN_HEIGHT);
+        stage.setMinWidth(MIN_WIDTH);
         stage.show();
     }
 

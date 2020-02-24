@@ -40,6 +40,7 @@ public class JukeBoxController implements PropertyChangeListener {
 
     /**
      * Initialize the controller and set music player.
+     *
      * @param musicPlayer musicPlayer to set
      */
     public void init(final MusicPlayer musicPlayer) {
