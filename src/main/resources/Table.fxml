@@ -3,40 +3,48 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/10.0.2-internal"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.TableController">
-    <GridPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.columnSpan="1"
-              GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
-        <TableView fx:id="table" maxHeight="Infinity" maxWidth="Infinity" minHeight="400.0" GridPane.columnIndex="0"
-                   GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.TableController">
+    <GridPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
+        <TableView fx:id="table" maxHeight="Infinity" maxWidth="Infinity" minHeight="400.0" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
             <columns>
-                <TableColumn id="tileColumn" fx:id="tileColumn" prefWidth="272.0" text="Title"/>
-                <TableColumn id="artistColumn" fx:id="artistColumn" prefWidth="166.0" text="Artist"/>
-                <TableColumn id="lengthColumn" fx:id="lengthColumn" prefWidth="162.0" text="Length"/>
-                <TableColumn id="voteColumn" fx:id="playableInColumn" minWidth="0.0" prefWidth="108.0" text="Playable"/>
-                <TableColumn id="voteColumn" fx:id="voteColumn" minWidth="0.0" prefWidth="87.0" text="Votes"/>
-                <TableColumn id="voteColumn" fx:id="buttonColumn" minWidth="0.0" prefWidth="114.0"
-                             text="Click To Vote"/>
+                <TableColumn id="tileColumn" fx:id="tileColumn" prefWidth="272.0" text="Title" />
+                <TableColumn id="artistColumn" fx:id="artistColumn" prefWidth="166.0" text="Artist" />
+                <TableColumn id="lengthColumn" fx:id="lengthColumn" prefWidth="162.0" text="Length" />
+                <TableColumn id="voteColumn" fx:id="playableInColumn" minWidth="0.0" prefWidth="108.0" text="Playable in" />
+                <TableColumn id="voteColumn" fx:id="voteColumn" minWidth="0.0" prefWidth="87.0" text="Votes" />
+                <TableColumn id="voteColumn" fx:id="buttonColumn" minWidth="0.0" prefWidth="114.0" text="Click To Vote" />
             </columns>
         </TableView>
 
-        <Pane maxHeight="185.0" maxWidth="910.0" GridPane.columnIndex="0" GridPane.columnSpan="1"
-              GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
-            <AnchorPane fx:id="currentSongPane" maxHeight="185.0" maxWidth="910.0" minHeight="100.0"/>
+        <Pane maxHeight="185.0" maxWidth="910.0" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="1" GridPane.vgrow="SOMETIMES">
+            <AnchorPane fx:id="currentSongPane" maxHeight="185.0" maxWidth="910.0" minHeight="100.0" />
         </Pane>
         <columnConstraints>
-            <ColumnConstraints/>
+            <ColumnConstraints />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints/>
-            <RowConstraints/>
+            <RowConstraints />
+            <RowConstraints />
         </rowConstraints>
     </GridPane>
-    <Pane maxWidth="200" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="SOMETIMES"
-          GridPane.vgrow="SOMETIMES" GridPane.rowIndex="0">
+    <Pane maxWidth="200" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="SOMETIMES">
         <GridPane layoutY="35.0" maxWidth="200" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-            <AnchorPane fx:id="controlPane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0"/>
-            <AnchorPane fx:id="volumePane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="1"/>
+            <AnchorPane fx:id="controlPane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0" />
+            <AnchorPane fx:id="volumePane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="1" />
+         <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
     </Pane>
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>

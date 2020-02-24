@@ -17,6 +17,7 @@ public abstract class ProgramModeFactory {
     protected static final String CURRENT_DIR = "user.dir";
     protected static final String STREAMING_ADDRESS_ARG = "--streamAddress=";
     protected static final String PORT_ARG = "--restPort=";
+    protected static final String REPLAY_ARG = "--replays=";
 
     public abstract ProgramMode createProgramMode(String... args) throws ShutdownException;
 

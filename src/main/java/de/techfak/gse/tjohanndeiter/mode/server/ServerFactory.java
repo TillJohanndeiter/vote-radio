@@ -29,12 +29,11 @@ import java.io.File;
  */
 public class ServerFactory extends ProgramModeFactory {
 
-    private static final String LOCAL_STREAM_ADDRESS = "none";
+    private static final int REPLAY_DEFAULT = 1;
     private static final int REST_PORT_DEFAULT = 8080;
     private static final int STREAM_PORT_DEFAULT = 1234;
     private static final String MULTICAST_DEFAULT = "239.255.0.1"; //NOPMD
-    private static final String LOCALHOST = "127.0.0.1"; //NOPMD
-
+    private static final String LOCAL_STREAM_ADDRESS = "none";
 
     @Override
     public ProgramMode createProgramMode(final String... args) throws ShutdownException {
@@ -44,23 +43,26 @@ public class ServerFactory extends ProgramModeFactory {
         String multicast = MULTICAST_DEFAULT;
         int streamPort = STREAM_PORT_DEFAULT;
         int restPort = REST_PORT_DEFAULT;
+        int playsBeforeReplay = REPLAY_DEFAULT;
 
 
         for (int i = args.length - 1; i > 0; i--) {
             if (args[i].startsWith(STREAMING_PORT_ARG)) {
-                streamPort = getStreamPort(i, args);
+                streamPort = getArgumentAsInteger(args, i);
                 streamPlay = true;
             } else if (args[i].startsWith(PORT_ARG)) {
-                restPort = getRestPort(args, i);
+                restPort = getArgumentAsInteger(args, i);
             } else if (args[i].startsWith(STREAMING_ADDRESS_ARG)) {
                 multicast = getMulticast(args, i);
+            } else if (args[i].startsWith(REPLAY_ARG)) {
+                playsBeforeReplay = getReplay(args, i);
             } else {
                 filepath = parseFilepath(args, i);
             }
         }
 
         final SongLibrary songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
-        final VoteList voteList = new VoteList(songLibrary, 0);
+        final VoteList voteList = new VoteList(songLibrary, playsBeforeReplay);
         final VoteStrategy voteStrategy = new ServerStrategy(voteList);
         final StreamUrl streamLocation = createStreamUrl(streamPlay, multicast, streamPort);
         final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
@@ -78,6 +80,10 @@ public class ServerFactory extends ProgramModeFactory {
         final Thread controllerThread = new Thread(controller::inputLoop);
 
         return new ServerMode(socketRestServer, musicPlayer, controllerThread);
+    }
+
+    private int getReplay(final String[] args, final int pos) throws InvalidArgsException {
+        return getArgumentAsInteger(args, pos);
     }
 
     private StreamUrl createStreamUrl(final boolean streamPlay, final String multicast, final int streamPort) {
@@ -116,15 +122,6 @@ public class ServerFactory extends ProgramModeFactory {
         return musicPlayer;
     }
 
-
-    private int getStreamPort(final int i, final String... args) throws InvalidArgsException {
-        try {
-            return Integer.parseInt(args[i].substring(args[i].indexOf('=') + 1));
-        } catch (NumberFormatException | StringIndexOutOfBoundsException e) {
-            throw new InvalidArgsException(e, args);
-        }
-    }
-
     private String getMulticast(final String[] args, final int i) throws InvalidArgsException {
         try {
             return args[i].substring(args[i].indexOf('=') + 1);
@@ -133,9 +130,7 @@ public class ServerFactory extends ProgramModeFactory {
         }
     }
 
-
-    private int getRestPort(final String[] args, final int pos) throws InvalidArgsException {
-
+    private int getArgumentAsInteger(final String[] args, final int pos) throws InvalidArgsException {
         int port;
         try {
             final int startOfPortNumber = args[pos].indexOf('=') + 1;

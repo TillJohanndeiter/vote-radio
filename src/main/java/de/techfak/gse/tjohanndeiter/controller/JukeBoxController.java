@@ -1,12 +1,20 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
+import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -20,7 +28,11 @@ public class JukeBoxController implements PropertyChangeListener {
     @FXML
     private ImageView startOrResume;
 
+    @FXML
+    private ChoiceBox<Integer> playsForReplayChoice = new ChoiceBox<>();
+
     private MusicPlayer musicPlayer;
+    private VoteList voteList;
 
     @Override
     public void propertyChange(final PropertyChangeEvent event) {
@@ -43,8 +55,22 @@ public class JukeBoxController implements PropertyChangeListener {
      *
      * @param musicPlayer musicPlayer to set
      */
-    public void init(final MusicPlayer musicPlayer) {
+    public void init(final MusicPlayer musicPlayer, final VoteList voteList) {
+        this.voteList = voteList;
         this.musicPlayer = musicPlayer;
+        final List<Integer> nums = new ArrayList<>();
+        for (int i = 0; i < voteList.getVotedPlaylist().size(); i++) {
+            nums.add(i);
+        }
+        playsForReplayChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(final ObservableValue<? extends Number> observableValue, final Number number, final Number t1) {
+                voteList.setNeededReplays(t1.intValue());
+            }
+        });
+        playsForReplayChoice.setItems(FXCollections.observableArrayList(nums));
+        playsForReplayChoice.setValue(0);
+        playsForReplayChoice.setTooltip(new Tooltip("Select plays before replay"));
     }
 
     @FXML

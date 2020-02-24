@@ -127,6 +127,18 @@ public class VoteList extends Playlist {
         return queueSong.getVoteCount() > songList.get(songList.indexOf(queueSong) - 1).getVoteCount();
     }
 
+    public void setNeededReplays(final int newReplays) {
+        for (final QueueSong queueSong : songList) {
+            if (queueSong.getPlaysBeforeReplay() > newReplays) {
+                queueSong.setPlaysBeforeReplay(newReplays);
+            }
+        }
+        playsBeforeReplay = newReplays;
+        songList.sort(new VoteComparator());
+        correction();
+        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
+    }
+
     @Override
     public void addSong(final Song song) {
         songList.addLast(new QueueSong(song, songList.size(), playsBeforeReplay));

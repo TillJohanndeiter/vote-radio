@@ -89,7 +89,7 @@ public class JukeBoxMode extends Application implements ProgramMode {
         final FXMLLoader controlPanelLoader = getFXMLLoader("OfflineControlPanel.fxml");
         final Pane panelRoot = controlPanelLoader.load();
         final JukeBoxController jukeBoxController = controlPanelLoader.getController();
-        jukeBoxController.init(musicPlayer);
+        jukeBoxController.init(musicPlayer, voteList);
         musicPlayer.addPropertyChangeListener(jukeBoxController);
         tableController.setControlPane(panelRoot);
     }
