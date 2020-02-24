@@ -12,7 +12,7 @@ class SongTest {
     private static final String ARTIST_TEST = "artistTest";
     private static final String ALBUM_TEST = "albumTest";
     private static final String GENRE_TEST = "genreTest";
-    private final Song song = new Song(null, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5);
+    private final Song song = new Song(FP_TEST, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5);
     private final Song defaultSong = new Song(null, null, null, null, null, 0);
 
     @Test
