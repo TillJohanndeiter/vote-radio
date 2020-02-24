@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <GridPane maxHeight="Infinity" maxWidth="Infinity" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.TableController">
     <GridPane maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0" GridPane.vgrow="ALWAYS">
@@ -27,8 +28,8 @@
             <RowConstraints />
         </rowConstraints>
     </GridPane>
-    <Pane maxWidth="200" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="SOMETIMES">
-        <GridPane layoutY="35.0" maxWidth="200" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+    <Pane maxWidth="200" prefHeight="500.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="SOMETIMES" GridPane.rowIndex="0" GridPane.vgrow="SOMETIMES">
+        <GridPane layoutY="105.0" maxWidth="200" prefHeight="100.0" prefWidth="196.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
             <AnchorPane fx:id="controlPane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="0" />
             <AnchorPane fx:id="volumePane" maxHeight="Infinity" maxWidth="Infinity" GridPane.columnIndex="1" />
          <columnConstraints>
@@ -39,6 +40,8 @@
             <RowConstraints />
          </rowConstraints>
         </GridPane>
+      <TextField fx:id="searchField" layoutX="9.0" layoutY="65.0" prefHeight="26.0" prefWidth="148.0" />
+      <Text fill="#2f2f2f" layoutX="14.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search" />
     </Pane>
    <columnConstraints>
       <ColumnConstraints />

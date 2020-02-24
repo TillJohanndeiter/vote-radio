@@ -13,10 +13,12 @@ import de.techfak.gse.tjohanndeiter.view.ActionButtonTableCell;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -72,6 +74,9 @@ public class TableController implements PropertyChangeListener {
     @FXML
     private AnchorPane volumePane = new AnchorPane();
 
+    @FXML
+    private TextField searchField = new TextField();
+
     private final ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
     private VoteStrategy voteStrategy;
     private User user;
@@ -100,6 +105,14 @@ public class TableController implements PropertyChangeListener {
         }
     }
 
+    private void voteForSong(final QueueSong song) {
+        try {
+            voteStrategy.voteById(song.getId(), user);
+        } catch (SongIdNotAvailable | UserVotedAlreadyException e) {
+            System.out.print(e.getMessage()); //NOPMD
+        }
+    }
+
     /**
      * Init for the controller and view. Set up {@link #table} and connect {@link #voteStrategy} for propertyChange
      * relation.
@@ -111,6 +124,28 @@ public class TableController implements PropertyChangeListener {
         this.voteStrategy = voteStrategy;
         this.user = user;
         tableViewInit();
+        initSearchField();
+    }
+
+    private void initSearchField() {
+        searchField.setOnAction(actionEvent -> {
+            if (emptySearchField()) {
+                table.setItems(observedSongs);
+            } else {
+                FilteredList<QueueSong> filteredList = new FilteredList<>(observedSongs);
+                filteredList.setPredicate(queueSong -> queueSong.getTitle().toLowerCase().startsWith(
+                        userSearchRequest()));
+                table.setItems(filteredList);
+            }
+        });
+    }
+
+    private String userSearchRequest() {
+        return searchField.getText().toLowerCase();
+    }
+
+    private boolean emptySearchField() {
+        return searchField.getText().isEmpty();
     }
 
     /**
@@ -153,14 +188,6 @@ public class TableController implements PropertyChangeListener {
         voteColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         buttonColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
         playableInColumn.prefWidthProperty().bind(table.widthProperty().divide(COLUMN_COUNT));
-    }
-
-    private void voteForSong(final QueueSong song) {
-        try {
-            voteStrategy.voteById(song.getId(), user);
-        } catch (SongIdNotAvailable | UserVotedAlreadyException e) {
-            System.out.print(e.getMessage()); //NOPMD
-        }
     }
 
     public void setControlPane(final Pane pane) {
