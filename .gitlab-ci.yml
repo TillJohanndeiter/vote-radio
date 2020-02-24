@@ -17,7 +17,4 @@ build:
 test:
   stage: test
   script:
-    - add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
-    - apt-get update
-    - apt-get install vlc
     - mvn test

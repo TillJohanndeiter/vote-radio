@@ -9,7 +9,7 @@ import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;
 class TerminalFactoryTest {
 
     private final TerminalFactory factory = new TerminalFactory();
-    
+
 
     @Test
     void createProgramMode() throws ShutdownException {
