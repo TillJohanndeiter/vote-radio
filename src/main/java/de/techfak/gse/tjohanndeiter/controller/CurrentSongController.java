@@ -29,25 +29,25 @@ public class CurrentSongController implements PropertyChangeListener {
     private static final String DEFAULT_TIME_STAMP = "0:00";
 
     @FXML
-    private final Text title = new Text();
+    private Text title = new Text();
 
     @FXML
-    private final Text artist = new Text();
+    private Text artist = new Text();
 
     @FXML
-    private final Text album = new Text();
+    private Text album = new Text();
 
     @FXML
-    private final Text duration = new Text();
+    private Text duration = new Text();
 
     @FXML
-    private final Text playedTime = new Text();
+    private Text playedTime = new Text();
 
     @FXML
     private ImageView cover;
 
     @FXML
-    private final Slider timeSlider = new Slider();
+    private Slider timeSlider = new Slider();
 
     private TimerTask task;
     private Timer timer;

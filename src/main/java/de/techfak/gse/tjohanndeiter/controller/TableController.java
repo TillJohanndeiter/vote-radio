@@ -42,38 +42,37 @@ public class TableController implements PropertyChangeListener {
     private static final int COLUMN_COUNT = 6;
 
     @FXML
-    private final TableView<QueueSong> table = new TableView<>();
+    private TableView<QueueSong> table = new TableView<>();
 
     @FXML
-    private final TableColumn<QueueSong, String> tileColumn = new TableColumn<>(TITLE);
+    private TableColumn<QueueSong, String> tileColumn = new TableColumn<>(TITLE);
 
     @FXML
-    private final TableColumn<QueueSong, String> artistColumn = new TableColumn<>(ARTIST);
+    private TableColumn<QueueSong, String> artistColumn = new TableColumn<>(ARTIST);
 
     @FXML
-    private final TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
+    private TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
 
     @FXML
-    private final TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
+    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
 
     @FXML
-    private final TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
+    private TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
 
     @FXML
-    private final TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
+    private TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
 
 
     @FXML
-    private final AnchorPane controlPane = new AnchorPane();
+    private AnchorPane controlPane = new AnchorPane();
 
     @FXML
-    private final AnchorPane currentSongPane = new AnchorPane();
+    private AnchorPane currentSongPane = new AnchorPane();
 
     @FXML
-    private final AnchorPane volumePane = new AnchorPane();
+    private AnchorPane volumePane = new AnchorPane();
 
     private final ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
-
     private VoteStrategy voteStrategy;
     private User user;
 

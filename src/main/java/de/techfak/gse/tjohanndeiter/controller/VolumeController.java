@@ -16,7 +16,7 @@ public class VolumeController implements PropertyChangeListener {
 
     public static final int MAX_VOLUME = 100;
     @FXML
-    private final Slider volumeSlider = new Slider();
+    private Slider volumeSlider = new Slider();
 
     private MusicPlayer musicPlayer;
 

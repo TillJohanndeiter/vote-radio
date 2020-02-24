@@ -32,21 +32,21 @@ public class NetworkController implements PropertyChangeListener { //NOPMD
     private static final String NOT_CONNECTED = "Not Connected";
 
     @FXML
-    private final TextField ipAddressField = new TextField();
+    private TextField ipAddressField = new TextField();
 
     @FXML
-    private final TextField restPortField = new TextField();
+    private TextField restPortField = new TextField();
 
     @FXML
-    private final Rectangle colorNetStatus = new Rectangle();
+    private Rectangle colorNetStatus = new Rectangle();
 
     @FXML
-    private final Text networkTextStatus = new Text();
+    private Text networkTextStatus = new Text();
 
     @FXML
-    private final Button connectButton = new Button();
+    private Button connectButton = new Button();
 
-    private final Uploader uploader = new Uploader(this);
+    private Uploader uploader = new Uploader(this);
 
     private Client client;
 
