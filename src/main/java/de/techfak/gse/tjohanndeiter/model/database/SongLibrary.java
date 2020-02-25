@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.database;
 
-import de.techfak.gse.tjohanndeiter.model.exception.database.SongAlreadyExitsException;
+import de.techfak.gse.tjohanndeiter.exception.database.SongAlreadyExitsException;
 
 import java.util.List;
 

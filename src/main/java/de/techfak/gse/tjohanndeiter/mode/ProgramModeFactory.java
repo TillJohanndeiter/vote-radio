@@ -1,8 +1,8 @@
 package de.techfak.gse.tjohanndeiter.mode;
 
 import de.techfak.gse.tjohanndeiter.GSERadio;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.InvalidArgsException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidArgsException;
 
 import java.util.Arrays;
 import java.util.List;

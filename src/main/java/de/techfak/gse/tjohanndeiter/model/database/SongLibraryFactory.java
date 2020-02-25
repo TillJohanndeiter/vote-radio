@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.database;
 
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 
 import java.io.File;
 

@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.database;
 
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.VlcJException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.VlcJException;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 import uk.co.caprica.vlcj.media.Media;
 import uk.co.caprica.vlcj.media.Meta;

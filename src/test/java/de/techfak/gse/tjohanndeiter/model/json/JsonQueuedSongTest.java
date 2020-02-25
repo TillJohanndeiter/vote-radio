@@ -1,6 +1,9 @@
 package de.techfak.gse.tjohanndeiter.model.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParser;
+import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParserImpl;
+import de.techfak.gse.tjohanndeiter.json.VoteListJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;

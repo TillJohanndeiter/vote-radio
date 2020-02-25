@@ -5,7 +5,7 @@ import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;

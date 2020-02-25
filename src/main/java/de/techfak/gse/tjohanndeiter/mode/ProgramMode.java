@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode;
 
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 
 /**
  * Interface for mode in which you can start the program. Only method does start the mode. Currently implemented modi

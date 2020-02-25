@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
-import de.techfak.gse.tjohanndeiter.model.client.Client;
+import de.techfak.gse.tjohanndeiter.mode.client.Client;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;

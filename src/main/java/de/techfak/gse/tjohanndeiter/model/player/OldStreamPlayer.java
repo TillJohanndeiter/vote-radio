@@ -1,8 +1,8 @@
 package de.techfak.gse.tjohanndeiter.model.player;
 
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.StartPlayerException;
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.InvalidPortException;
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.MusicStreamPortInUseException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.StartPlayerException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidPortException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.MusicStreamPortInUseException;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import uk.co.caprica.vlcj.player.base.MediaPlayer;
 import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;

@@ -6,7 +6,7 @@ import de.techfak.gse.tjohanndeiter.mode.client.ClientFactory;
 import de.techfak.gse.tjohanndeiter.mode.jukebox.JukeBoxFactory;
 import de.techfak.gse.tjohanndeiter.mode.server.ServerFactory;
 import de.techfak.gse.tjohanndeiter.mode.terminal.TerminalFactory;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import org.apache.log4j.BasicConfigurator;
 
 

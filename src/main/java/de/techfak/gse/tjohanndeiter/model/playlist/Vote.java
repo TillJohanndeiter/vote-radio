@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.model.playlist;
 
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 
 public class Vote { //NOPMD
 

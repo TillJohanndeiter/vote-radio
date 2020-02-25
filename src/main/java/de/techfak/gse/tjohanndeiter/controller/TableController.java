@@ -1,13 +1,13 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
-import de.techfak.gse.tjohanndeiter.model.client.Client;
-import de.techfak.gse.tjohanndeiter.model.exception.client.UserVotedAlreadyException;
-import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
+import de.techfak.gse.tjohanndeiter.mode.client.Client;
+import de.techfak.gse.tjohanndeiter.exception.client.UserVotedAlreadyException;
+import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import de.techfak.gse.tjohanndeiter.view.ActionButtonTableCell;
 import javafx.beans.property.SimpleStringProperty;

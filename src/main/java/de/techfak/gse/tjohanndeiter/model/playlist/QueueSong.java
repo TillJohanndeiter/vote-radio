@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 
 import java.util.ArrayList;
 import java.util.List;

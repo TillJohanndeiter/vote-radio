@@ -1,8 +1,8 @@
 package de.techfak.gse.tjohanndeiter.model.voting;
 
-import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
+import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 
 /**
  * Simple strategy of a client. Hand over #id of vote to {@link VoteList}.

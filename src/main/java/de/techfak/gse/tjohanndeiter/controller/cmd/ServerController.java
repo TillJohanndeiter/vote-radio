@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.controller.cmd;
 
-import de.techfak.gse.tjohanndeiter.model.server.RestServer;
+import de.techfak.gse.tjohanndeiter.mode.server.RestServer;
 
 /**
  * Simple controller for cmd interaction in server mode. Additional commands are information about port and address.

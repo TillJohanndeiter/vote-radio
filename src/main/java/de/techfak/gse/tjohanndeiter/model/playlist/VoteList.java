@@ -2,8 +2,8 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
-import de.techfak.gse.tjohanndeiter.model.exception.database.SongIdNotAvailable;
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 
 import java.util.Collections;
 import java.util.Comparator;

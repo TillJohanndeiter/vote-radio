@@ -1,9 +1,9 @@
 package de.techfak.gse.tjohanndeiter.model.database;
 
-import de.techfak.gse.tjohanndeiter.model.exception.database.SongAlreadyExitsException;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.NoMp3FilesException;
-import de.techfak.gse.tjohanndeiter.model.exception.shutdown.VlcJException;
+import de.techfak.gse.tjohanndeiter.exception.database.SongAlreadyExitsException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.NoMp3FilesException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.VlcJException;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 
 import java.io.File;

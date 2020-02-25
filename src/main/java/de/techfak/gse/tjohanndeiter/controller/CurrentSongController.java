@@ -1,7 +1,7 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
-import de.techfak.gse.tjohanndeiter.model.client.Client;
-import de.techfak.gse.tjohanndeiter.model.client.ServerResponse;
+import de.techfak.gse.tjohanndeiter.mode.client.Client;
+import de.techfak.gse.tjohanndeiter.mode.client.ServerResponse;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;

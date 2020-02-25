@@ -1,10 +1,8 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
-import de.techfak.gse.tjohanndeiter.model.server.RestServer;
-
 
 
 /**

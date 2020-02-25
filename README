@@ -1,2 +1,27 @@
 GIT checkout:
 git clone https://se.techfak.de/git/g-se-tut-ws-2019.project-template.git
+
+User guide:
+
+Terminal Mode / Randomplay
+
+Start the application without any arguments or just the filepath start a terminal application with background music. The playlist is randomly generated from any kind of mp3 files in the music folder. If no path is available it will search in the current folder.
+
+JukeBox / Offline voting
+
+--jukebox
+
+Start the application with the argument --jukebox and an optional filepath start the gui with a playlist and the possiblitie to vote for a song and a minimum of plays before replay. The list is sorted after votes always
+
+Client
+
+--client
+
+Same as jukebox mode, but you can connect to another pc who run server mode. You have to enter Ip and the port
+
+Server
+
+--server --streamPort=5050 --streamAddress=239.255.0.1 --restPort=8080 --replays=5 music
+
+
+Will start a rest and socket deamon server with similar commands as terminal mode. You can choose the port and addres of the rtp stream and port of the rest server but also the minimum of plays before replay and optional a filepath

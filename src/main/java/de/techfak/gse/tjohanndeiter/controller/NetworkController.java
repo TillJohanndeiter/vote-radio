@@ -1,8 +1,8 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
-import de.techfak.gse.tjohanndeiter.model.client.Client;
-import de.techfak.gse.tjohanndeiter.model.client.UpdateStrategy;
-import de.techfak.gse.tjohanndeiter.model.client.Uploader;
+import de.techfak.gse.tjohanndeiter.mode.client.Client;
+import de.techfak.gse.tjohanndeiter.mode.client.UpdateStrategy;
+import de.techfak.gse.tjohanndeiter.mode.client.Uploader;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

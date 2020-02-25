@@ -7,7 +7,7 @@ import de.techfak.gse.tjohanndeiter.controller.VolumeController;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
-import de.techfak.gse.tjohanndeiter.model.server.User;
+import de.techfak.gse.tjohanndeiter.mode.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import javafx.application.Application;
 import javafx.application.Platform;

@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.mode.client;
 
 import de.techfak.gse.tjohanndeiter.GSERadio;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
-import de.techfak.gse.tjohanndeiter.model.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;

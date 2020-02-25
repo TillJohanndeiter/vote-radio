@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.player;
 
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.server.StreamUrl;
+import de.techfak.gse.tjohanndeiter.mode.server.StreamUrl;
 import uk.co.caprica.vlcj.medialist.MediaListRef;
 import uk.co.caprica.vlcj.player.list.MediaListPlayer;
 import uk.co.caprica.vlcj.player.list.MediaListPlayerEventAdapter;
