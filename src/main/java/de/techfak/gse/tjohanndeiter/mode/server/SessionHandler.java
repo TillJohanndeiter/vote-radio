@@ -1,10 +1,10 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import de.techfak.gse.tjohanndeiter.mode.client.Client;
 import de.techfak.gse.tjohanndeiter.exception.client.UserDoesntExits;
 import de.techfak.gse.tjohanndeiter.exception.client.UserVotedAlreadyException;
 import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
+import de.techfak.gse.tjohanndeiter.json.JsonException;
+import de.techfak.gse.tjohanndeiter.mode.client.Client;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -103,7 +103,7 @@ public class SessionHandler { //NOPMD
         final String ip = session.getRemoteIpAddress();
         try {
             return jsonOKResponse(modelConnector.getJsonUser(ip));
-        } catch (JsonProcessingException | UserDoesntExits e) {
+        } catch (JsonException | UserDoesntExits e) {
             return internalErrorResponse(e.getMessage());
         }
     }
@@ -111,7 +111,7 @@ public class SessionHandler { //NOPMD
     private Response getTimeBean() {
         try {
             return jsonOKResponse(modelConnector.getJsonPlayTimeBean());
-        } catch (JsonProcessingException e) {
+        } catch (JsonException e) {
             return internalErrorResponse(e.getMessage());
         }
     }

@@ -48,7 +48,6 @@ public class JukeBoxMode extends Application implements ProgramMode {
 
     @Override
     public void startProgram() {
-        //TODO: Implement choose of playsBeforeReplay
         Application.launch();
     }
 

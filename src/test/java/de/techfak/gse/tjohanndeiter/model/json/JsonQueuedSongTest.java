@@ -1,11 +1,11 @@
 package de.techfak.gse.tjohanndeiter.model.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.json.VoteListJsonParserImpl;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
+import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -56,22 +56,22 @@ class JsonQueuedSongTest {
     }
 
     @Test
-    void toJsonNormal() throws JsonProcessingException {
+    void toJsonNormal() throws JsonException {
         final QueueSong result = songJsonParser.toSong(NORMAL_JSON_SONG);
         Assertions.assertEquals(result, queueSong);
     }
 
     @Test
-    void toJsonDefault() throws JsonProcessingException {
+    void toJsonDefault() throws JsonException {
         final QueueSong result = songJsonParser.toSong(JSON_DEFAULT_SONG);
         Assertions.assertEquals(result, defaultSong);
     }
 
     @Test
-    void notSerializable() throws JsonProcessingException {
+    void notSerializable() throws JsonException {
         final String playlistJson = new VoteListJsonParserImpl().toJson(new VoteList(List.of(queueSong, defaultSong)));
 
-        Assertions.assertThrows(JsonProcessingException.class, () -> songJsonParser.toSong(playlistJson));
+        Assertions.assertThrows(JsonException.class, () -> songJsonParser.toSong(playlistJson));
     }
 
 }

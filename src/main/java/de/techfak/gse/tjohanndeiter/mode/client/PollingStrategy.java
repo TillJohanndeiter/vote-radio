@@ -1,9 +1,9 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
+import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 
 import java.beans.PropertyChangeListener;
@@ -52,7 +52,7 @@ public class PollingStrategy implements UpdateStrategy {
                     support.firePropertyChange(MusicPlayer.NEW_SONG, oldSong, currentSong);
                     support.firePropertyChange(Client.CONNECTED, true, true);
                     oldSong = currentSong;
-                } catch (JsonProcessingException e) {
+                } catch (JsonException e) {
                     support.firePropertyChange(JSON_ERROR, null, null);
                 } catch (IOException | InterruptedException e) {
                     support.firePropertyChange(LOST_CONNECTION, null, null);
@@ -74,7 +74,7 @@ public class PollingStrategy implements UpdateStrategy {
                     support.firePropertyChange(Playlist.PLAYLIST_CHANGE, oldList, voteList);
                     support.firePropertyChange(Client.CONNECTED, false, true);
                     oldList = voteList;
-                } catch (JsonProcessingException e) {
+                } catch (JsonException e) {
                     support.firePropertyChange(JSON_ERROR, null, null);
                 } catch (IOException | InterruptedException e) {
                     support.firePropertyChange(LOST_CONNECTION, null, null);

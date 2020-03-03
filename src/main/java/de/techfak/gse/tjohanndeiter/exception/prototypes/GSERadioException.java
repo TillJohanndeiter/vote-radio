@@ -11,7 +11,7 @@ public abstract class GSERadioException extends Exception {
         super(message);
     }
 
-    GSERadioException(final String message, final Exception e) {
+    public GSERadioException(final String message, final Exception e) {
         super(message, e);
     }
 }

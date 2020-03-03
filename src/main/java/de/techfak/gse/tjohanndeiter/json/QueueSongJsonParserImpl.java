@@ -7,16 +7,23 @@ import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
 public class QueueSongJsonParserImpl implements QueueSongJsonParser {
 
 
-
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
-    public QueueSong toSong(final String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, QueueSong.class);
+    public QueueSong toSong(final String json) throws JsonException {
+        try {
+            return objectMapper.readValue(json, QueueSong.class);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to deserialize Song", e);
+        }
     }
 
     @Override
-    public String toJson(final QueueSong song) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(song);
+    public String toJson(final QueueSong song) throws JsonException {
+        try {
+            return objectMapper.writeValueAsString(song);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to serialize Song", e);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.mode.client.SongUpload;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.database.SongFactory;
@@ -57,7 +58,7 @@ class UploadRequester {
             addSongToLibraryAndPlaylist(fileSong);
 
             return plainTextOKResponse("Uploaded :" + songUpload.getFileName());
-        } catch (IOException | NanoHTTPD.ResponseException | VlcJException e) {
+        } catch (IOException | NanoHTTPD.ResponseException | VlcJException | JsonException e) {
             return internalErrorResponse("SongUpload Failed!");
         } catch (SongAlreadyExitsException e) {
             return internalErrorResponse("Song already Exits");

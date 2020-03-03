@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.json.TimeBeanJsonParser;
@@ -57,12 +58,12 @@ class HttpRequester {
         return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).body();
     }
 
-    VoteList getPlaylist() throws IOException, InterruptedException {
+    VoteList getPlaylist() throws IOException, JsonException, InterruptedException {
         return voteListJsonParser.toPlaylist(getJsonString(SessionHandler.PLAYLIST));
     }
 
 
-    QueueSong getCurrentSong() throws IOException, InterruptedException {
+    QueueSong getCurrentSong() throws IOException, InterruptedException, JsonException {
         return songJsonParser.toSong(getJsonString(SessionHandler.CURRENT_SONG));
     }
 
@@ -97,11 +98,11 @@ class HttpRequester {
         return httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString()).statusCode();
     }
 
-    public TimeBean getPlayedTime() throws IOException, InterruptedException {
+    public TimeBean getPlayedTime() throws IOException, InterruptedException, JsonException {
         return timeBeanJsonParser.toTimeBean(getRequestBody(SessionHandler.PLAY_TIME));
     }
 
-    User getUser() throws IOException, InterruptedException {
+    User getUser() throws IOException, InterruptedException, JsonException {
         return userJsonParser.toUser(getRequestBody(SessionHandler.USER));
     }
 }

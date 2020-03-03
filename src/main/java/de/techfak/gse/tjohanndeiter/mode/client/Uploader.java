@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.json.SongUploadJSonParser;
 import de.techfak.gse.tjohanndeiter.json.SongUploadParser;
 import de.techfak.gse.tjohanndeiter.mode.server.SessionHandler;
@@ -47,12 +48,12 @@ public class Uploader {
                 final HttpRequest httpRequest = createRequest(ipAddress, restPort, json);
                 uploadAndCheckSuccess(file, httpRequest);
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | JsonException e) {
             support.firePropertyChange(FAILED_UPLOAD, null, file);
         }
     }
 
-    private String getJson(final File file) throws IOException {
+    private String getJson(final File file) throws IOException, JsonException {
         final byte[] fileData = Files.readAllBytes(file.toPath());
         final String encoded = Base64.getEncoder().encodeToString(fileData);
         final SongUpload songUpload = new SongUpload(encoded, file.getName());

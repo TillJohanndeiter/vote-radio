@@ -10,12 +10,20 @@ public class SongUploadParser implements SongUploadJSonParser {
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
-    public SongUpload toSongUpload(final String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, SongUpload.class);
+    public SongUpload toSongUpload(final String json) throws JsonException {
+        try {
+            return objectMapper.readValue(json, SongUpload.class);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to deserialize SongUpload", e);
+        }
     }
 
     @Override
-    public String toJson(final SongUpload song) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(song);
+    public String toJson(final SongUpload song) throws JsonException {
+        try {
+            return objectMapper.writeValueAsString(song);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to serialize SongUpload", e);
+        }
     }
 }

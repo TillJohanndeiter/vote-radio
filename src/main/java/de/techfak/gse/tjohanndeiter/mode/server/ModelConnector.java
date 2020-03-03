@@ -1,7 +1,7 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import de.techfak.gse.tjohanndeiter.exception.client.UserDoesntExits;
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.json.TimeBeanJsonParser;
@@ -55,16 +55,16 @@ class ModelConnector implements PropertyChangeListener {
                 default:
                     break;
             }
-        } catch (JsonProcessingException e) {
-            System.out.println("Warning: Json Parsing failed!"); //NOPMD
+        } catch (JsonException e) {
+            e.printStackTrace();
         }
     }
 
-    String getJsonPlayTimeBean() throws JsonProcessingException {
+    String getJsonPlayTimeBean() throws JsonException {
         return timeBeanJsonParser.toJson(musicPlayer.createPlayTimeBean());
     }
 
-    String getJsonUser(final String ipAddress) throws UserDoesntExits, JsonProcessingException {
+    String getJsonUser(final String ipAddress) throws UserDoesntExits, JsonException {
         return userJsonParser.toJson(userManger.getUserByIp(ipAddress));
     }
 
@@ -72,11 +72,11 @@ class ModelConnector implements PropertyChangeListener {
         return userManger.getUserByIp(ipAddress);
     }
 
-    private void refreshSongJson(final PropertyChangeEvent propertyChangeEvent) throws JsonProcessingException {
+    private void refreshSongJson(final PropertyChangeEvent propertyChangeEvent) throws JsonException {
         currentSongJson = songJsonParser.toJson((QueueSong) propertyChangeEvent.getNewValue());
     }
 
-    private void refreshPlaylistJson(final PropertyChangeEvent propertyChangeEvent) throws JsonProcessingException {
+    private void refreshPlaylistJson(final PropertyChangeEvent propertyChangeEvent) throws JsonException {
         playlistJson = voteListJsonParser.toJson((VoteList) propertyChangeEvent.getNewValue());
     }
 

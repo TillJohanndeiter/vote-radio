@@ -9,12 +9,20 @@ public class TimeBeanJsonParserImpl implements TimeBeanJsonParser {
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
-    public TimeBean toTimeBean(final String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, TimeBean.class);
+    public TimeBean toTimeBean(final String json) throws JsonException {
+        try {
+            return objectMapper.readValue(json, TimeBean.class);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to deserialize TimeBean", e);
+        }
     }
 
     @Override
-    public String toJson(final TimeBean timeBean) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(timeBean);
+    public String toJson(final TimeBean timeBean) throws JsonException {
+        try {
+            return objectMapper.writeValueAsString(timeBean);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to serialize TimeBean", e);
+        }
     }
 }

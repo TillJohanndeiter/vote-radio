@@ -7,16 +7,24 @@ import de.techfak.gse.tjohanndeiter.mode.server.User;
 public class UserJsonParserImpl implements UserJsonParser {
 
 
-
     private final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
 
     @Override
-    public User toUser(final String json) throws JsonProcessingException {
-        return objectMapper.readValue(json, User.class);
+    public User toUser(final String json) throws JsonException {
+        try {
+            return objectMapper.readValue(json, User.class);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to deserialize User", e);
+        }
     }
 
     @Override
-    public String toJson(final User user) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(user);
+    public String toJson(final User user) throws JsonException {
+        try {
+
+            return objectMapper.writeValueAsString(user);
+        } catch (final JsonProcessingException e) {
+            throw new JsonException("ObjectMapper failed to serialize User", e);
+        }
     }
 }

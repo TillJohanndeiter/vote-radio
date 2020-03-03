@@ -1,5 +1,6 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
+import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
@@ -73,14 +74,14 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
                 default:
                     break;
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException | InterruptedException | JsonException e) {
             support.firePropertyChange(JSON_ERROR, REGISTER_MESSAGE, null);
             e.printStackTrace(); //NOPMD
         }
         answer(message);
     }
 
-    private void fireNewSong() throws IOException, InterruptedException {
+    private void fireNewSong() throws IOException, InterruptedException, JsonException {
         final QueueSong queueSong = httpRequester.getCurrentSong();
         final TimeBean timeBean = httpRequester.getPlayedTime();
         final ServerResponse response = new ServerResponse(queueSong, timeBean);
