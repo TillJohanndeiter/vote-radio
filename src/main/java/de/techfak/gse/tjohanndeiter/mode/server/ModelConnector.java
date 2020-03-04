@@ -108,7 +108,4 @@ class ModelConnector implements PropertyChangeListener {
         }
     }
 
-    public void setCurrentSongJson(final String currentSongJson) {
-        this.currentSongJson = currentSongJson;
-    }
 }

@@ -32,7 +32,6 @@ class SessionHandlerITest {
 
     @BeforeEach
     private void startServer() throws IOException { //NOPMD
-        modelObserver.setCurrentSongJson("test");
         pollingServer.start();
         voteList.addPropertyChangeListener(modelObserver);
 
