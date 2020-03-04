@@ -48,7 +48,7 @@ public class PollingStrategy implements UpdateStrategy {
             @Override
             public void run() {
                 try {
-                    final QueueSong currentSong = requester.getCurrentSong();
+                    final QueueSong currentSong = requester.getCurrentSong().getQueueSong();
                     support.firePropertyChange(MusicPlayer.NEW_SONG, oldSong, currentSong);
                     support.firePropertyChange(Client.CONNECTED, true, true);
                     oldSong = currentSong;

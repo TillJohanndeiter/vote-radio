@@ -1,7 +1,7 @@
 package de.techfak.gse.tjohanndeiter.controller;
 
 import de.techfak.gse.tjohanndeiter.mode.client.Client;
-import de.techfak.gse.tjohanndeiter.mode.client.ServerResponse;
+import de.techfak.gse.tjohanndeiter.mode.server.CurrentSong;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
@@ -75,7 +75,7 @@ public class CurrentSongController implements PropertyChangeListener {
                 Platform.runLater(() -> updateCurrentSong(newSong, new TimeBean(newSong.getLength(), 0)));
                 break;
             case Client.NEW_SONG:
-                final ServerResponse response = (ServerResponse) event.getNewValue();
+                final CurrentSong response = (CurrentSong) event.getNewValue();
                 final Song song = response.getQueueSong();
                 updateCurrentSong(song, response.getTimeBean());
                 startTimeCounter(response.getTimeBean());

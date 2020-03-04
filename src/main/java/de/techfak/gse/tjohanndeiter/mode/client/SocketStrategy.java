@@ -1,11 +1,10 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
 import de.techfak.gse.tjohanndeiter.json.JsonException;
-import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
-import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
-import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import de.techfak.gse.tjohanndeiter.mode.server.CurrentSong;
 import de.techfak.gse.tjohanndeiter.mode.server.ServerSocket;
+import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
+import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -75,23 +74,21 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
                     break;
             }
         } catch (IOException | InterruptedException | JsonException e) {
-            support.firePropertyChange(JSON_ERROR, REGISTER_MESSAGE, null);
+            support.firePropertyChange(JSON_ERROR, null, REGISTER_MESSAGE);
             e.printStackTrace(); //NOPMD
         }
         answer(message);
     }
 
     private void fireNewSong() throws IOException, InterruptedException, JsonException {
-        final QueueSong queueSong = httpRequester.getCurrentSong();
-        final TimeBean timeBean = httpRequester.getPlayedTime();
-        final ServerResponse response = new ServerResponse(queueSong, timeBean);
+        final CurrentSong currentSongResponse = httpRequester.getCurrentSong();
         final Thread thread = new Thread(() -> {
             try {
                 TimeUnit.SECONDS.sleep(2);
             } catch (InterruptedException e) {
                 e.printStackTrace(); //NOPMD
             }
-            support.firePropertyChange(Client.NEW_SONG, null, response);
+            support.firePropertyChange(Client.NEW_SONG, null, currentSongResponse);
         });
         thread.start();
     }

@@ -1,12 +1,14 @@
 package de.techfak.gse.tjohanndeiter.model.player;
 
+import de.techfak.gse.tjohanndeiter.mode.server.StreamUrl;
+
 public class ReceiverPlayer extends MusicPlayer {
 
     private final String rtpAddress;
 
-    public ReceiverPlayer(final String serverAdress, final String port) {
+    public ReceiverPlayer(final StreamUrl streamUrl) {
         super(null);
-        rtpAddress = "rtp://@" + serverAdress + ':' + port;
+        rtpAddress = "rtp://@" + streamUrl.getMulticastAddress() + ':' + streamUrl.getPort();
     }
 
     @Override

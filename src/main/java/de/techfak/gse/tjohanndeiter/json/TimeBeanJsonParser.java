@@ -1,6 +1,6 @@
 package de.techfak.gse.tjohanndeiter.json;
 
-import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
+        import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
 
 public interface TimeBeanJsonParser {
 

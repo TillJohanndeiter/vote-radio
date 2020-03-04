@@ -1,5 +1,7 @@
 package de.techfak.gse.tjohanndeiter.mode.client;
 
+import de.techfak.gse.tjohanndeiter.json.JsonException;
+import de.techfak.gse.tjohanndeiter.mode.server.StreamUrl;
 import de.techfak.gse.tjohanndeiter.model.player.ReceiverPlayer;
 
 import java.beans.PropertyChangeListener;
@@ -78,20 +80,21 @@ public class Client {
         } catch (URISyntaxException | IllegalArgumentException e) {
             connected = false;
             support.firePropertyChange(INVALID_URL, null, restAddress);
-        }  catch (IOException | InterruptedException e) {
+        }  catch (IOException | InterruptedException | JsonException e) {
             connected = false;
             support.firePropertyChange(INVALID_SERVER, null, restAddress);
         }
     }
 
-    private void establishConnection() throws IOException, InterruptedException, URISyntaxException {
-        receiverPlayer = new ReceiverPlayer(httpRequester.getMusicAddress(), httpRequester.getMusicPort());
+    private void establishConnection() throws URISyntaxException, InterruptedException, IOException, JsonException {
+        final StreamUrl streamUrl = httpRequester.getStreamUrl();
+        receiverPlayer = new ReceiverPlayer(streamUrl);
         updateStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
         addObservers();
         receiverPlayer.startPlay();
         support.firePropertyChange(NEW_PLAYER, null, receiverPlayer);
-        connected = true;
         support.firePropertyChange(CONNECTED, null, restAddress);
+        connected = true;
     }
 
     private void addObservers() {

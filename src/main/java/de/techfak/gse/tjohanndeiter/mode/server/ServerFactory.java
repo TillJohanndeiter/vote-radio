@@ -58,14 +58,13 @@ public class ServerFactory extends ProgramModeFactory {
         final SongLibrary songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
         final VoteList voteList = new VoteList(songLibrary, playsBeforeReplay);
         final VoteStrategy voteStrategy = new ServerStrategy(voteList);
-        final StreamUrl streamLocation = createStreamUrl(streamPlay, multicast, streamPort);
+        final StreamUrl streamUrl = createStreamUrl(streamPlay, multicast, streamPort);
         final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
 
-        final MusicPlayer musicPlayer = createMusicPlayer(streamPlay, streamLocation, voteList, args);
+        final MusicPlayer musicPlayer = createMusicPlayer(streamPlay, streamUrl, voteList, args);
         final UserManger userManger = new UserManger();
-        final ModelConnector modelObserver = new ModelConnector(musicPlayer, userManger);
-        final SessionHandler sessionHandler = new SessionHandler(streamLocation, voteStrategy,
-                uploadRequester, modelObserver);
+        final ModelConnector modelObserver = new ModelConnector(musicPlayer, userManger, streamUrl);
+        final SessionHandler sessionHandler = new SessionHandler(voteStrategy, uploadRequester, modelObserver);
 
 
         final SocketRestServer socketRestServer = new SocketRestServer(restPort, sessionHandler, userManger);

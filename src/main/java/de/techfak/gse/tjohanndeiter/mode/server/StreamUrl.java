@@ -7,8 +7,12 @@ package de.techfak.gse.tjohanndeiter.mode.server;
  */
 public class StreamUrl {
 
-    private final String multicastAddress;
-    private final String port;
+    private String multicastAddress = null;
+    private String port = null;
+
+    private StreamUrl() {
+
+    }
 
     StreamUrl(final String multicastAddress, final int port) {
         this.multicastAddress = multicastAddress;
