@@ -22,12 +22,12 @@ class JsonQueuedSongTest {
     private static final String ALBUM_TEST = "albumTest";
     private static final String GENRE_TEST = "genreTest";
     private static final String JSON_DEFAULT_SONG = "{\"title\":\"---\",\"artist\":\"---\","
-            + "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"cover\":null,\"votes\":[],"
-            + "\"playsBeforeReplay\":0,\"id\":3}";
+            + "\"album\":\"---\",\"genre\":\"---\",\"length\":2,\"cover\":null,\"id\":3,\"votes\":[],"
+            + "\"playsBeforeReplay\":0}";
 
     private static final String NORMAL_JSON_SONG = "{\"title\":\"titleTest\",\"artist\":\"artistTest\","
-            + "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"cover\":null,"
-            + "\"votes\":[],\"playsBeforeReplay\":0,\"id\":1}";
+            + "\"album\":\"albumTest\",\"genre\":\"genreTest\",\"length\":5,\"cover\":null,\"id\":1,"
+            + "\"votes\":[],\"playsBeforeReplay\":0}";
 
 
     private final VotedSong queueSong = new VotedSong(
