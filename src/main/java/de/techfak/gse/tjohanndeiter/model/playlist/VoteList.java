@@ -14,6 +14,7 @@ import java.util.List;
 public class VoteList extends Playlist {
 
     private final LinkedList<QueueSong> songList = new LinkedList<>();
+    private VoteComparator voteComparator = new VoteComparator();
     private int playsBeforeReplay;
     private QueueSong currentSong;
 
@@ -75,7 +76,7 @@ public class VoteList extends Playlist {
     private void updatePlaylist(final QueueSong foundSong, final User user) {
         if (!currentSong.equals(foundSong)) {
             foundSong.increaseVote(user);
-            songList.sort(new VoteComparator());
+            songList.sort(voteComparator);
             correction();
             support.firePropertyChange(PLAYLIST_CHANGE, null, this);
         }
@@ -134,7 +135,7 @@ public class VoteList extends Playlist {
             }
         }
         playsBeforeReplay = newReplays;
-        songList.sort(new VoteComparator());
+        songList.sort(voteComparator);
         correction();
         support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
@@ -161,7 +162,7 @@ public class VoteList extends Playlist {
         for (int i = 0; i < songList.size() - 1; i++) {
             songList.get(i).decReplayCount();
         }
-        songList.sort(new VoteComparator());
+        songList.sort(voteComparator);
         correction();
     }
 
