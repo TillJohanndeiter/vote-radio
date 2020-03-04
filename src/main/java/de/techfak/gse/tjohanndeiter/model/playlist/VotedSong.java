@@ -3,6 +3,7 @@ package de.techfak.gse.tjohanndeiter.model.playlist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
 import de.techfak.gse.tjohanndeiter.mode.server.User;
+import de.techfak.gse.tjohanndeiter.model.voting.Vote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +12,12 @@ import java.util.Objects;
 /**
  * Extends {@link Song} form database with an unique id, voteCount and needed replays before next time gets played.
  */
-public class QueueSong extends Song {
+public class VotedSong extends IDSong {
 
     private List<Vote> votes = new ArrayList<>();
     private int playsBeforeReplay;
-    private int id;
 
-    public QueueSong() {
+    private VotedSong() {
         super();
     }
 
@@ -28,9 +28,8 @@ public class QueueSong extends Song {
      * @param id   id of Song
      * @param playsBeforeReplay counter how many songs must be played before replay
      */
-    public QueueSong(final Song song, final int id, final int playsBeforeReplay) {
-        super(song);
-        this.id = id;
+    public VotedSong(final Song song, final int id, final int playsBeforeReplay) {
+        super(song, id);
         this.playsBeforeReplay = playsBeforeReplay;
     }
 
@@ -38,8 +37,8 @@ public class QueueSong extends Song {
      * Copy Constructor.
      * @param queueSong queueSong to copy
      */
-    public QueueSong(final QueueSong queueSong) {
-        this(queueSong, queueSong.getId(), queueSong.getPlaysBeforeReplay());
+    VotedSong(final VotedSong queueSong) {
+        this(queueSong, queueSong.id, queueSong.playsBeforeReplay);
     }
 
     public List<Vote> getVotes() {
@@ -59,17 +58,17 @@ public class QueueSong extends Song {
         return id;
     }
 
-    void decReplayCount() {
+    public void decReplayCount() {
         if (playsBeforeReplay > 0) {
             playsBeforeReplay--;
         }
     }
 
-    void increaseVote(final User user) {
+    public void increaseVote(final User user) {
         votes.add(new Vote(user));
     }
 
-    void resetVote() {
+    public void resetVote() {
         votes.clear();
     }
 
@@ -89,13 +88,13 @@ public class QueueSong extends Song {
         if (this == o) {
             return true; //NOPMD
         }
-        if (!(o instanceof QueueSong)) {
+        if (!(o instanceof VotedSong)) {
             return false; //NOPMD
         }
         if (!super.equals(o)) {
             return false; //NOPMD
         }
-        final QueueSong queueSong = (QueueSong) o;
+        final VotedSong queueSong = (VotedSong) o;
         return id == queueSong.id;
     }
 

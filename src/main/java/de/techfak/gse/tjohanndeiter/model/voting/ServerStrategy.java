@@ -2,10 +2,9 @@ package de.techfak.gse.tjohanndeiter.model.voting;
 
 import de.techfak.gse.tjohanndeiter.exception.client.UserVotedAlreadyException;
 import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
-import de.techfak.gse.tjohanndeiter.model.playlist.Vote;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.mode.server.User;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 
 /**
  * VoteStrategy for server. Vote is only hand over to {@link VoteList} if user hasn't vote for song already.
@@ -30,7 +29,7 @@ public class ServerStrategy implements VoteStrategy {
     @Override
     public void voteById(final int id, final User user) throws SongIdNotAvailable, UserVotedAlreadyException {
 
-        final QueueSong queueSong = voteList.findSongById(id);
+        final VotedSong queueSong = voteList.findSongById(id);
 
         if (userNotVotedForSong(queueSong, user)) {
             voteList.voteForSongById(id, user);
@@ -39,7 +38,7 @@ public class ServerStrategy implements VoteStrategy {
         }
     }
 
-    private boolean userNotVotedForSong(final QueueSong queueSong, final User user) {
+    private boolean userNotVotedForSong(final VotedSong queueSong, final User user) {
         for (final Vote vote : queueSong.getVotes()) {
             if (vote.getUser().equals(user)) {
                 return false;

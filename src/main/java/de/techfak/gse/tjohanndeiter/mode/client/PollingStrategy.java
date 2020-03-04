@@ -3,7 +3,7 @@ package de.techfak.gse.tjohanndeiter.mode.client;
 import de.techfak.gse.tjohanndeiter.json.JsonException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 
 import java.beans.PropertyChangeListener;
@@ -23,7 +23,7 @@ public class PollingStrategy implements UpdateStrategy {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private final HttpRequester requester;
 
-    private QueueSong oldSong;
+    private VotedSong oldSong;
     private VoteList oldList;
 
     private Timer currentSongTimer;
@@ -48,7 +48,7 @@ public class PollingStrategy implements UpdateStrategy {
             @Override
             public void run() {
                 try {
-                    final QueueSong currentSong = requester.getCurrentSong().getQueueSong();
+                    final VotedSong currentSong = requester.getCurrentSong().getQueueSong();
                     support.firePropertyChange(MusicPlayer.NEW_SONG, oldSong, currentSong);
                     support.firePropertyChange(Client.CONNECTED, true, true);
                     oldSong = currentSong;

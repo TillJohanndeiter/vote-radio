@@ -5,7 +5,7 @@ import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParser;
 import de.techfak.gse.tjohanndeiter.json.QueueSongJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.json.VoteListJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,9 +30,9 @@ class JsonQueuedSongTest {
             + "\"votes\":[],\"playsBeforeReplay\":0,\"id\":1}";
 
 
-    private final QueueSong queueSong = new QueueSong(
+    private final VotedSong queueSong = new VotedSong(
             new Song(FP_TEST, TITLE_TEST, ARTIST_TEST, ALBUM_TEST, GENRE_TEST, 5), 1, 0);
-    private final QueueSong defaultSong = new QueueSong(
+    private final VotedSong defaultSong = new VotedSong(
             new Song(NO_METADATA, NO_METADATA, NO_METADATA, NO_METADATA, NO_METADATA, 2), 3, 0);
 
     private final QueueSongJsonParser songJsonParser = new QueueSongJsonParserImpl();
@@ -57,20 +57,19 @@ class JsonQueuedSongTest {
 
     @Test
     void toJsonNormal() throws JsonException {
-        final QueueSong result = songJsonParser.toSong(NORMAL_JSON_SONG);
+        final VotedSong result = songJsonParser.toSong(NORMAL_JSON_SONG);
         Assertions.assertEquals(result, queueSong);
     }
 
     @Test
     void toJsonDefault() throws JsonException {
-        final QueueSong result = songJsonParser.toSong(JSON_DEFAULT_SONG);
+        final VotedSong result = songJsonParser.toSong(JSON_DEFAULT_SONG);
         Assertions.assertEquals(result, defaultSong);
     }
 
     @Test
     void notSerializable() throws JsonException {
         final String playlistJson = new VoteListJsonParserImpl().toJson(new VoteList(List.of(queueSong, defaultSong)));
-
         Assertions.assertThrows(JsonException.class, () -> songJsonParser.toSong(playlistJson));
     }
 

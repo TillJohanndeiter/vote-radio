@@ -13,10 +13,10 @@ import java.util.List;
 
 public class VoteList extends Playlist {
 
-    private final LinkedList<QueueSong> songList = new LinkedList<>();
+    private final LinkedList<VotedSong> songList = new LinkedList<>();
     private VoteComparator voteComparator = new VoteComparator();
     private int playsBeforeReplay;
-    private QueueSong currentSong;
+    private VotedSong currentSong;
 
     /**
      * Default constructor for serialization. Do not delete.
@@ -38,12 +38,13 @@ public class VoteList extends Playlist {
         this.playsBeforeReplay = playsBeforeReplay;
         int idx = 0;
         for (final Song song : songLibrary.getSongs()) {
-            final QueueSong votedSong = new QueueSong(song, idx, 0); //NOPMD
+            final VotedSong votedSong = new VotedSong(song, idx, 0); //NOPMD
             songList.add(votedSong);
             idx++;
         }
         currentSong = songList.get(0);
     }
+
 
 
     /**
@@ -52,12 +53,24 @@ public class VoteList extends Playlist {
      * @param songList test list
      */
 
-    public VoteList(final List<QueueSong> songList) {
+    public VoteList(final List<VotedSong> songList) {
         super();
-        for (final QueueSong song : songList) {
-            final QueueSong votedSong = new QueueSong(song); //NOPMD
+        for (final VotedSong song : songList) {
+            final VotedSong votedSong = new VotedSong(song); //NOPMD
             this.songList.add(votedSong);
         }
+    }
+
+    public void setNeededReplays(final int newReplays) {
+        for (final VotedSong queueSong : songList) {
+            if (queueSong.getPlaysBeforeReplay() > newReplays) {
+                queueSong.setPlaysBeforeReplay(newReplays);
+            }
+        }
+        playsBeforeReplay = newReplays;
+        songList.sort(voteComparator);
+        correction();
+        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
     /**
@@ -68,12 +81,12 @@ public class VoteList extends Playlist {
      * @throws SongIdNotAvailable in case if not song with #idOfSong is available
      */
     public void voteForSongById(final int idOfSong, final User user) throws SongIdNotAvailable {
-        final QueueSong foundSong = findSongById(idOfSong);
+        final VotedSong foundSong = findSongById(idOfSong);
         updatePlaylist(foundSong, user);
     }
 
 
-    private void updatePlaylist(final QueueSong foundSong, final User user) {
+    private void updatePlaylist(final VotedSong foundSong, final User user) {
         if (!currentSong.equals(foundSong)) {
             foundSong.increaseVote(user);
             songList.sort(voteComparator);
@@ -84,13 +97,13 @@ public class VoteList extends Playlist {
 
 
     /**
-     * Returns {@link QueueSong} by id.
+     * Returns {@link VotedSong} by id.
      * @param idOfSong id to lookup
      * @return song by #idOfSong
      * @throws SongIdNotAvailable in case of id that doesn't belong to any song
      */
-    public QueueSong findSongById(final int idOfSong) throws SongIdNotAvailable {
-        for (final QueueSong votedSong : songList) {
+    public VotedSong findSongById(final int idOfSong) throws SongIdNotAvailable {
+        for (final VotedSong votedSong : songList) {
             if (votedSong.getId() == idOfSong) {
                 return votedSong;
             }
@@ -104,45 +117,33 @@ public class VoteList extends Playlist {
      * playedBeforeReplay. Method bring it back to the correct order.
      */
     private void correction() {
-        for (final QueueSong queueSong : songList) {
+        for (final VotedSong queueSong : songList) {
             while (isNotHighest(queueSong) && couldBeHigher(queueSong) && nextSongLessVotes(queueSong)) {
                 forwardSwap(queueSong);
             }
         }
     }
 
-    private boolean couldBeHigher(final QueueSong queueSong) {
+    private boolean couldBeHigher(final VotedSong queueSong) {
         return queueSong.getPlaysBeforeReplay() < songList.indexOf(queueSong);
     }
 
-    private boolean isNotHighest(final QueueSong queueSong) {
+    private boolean isNotHighest(final VotedSong queueSong) {
         return songList.indexOf(queueSong) > 1;
     }
 
-    private void forwardSwap(final QueueSong queueSong) {
+    private void forwardSwap(final VotedSong queueSong) {
         final int pos = songList.indexOf(queueSong);
         Collections.swap(songList, pos, pos - 1);
     }
 
-    private boolean nextSongLessVotes(final QueueSong queueSong) {
+    private boolean nextSongLessVotes(final VotedSong queueSong) {
         return queueSong.getVoteCount() > songList.get(songList.indexOf(queueSong) - 1).getVoteCount();
-    }
-
-    public void setNeededReplays(final int newReplays) {
-        for (final QueueSong queueSong : songList) {
-            if (queueSong.getPlaysBeforeReplay() > newReplays) {
-                queueSong.setPlaysBeforeReplay(newReplays);
-            }
-        }
-        playsBeforeReplay = newReplays;
-        songList.sort(voteComparator);
-        correction();
-        support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
     @Override
     public void addSong(final Song song) {
-        songList.addLast(new QueueSong(song, songList.size(), playsBeforeReplay));
+        songList.addLast(new VotedSong(song, songList.size(), playsBeforeReplay));
         support.firePropertyChange(PLAYLIST_CHANGE, null, this);
     }
 
@@ -152,7 +153,7 @@ public class VoteList extends Playlist {
      */
     @Override
     public void skipToNext() {
-        final QueueSong old = songList.get(0);
+        final VotedSong old = songList.get(0);
         old.setPlaysBeforeReplay(playsBeforeReplay);
         old.resetVote();
         songList.remove(old);
@@ -166,7 +167,7 @@ public class VoteList extends Playlist {
         correction();
     }
 
-    public List<QueueSong> getVotedPlaylist() {
+    public List<VotedSong> getVotedPlaylist() {
         return songList;
     }
 
@@ -185,10 +186,10 @@ public class VoteList extends Playlist {
         return result.toString();
     }
 
-    class VoteComparator implements Comparator<QueueSong> {
+    class VoteComparator implements Comparator<VotedSong> {
 
         @Override
-        public int compare(final QueueSong queueSong, final QueueSong t1) {
+        public int compare(final VotedSong queueSong, final VotedSong t1) {
             if (t1.equals(currentSong)) {
                 return Integer.MAX_VALUE;
             } else if (songList.indexOf(t1) <= queueSong.getPlaysBeforeReplay()) {

@@ -1,7 +1,7 @@
 package de.techfak.gse.tjohanndeiter.view;
 
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
-import de.techfak.gse.tjohanndeiter.model.playlist.Vote;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
+import de.techfak.gse.tjohanndeiter.model.voting.Vote;
 import de.techfak.gse.tjohanndeiter.mode.server.User;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -69,7 +69,7 @@ public final class ActionButtonTableCell<S> extends TableCell<S, Button> {
     }
 
     private boolean userVotedAlready() {
-        final QueueSong queueSong = (QueueSong) getCurrentItem();
+        final VotedSong queueSong = (VotedSong) getCurrentItem();
         for (final Vote vote : queueSong.getVotes()) {
             if (vote.getUser().equals(user)) {
                 return true;

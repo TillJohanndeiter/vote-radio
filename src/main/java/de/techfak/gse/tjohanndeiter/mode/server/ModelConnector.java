@@ -15,7 +15,7 @@ import de.techfak.gse.tjohanndeiter.json.VoteListJsonParser;
 import de.techfak.gse.tjohanndeiter.json.VoteListJsonParserImpl;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 
 import java.beans.PropertyChangeEvent;
@@ -92,7 +92,7 @@ class ModelConnector implements PropertyChangeListener {
     }
 
     private void refreshSongJson(final PropertyChangeEvent propertyChangeEvent) throws JsonException {
-        currentSongJson = songJsonParser.toJson((QueueSong) propertyChangeEvent.getNewValue());
+        currentSongJson = songJsonParser.toJson((VotedSong) propertyChangeEvent.getNewValue());
     }
 
     private void refreshPlaylistJson(final PropertyChangeEvent propertyChangeEvent) throws JsonException {

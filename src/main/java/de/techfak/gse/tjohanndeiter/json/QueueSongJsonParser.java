@@ -1,9 +1,9 @@
 package de.techfak.gse.tjohanndeiter.json;
 
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 
 public interface QueueSongJsonParser {
-    String toJson(QueueSong song) throws JsonException;
+    String toJson(VotedSong song) throws JsonException;
 
-    QueueSong toSong(String json) throws JsonException;
+    VotedSong toSong(String json) throws JsonException;
 }

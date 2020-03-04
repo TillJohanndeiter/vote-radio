@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.exception.shutdown.RestServerException;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,7 @@ class SessionHandlerITest {
 
 
     private final Song song = new Song("test", "test", "test", "test", "test", 3);
-    private final VoteList voteList = new VoteList(List.of(new QueueSong(song, 1, 0)));
+    private final VoteList voteList = new VoteList(List.of(new VotedSong(song, 1, 0)));
     private final ModelConnector modelObserver = new ModelConnector(null, null, null);
     private final PollingRestServer pollingServer = new PollingRestServer(LOCALHOST, 8080,
             new SessionHandler(null, null, modelObserver));

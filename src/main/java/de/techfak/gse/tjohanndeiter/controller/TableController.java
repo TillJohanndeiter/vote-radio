@@ -5,7 +5,7 @@ import de.techfak.gse.tjohanndeiter.exception.client.UserVotedAlreadyException;
 import de.techfak.gse.tjohanndeiter.exception.database.SongIdNotAvailable;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.mode.server.User;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
@@ -29,7 +29,7 @@ import java.util.List;
 
 
 /**
- * Responsible for update playlist including metadata, votes and needed replay for each {@link QueueSong} in playlist.
+ * Responsible for update playlist including metadata, votes and needed replay for each {@link VotedSong} in playlist.
  * Also send a vote to {@link #voteStrategy} if user give a vote by click on #ActionButtonTableCell in
  * {@link #buttonColumn}.
  */
@@ -44,25 +44,25 @@ public class TableController implements PropertyChangeListener {
     private static final int COLUMN_COUNT = 6;
 
     @FXML
-    private TableView<QueueSong> table = new TableView<>();
+    private TableView<VotedSong> table = new TableView<>();
 
     @FXML
-    private TableColumn<QueueSong, String> tileColumn = new TableColumn<>(TITLE);
+    private TableColumn<VotedSong, String> tileColumn = new TableColumn<>(TITLE);
 
     @FXML
-    private TableColumn<QueueSong, String> artistColumn = new TableColumn<>(ARTIST);
+    private TableColumn<VotedSong, String> artistColumn = new TableColumn<>(ARTIST);
 
     @FXML
-    private TableColumn<QueueSong, String> lengthColumn = new TableColumn<>(LENGTH);
+    private TableColumn<VotedSong, String> lengthColumn = new TableColumn<>(LENGTH);
 
     @FXML
-    private TableColumn<QueueSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
+    private TableColumn<VotedSong, Button> voteColumn = new TableColumn<>(VOTE_COUNT);
 
     @FXML
-    private TableColumn<QueueSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
+    private TableColumn<VotedSong, String> playableInColumn = new TableColumn<>(PLAYABLE_IN_COUNT);
 
     @FXML
-    private TableColumn<QueueSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
+    private TableColumn<VotedSong, Button> buttonColumn = new TableColumn<>(VOTE_CLICK);
 
 
     @FXML
@@ -77,7 +77,7 @@ public class TableController implements PropertyChangeListener {
     @FXML
     private TextField searchField = new TextField();
 
-    private final ObservableList<QueueSong> observedSongs = FXCollections.observableArrayList(List.of());
+    private final ObservableList<VotedSong> observedSongs = FXCollections.observableArrayList(List.of());
     private VoteStrategy voteStrategy;
     private User user;
 
@@ -105,7 +105,7 @@ public class TableController implements PropertyChangeListener {
         }
     }
 
-    private void voteForSong(final QueueSong song) {
+    private void voteForSong(final VotedSong song) {
         try {
             voteStrategy.voteById(song.getId(), user);
         } catch (SongIdNotAvailable | UserVotedAlreadyException e) {
@@ -132,7 +132,7 @@ public class TableController implements PropertyChangeListener {
             if (emptySearchField()) {
                 table.setItems(observedSongs);
             } else {
-                FilteredList<QueueSong> filteredList = new FilteredList<>(observedSongs);
+                FilteredList<VotedSong> filteredList = new FilteredList<>(observedSongs);
                 filteredList.setPredicate(queueSong -> queueSong.getTitle().toLowerCase().startsWith(
                         userSearchRequest()));
                 table.setItems(filteredList);
@@ -169,7 +169,7 @@ public class TableController implements PropertyChangeListener {
         artistColumn.setCellValueFactory(new PropertyValueFactory<>(ARTIST));
         voteColumn.setCellValueFactory(new PropertyValueFactory<>(VOTE_COUNT));
         playableInColumn.setCellValueFactory(new PropertyValueFactory<>(PLAYABLE_IN_COUNT));
-        buttonColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Click to vote", (QueueSong song) -> {
+        buttonColumn.setCellFactory(ActionButtonTableCell.forTableColumn("Click to vote", (VotedSong song) -> {
             voteForSong(song);
             return song;
         }));

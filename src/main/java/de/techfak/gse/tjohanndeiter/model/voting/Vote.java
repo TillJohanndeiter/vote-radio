@@ -1,4 +1,4 @@
-package de.techfak.gse.tjohanndeiter.model.playlist;
+package de.techfak.gse.tjohanndeiter.model.voting;
 
 import de.techfak.gse.tjohanndeiter.mode.server.User;
 

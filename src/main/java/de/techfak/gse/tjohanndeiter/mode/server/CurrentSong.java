@@ -1,22 +1,22 @@
 package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.model.player.TimeBean;
-import de.techfak.gse.tjohanndeiter.model.playlist.QueueSong;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 
 public class CurrentSong {
-    private QueueSong queueSong;
+    private VotedSong queueSong;
     private TimeBean timeBean;
 
     private CurrentSong() {
 
     }
 
-    public CurrentSong(final QueueSong currentSong, final TimeBean timeBean) {
+    public CurrentSong(final VotedSong currentSong, final TimeBean timeBean) {
         this.queueSong = currentSong;
         this.timeBean = timeBean;
     }
 
-    public QueueSong getQueueSong() {
+    public VotedSong getQueueSong() {
         return queueSong;
     }
 
