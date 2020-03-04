@@ -107,4 +107,8 @@ class ModelConnector implements PropertyChangeListener {
             throw new RestServerException("Falied to serialize music stream bean", e);
         }
     }
+
+    public void setCurrentSongJson(final String currentSongJson) {
+        this.currentSongJson = currentSongJson;
+    }
 }

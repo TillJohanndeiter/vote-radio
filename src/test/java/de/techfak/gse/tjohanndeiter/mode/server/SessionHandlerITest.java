@@ -2,8 +2,8 @@ package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.exception.shutdown.RestServerException;
 import de.techfak.gse.tjohanndeiter.model.database.Song;
-import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
+import de.techfak.gse.tjohanndeiter.model.playlist.VotedSong;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +32,7 @@ class SessionHandlerITest {
 
     @BeforeEach
     private void startServer() throws IOException { //NOPMD
+        modelObserver.setCurrentSongJson("test");
         pollingServer.start();
         voteList.addPropertyChangeListener(modelObserver);
 
@@ -40,18 +41,6 @@ class SessionHandlerITest {
     @AfterEach
     private void endServer() { //NOPMD
         pollingServer.closeAllConnections();
-    }
-
-
-    /**
-     * Test for User Story 13 1. Um den/die Fehler eines falschen HTTP Statuscode, ausgelöst bspw durch refactoring der
-     * serve Methode zu finden, wurde die Äquivalenzklasse des korrekten HTTP GET Request gebildet. Als Repräsentant
-     * wurde der GET Request "http://localhost:8080/current-song" gewählt
-     */
-    @Test
-    void currentSongStatusCode() throws IOException {
-        final int code = getCode("current-song");
-        Assertions.assertThat(code == 200).isTrue();
     }
 
 
