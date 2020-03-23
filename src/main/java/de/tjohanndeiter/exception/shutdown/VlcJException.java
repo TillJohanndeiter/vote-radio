@@ -3,7 +3,7 @@ package de.tjohanndeiter.exception.shutdown;
 import de.tjohanndeiter.exception.prototypes.ShutdownException;
 
 /**
- * Exception if any kind of VLCJ exceptions thrown.
+ * Exception if any kind of VLCJ exceptions thrown or missing vlc installation.
  */
 public class VlcJException extends ShutdownException {
 
@@ -12,5 +12,9 @@ public class VlcJException extends ShutdownException {
 
     public VlcJException(final String message, final Exception e) {
         super(message, e, ERROR_CODE);
+    }
+
+    public VlcJException(final String message) {
+        super(message, ERROR_CODE);
     }
 }

@@ -3,9 +3,11 @@ package de.tjohanndeiter.mode;
 import de.tjohanndeiter.VoteRadio;
 import de.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.tjohanndeiter.exception.shutdown.InvalidArgsException;
+import de.tjohanndeiter.exception.shutdown.VlcNotFoundException;
 import de.tjohanndeiter.model.database.SongLibrary;
 import de.tjohanndeiter.model.database.SongLibraryFactory;
 import de.tjohanndeiter.model.database.SongLibraryFactoryImpl;
+import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;
 
 import java.io.File;
 import java.util.Arrays;
@@ -23,8 +25,15 @@ public abstract class ProgramModeFactory {
     protected static final String PORT_ARG = "--restPort=";
     protected static final String REPLAY_ARG = "--replays=";
 
+    /**
+     * Used template pattern to create the program mode.
+     * @param args from cmd
+     * @return ProgramMode for client terminal or offline jukebox
+     * @throws ShutdownException in case of illegal arg combinations or missing vlc installation
+     */
     public ProgramMode createProgramMode(String... args) throws ShutdownException {
         checkIfIllegalArgCombination(args);
+        checkVlcInstall();
         return createSpecificProgramMode(args);
     }
 
@@ -73,5 +82,16 @@ public abstract class ProgramModeFactory {
                 || argList.contains(VoteRadio.CLIENT_ARG) && argList.contains(VoteRadio.JUKEBOX_ARG)
                 || argList.contains(VoteRadio.JUKEBOX_ARG) && containsServerArgs
                 || argList.contains(VoteRadio.ALT_JUKEBOX_ARG) && containsServerArgs;
+    }
+
+    private void checkVlcInstall() throws VlcNotFoundException {
+        if (!vlcInstalled()) {
+            throw new VlcNotFoundException();
+        }
+    }
+
+    private boolean vlcInstalled() {
+        final NativeDiscovery nativeDiscovery = new NativeDiscovery();
+        return nativeDiscovery.discover();
     }
 }

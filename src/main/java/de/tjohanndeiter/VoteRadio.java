@@ -32,7 +32,7 @@ public final class VoteRadio {
     public static void main(final String... args) {
 
         try {
-            BasicConfigurator.configure();
+            initLibraries();
             ProgramModeFactory factory = new TerminalFactory();
 
             if (args.length > 0 && args[0].equals(CLIENT_ARG)) {
@@ -50,6 +50,10 @@ public final class VoteRadio {
             e.printStackTrace(); //NOPMD
             System.exit(e.getErrorCode()); //NOPMD
         }
+    }
+
+    private static void initLibraries() {
+        BasicConfigurator.configure();
     }
 
 }
