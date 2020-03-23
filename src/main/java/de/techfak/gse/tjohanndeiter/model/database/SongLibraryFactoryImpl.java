@@ -2,7 +2,7 @@ package de.techfak.gse.tjohanndeiter.model.database;
 
 import de.techfak.gse.tjohanndeiter.exception.database.SongAlreadyExitsException;
 import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
-import de.techfak.gse.tjohanndeiter.exception.shutdown.NoMp3FilesException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidPathException;
 import de.techfak.gse.tjohanndeiter.exception.shutdown.VlcJException;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
 
@@ -13,7 +13,7 @@ import java.util.Objects;
  * Creates {@link SongLibrary} with *.mp3 files from a folder. Use VlcJ library for implementation. For creation
  * of {@link Song} bean {@link SongFactory} is used.
  */
-public class SongLibraryVlcJFactory implements SongLibraryFactory {
+public class SongLibraryFactoryImpl implements SongLibraryFactory {
 
 
     private final SongFactory songFactory = new SongFactory();
@@ -23,7 +23,7 @@ public class SongLibraryVlcJFactory implements SongLibraryFactory {
      * metadata and creates {@linkplain SongLibrary} with {@linkplain Song} objects.
      *
      * @return {@linkplain SongLibrary} with song objects
-     * @throws NoMp3FilesException if no mp3 files in folder
+     * @throws InvalidPathException if no mp3 files in folder
      */
 
     @Override
@@ -35,14 +35,14 @@ public class SongLibraryVlcJFactory implements SongLibraryFactory {
 
 
         if (!folder.isDirectory()) {
-            throw new NoMp3FilesException(filepath + " Is not a Folder");
+            throw new InvalidPathException(filepath + " Is not a Folder");
         }
 
 
         final File[] mp3FilesInFolder = folder.listFiles((File file, String s) -> s.endsWith(".mp3"));
 
         if (Objects.requireNonNull(mp3FilesInFolder).length == 0) {
-            throw new NoMp3FilesException(filepath + " Contain not valid mp3 Files");
+            throw new InvalidPathException(filepath + " Contain not valid mp3 Files");
         }
 
         addMp3inFolderToLibrary(songLibrary, mp3FilesInFolder);

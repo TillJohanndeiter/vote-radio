@@ -9,7 +9,7 @@ public class MusicStreamPortInUseException extends StartPlayerException {
 
     private static final long serialVersionUID = 1L;
 
-    public MusicStreamPortInUseException(final String adress, final int port) {
+    public MusicStreamPortInUseException(final String adress, final String port) {
         super("Music stream failed. Maybe adress: " + adress + " Port: " + port + " is used already. ");
     }
 }
