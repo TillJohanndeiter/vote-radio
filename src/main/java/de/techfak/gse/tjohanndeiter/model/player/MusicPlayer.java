@@ -101,14 +101,4 @@ public abstract class MusicPlayer { //NOPMD
         support.firePropertyChange(PAUSE_PLAYER, mediaPlayer.status().isPlaying(),
                 !mediaPlayer.status().isPlaying());
     }
-
-    class EndEvent implements Runnable {
-
-        @Override
-        public void run() {
-            playlist.skipToNext();
-            final Song song = playlist.getCurrentSong();
-            support.firePropertyChange(NEW_SONG, null, song);
-        }
-    }
 }
