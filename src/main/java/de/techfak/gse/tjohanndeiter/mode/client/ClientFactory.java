@@ -17,8 +17,7 @@ public class ClientFactory extends ProgramModeFactory {
      * @throws ShutdownException in case of contradictory arguments
      */
     @Override
-    public ProgramMode createProgramMode(final String... args) throws ShutdownException {
-        checkIfIllegalArgCombination(args);
+    public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
         return new ClientMode();
     }
 }

@@ -3,7 +3,11 @@ package de.techfak.gse.tjohanndeiter.mode;
 import de.techfak.gse.tjohanndeiter.GSERadio;
 import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidArgsException;
+import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
+import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
+import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactoryImpl;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,7 +23,12 @@ public abstract class ProgramModeFactory {
     protected static final String PORT_ARG = "--restPort=";
     protected static final String REPLAY_ARG = "--replays=";
 
-    public abstract ProgramMode createProgramMode(String... args) throws ShutdownException;
+    public ProgramMode createProgramMode(String... args) throws ShutdownException {
+        checkIfIllegalArgCombination(args);
+        return createSpecificProgramMode(args);
+    }
+
+    public abstract ProgramMode createSpecificProgramMode(String... args) throws ShutdownException;
 
     /**
      * Checks if args combinations contains a illegal combination.
@@ -39,13 +48,15 @@ public abstract class ProgramModeFactory {
      * @param posOfFilepath index of filepath
      * @return parse filepath
      */
-    protected String parseFilepath(final String[] args, final int posOfFilepath) {
+    protected SongLibrary createSongLibrary(final String[] args, final int posOfFilepath) throws ShutdownException {
         String filepath = System.getProperty(CURRENT_DIR);
         if (args.length > posOfFilepath && !args[posOfFilepath].startsWith(STREAMING_PORT_ARG)
                 && !args[posOfFilepath].startsWith(PORT_ARG)) {
             filepath = args[posOfFilepath];
         }
-        return filepath;
+        final SongLibraryFactory songLibraryFactory = new SongLibraryFactoryImpl();
+
+        return songLibraryFactory.createSongLibrary(new File(filepath));
     }
 
     private boolean invalidArgCombination(final String... args) {

@@ -1,9 +1,9 @@
 package de.techfak.gse.tjohanndeiter.mode.terminal;
 
-import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
-import org.junit.Test;
+import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;
 
 class TerminalFactoryTest {

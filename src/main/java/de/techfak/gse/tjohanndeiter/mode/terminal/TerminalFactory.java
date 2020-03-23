@@ -1,18 +1,16 @@
 package de.techfak.gse.tjohanndeiter.mode.terminal;
 
 import de.techfak.gse.tjohanndeiter.controller.cmd.TerminalController;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
-import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
-import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactoryImpl;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.Playlist;
 import de.techfak.gse.tjohanndeiter.model.playlist.ShuffleList;
-
-import java.io.File;
 
 /**
  * Factory for {@link TerminalMode}. Parse filepath an creates random play with it.
@@ -20,7 +18,7 @@ import java.io.File;
  */
 public class TerminalFactory extends ProgramModeFactory {
 
-    private final SongLibraryFactory factory = new SongLibraryVlcJFactory();
+    private final SongLibraryFactory factory = new SongLibraryFactoryImpl();
 
     /**
      * Parse filepath and creates Terminal mode.
@@ -29,10 +27,8 @@ public class TerminalFactory extends ProgramModeFactory {
      * @throws ShutdownException if folder doesn't contain mp3 files or argument combination is illegal
      */
     @Override
-    public ProgramMode createProgramMode(final String... args) throws ShutdownException {
-        checkIfIllegalArgCombination(args);
-        final String filepath = parseFilepath(args, 0);
-        final SongLibrary songLibrary = factory.createSongLibrary(new File(filepath));
+    public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
+        final SongLibrary songLibrary = createSongLibrary(args, 0);
         final Playlist playlist = new ShuffleList(songLibrary);
         final MusicPlayer musicPlayer = new OfflinePlayer(playlist);
         final TerminalController terminalController = new TerminalController();

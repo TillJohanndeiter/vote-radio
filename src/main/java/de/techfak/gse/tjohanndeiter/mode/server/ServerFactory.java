@@ -2,12 +2,13 @@ package de.techfak.gse.tjohanndeiter.mode.server;
 
 import de.techfak.gse.tjohanndeiter.controller.cmd.ServerController;
 import de.techfak.gse.tjohanndeiter.controller.cmd.TerminalController;
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidArgsException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidPortException;
+import de.techfak.gse.tjohanndeiter.exception.shutdown.MusicStreamPortInUseException;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
-import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
-import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
-import de.techfak.gse.tjohanndeiter.exception.shutdown.InvalidArgsException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.player.StreamPlayer;
@@ -15,7 +16,7 @@ import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.voting.ServerStrategy;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
 
-import java.io.File;
+import java.util.Objects;
 
 /**
  * Factory for {@link ServerMode}. Parse command lines for address and port of music stream and port of rest server.
@@ -30,7 +31,7 @@ public class ServerFactory extends ProgramModeFactory {
     private static final String LOCAL_STREAM_ADDRESS = "none";
 
     @Override
-    public ProgramMode createProgramMode(final String... args) throws ShutdownException {
+    public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
         checkIfIllegalArgCombination(args);
         boolean streamPlay = false;
         String filepath = System.getProperty(CURRENT_DIR);
@@ -38,6 +39,7 @@ public class ServerFactory extends ProgramModeFactory {
         int streamPort = STREAM_PORT_DEFAULT;
         int restPort = REST_PORT_DEFAULT;
         int playsBeforeReplay = REPLAY_DEFAULT;
+        SongLibrary songLibrary = null;
 
 
         for (int i = args.length - 1; i > 0; i--) {
@@ -51,12 +53,11 @@ public class ServerFactory extends ProgramModeFactory {
             } else if (args[i].startsWith(REPLAY_ARG)) {
                 playsBeforeReplay = getReplay(args, i);
             } else {
-                filepath = parseFilepath(args, i);
+                songLibrary = createSongLibrary(args, i);
             }
         }
 
-        final SongLibrary songLibrary = new SongLibraryVlcJFactory().createSongLibrary(new File(filepath));
-        final VoteList voteList = new VoteList(songLibrary, playsBeforeReplay);
+        final VoteList voteList = new VoteList(Objects.requireNonNull(songLibrary), playsBeforeReplay);
         final VoteStrategy voteStrategy = new ServerStrategy(voteList);
         final StreamUrl streamUrl = createStreamUrl(streamPlay, multicast, streamPort);
         final UploadRequester uploadRequester = new UploadRequester(songLibrary, voteList);
@@ -99,8 +100,8 @@ public class ServerFactory extends ProgramModeFactory {
     }
 
     private MusicPlayer createMusicPlayer(final boolean streamPlay, final StreamUrl streamUrl,
-                                          final VoteList voteList, final String... args)
-            throws InvalidArgsException {
+                                          final VoteList voteList, final String... args) throws
+            InvalidPortException, MusicStreamPortInUseException, InvalidArgsException {
 
         final MusicPlayer musicPlayer;
         if (streamPlay) {

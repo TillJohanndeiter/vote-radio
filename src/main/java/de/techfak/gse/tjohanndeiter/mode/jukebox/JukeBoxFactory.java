@@ -1,18 +1,14 @@
 package de.techfak.gse.tjohanndeiter.mode.jukebox;
 
+import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.mode.ProgramMode;
 import de.techfak.gse.tjohanndeiter.mode.ProgramModeFactory;
 import de.techfak.gse.tjohanndeiter.model.database.SongLibrary;
-import de.techfak.gse.tjohanndeiter.model.database.SongLibraryFactory;
-import de.techfak.gse.tjohanndeiter.model.database.SongLibraryVlcJFactory;
-import de.techfak.gse.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.techfak.gse.tjohanndeiter.model.player.MusicPlayer;
 import de.techfak.gse.tjohanndeiter.model.player.OfflinePlayer;
 import de.techfak.gse.tjohanndeiter.model.playlist.VoteList;
 import de.techfak.gse.tjohanndeiter.model.voting.JukeBoxStrategy;
 import de.techfak.gse.tjohanndeiter.model.voting.VoteStrategy;
-
-import java.io.File;
 
 
 /**
@@ -32,9 +28,8 @@ public class JukeBoxFactory extends ProgramModeFactory {
      * @throws ShutdownException if #args contains contradictory combinations.
      */
     @Override
-    public ProgramMode createProgramMode(final String... args) throws ShutdownException {
-        checkIfIllegalArgCombination(args);
-        final SongLibrary songLibrary = createSongLibrary(args);
+    public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
+        final SongLibrary songLibrary = createSongLibrary(args, 1);
         final VoteList voteList = setVoteList(songLibrary);
         setMusicPlayer(voteList);
         setVoteStrategy(voteList);
@@ -55,11 +50,5 @@ public class JukeBoxFactory extends ProgramModeFactory {
     private void setVoteStrategy(final VoteList voteList) {
         final VoteStrategy voteStrategy = new JukeBoxStrategy(voteList);
         JukeBoxMode.setVoteStrategy(voteStrategy);
-    }
-
-    private SongLibrary createSongLibrary(final String... args) throws ShutdownException {
-        final String filepath = parseFilepath(args, 1);
-        final SongLibraryFactory songLibraryFactory = new SongLibraryVlcJFactory();
-        return songLibraryFactory.createSongLibrary(new File(filepath));
     }
 }
