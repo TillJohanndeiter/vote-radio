@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="239.0" prefWidth="164.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.NetworkController">
+<AnchorPane prefHeight="239.0" prefWidth="164.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tjohanndeiter.controller.NetworkController">
     <TextField fx:id="ipAddressField" alignment="CENTER" layoutX="7.0" layoutY="22.0" prefHeight="26.0" prefWidth="150.0" />
     <TextField fx:id="restPortField" alignment="CENTER" layoutX="7.0" layoutY="64.0" prefHeight="26.0" prefWidth="150.0" />
     <Text fill="#2f2f2f" layoutX="9.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IP-Address" />

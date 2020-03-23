@@ -5,6 +5,6 @@
 
 <AnchorPane prefHeight="154.0" prefWidth="36.0" xmlns="http://javafx.com/javafx/10.0.2-internal"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.techfak.gse.tjohanndeiter.controller.VolumeController">
+            fx:controller="de.tjohanndeiter.controller.VolumeController">
     <Slider fx:id="volumeSlider" layoutX="10.0" layoutY="7.0" orientation="VERTICAL"/>
 </AnchorPane>

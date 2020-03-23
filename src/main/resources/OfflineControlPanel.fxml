@@ -5,7 +5,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane alignment="CENTER_RIGHT" maxHeight="Infinity" maxWidth="Infinity" minHeight="154.0" minWidth="71.0" prefHeight="196.0" prefWidth="92.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.techfak.gse.tjohanndeiter.controller.JukeBoxController">
+<StackPane alignment="CENTER_RIGHT" maxHeight="Infinity" maxWidth="Infinity" minHeight="154.0" minWidth="71.0" prefHeight="196.0" prefWidth="92.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tjohanndeiter.controller.JukeBoxController">
     <Pane prefHeight="210.0" prefWidth="92.0">
         <ImageView fx:id="startOrResume" fitHeight="70.0" fitWidth="70.0" layoutX="11.0" layoutY="4.0" onMouseClicked="#changePlayState" pickOnBounds="true" preserveRatio="true">
             <effect>

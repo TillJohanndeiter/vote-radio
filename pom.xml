@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.techfak.gse</groupId>
-    <artifactId>template</artifactId>
+    <groupId>de.tjohanndeiter</groupId>
+    <artifactId>voteRadioa</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>GSE-Template-Project</name>
+    <name>Template-Project</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -306,8 +306,8 @@
                     <repositoryLayout>flat</repositoryLayout>
                     <programs>
                         <program>
-                            <mainClass>de.techfak.gse.tjohanndeiter.GSERadio</mainClass>
-                            <id>helloworld</id>
+                            <mainClass>de.tjohanndeiter.VoteRadio</mainClass>
+                            <id>voteRadio</id>
                         </program>
                     </programs>
                 </configuration>
