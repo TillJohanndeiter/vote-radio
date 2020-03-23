@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Extends {@link Song} form database with an unique id, voteCount and needed replays before next time gets played.
  */
-public class VotedSong extends IDSong {
+public class VotedSong extends IdentifiableSong {
 
     private List<Vote> votes = new ArrayList<>();
     private int playsBeforeReplay;
