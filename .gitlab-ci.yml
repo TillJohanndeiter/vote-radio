@@ -1,3 +1,7 @@
+before-build:
+  script:
+  - docker images
+
 image: maven:latest
 
 variables:
