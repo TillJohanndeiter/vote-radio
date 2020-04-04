@@ -1,4 +1,4 @@
-image: openjdk:11-jdk
+image: maven:latest
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
@@ -12,17 +12,6 @@ cache:
 build:
   stage: build
   script:
-    - echo 'IMAGES';
-      docker images -q;
-      for container in $(docker ps -aq);
-      do
-          docker rm -f $container
-      done
-
-      for image in $(docker images -q);
-      do
-      docker rmi $image
-      done
     - mvn compile
 
 test:
