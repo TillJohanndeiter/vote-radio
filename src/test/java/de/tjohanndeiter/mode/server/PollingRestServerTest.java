@@ -3,7 +3,6 @@ package de.tjohanndeiter.mode.server;
 import de.tjohanndeiter.exception.shutdown.RestServerException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -13,16 +12,12 @@ class PollingRestServerTest {
 
     private static final String LOCALHOST = "127.0.0.1";//NOPMD
 
-    private PollingRestServer pollingRestServer;
-
-    @BeforeEach
-    void setUp() {
-        pollingRestServer = new PollingRestServer(LOCALHOST, 8080, null);
-    }
+    private PollingRestServer pollingRestServer = new PollingRestServer(LOCALHOST, 6060, null);
 
     @AfterEach
     void tearDown() {
         pollingRestServer.closeAllConnections();
+        pollingRestServer.stop();
     }
 
     @Test
@@ -32,8 +27,8 @@ class PollingRestServerTest {
 
     @Test
     void throwsIfPortInUseFromTcp() throws IOException {
-        final PollingRestServer pollingRestServer = new PollingRestServer(LOCALHOST, 8080, null);
         pollingRestServer.start();
-        Assertions.assertThrows(RestServerException.class, pollingRestServer::startServer);
+        final PollingRestServer anotherServer = new PollingRestServer(LOCALHOST, 6060, null);
+        Assertions.assertThrows(RestServerException.class, anotherServer::startServer);
     }
 }

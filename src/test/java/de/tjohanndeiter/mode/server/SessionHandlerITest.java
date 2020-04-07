@@ -14,39 +14,37 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-@SuppressWarnings("deprecation")
 class SessionHandlerITest {
 
 
-    private static final String LOCALHOST = "127.0.0.1";//NOPMD
-
-
-    private final Song song = new Song("test", "test", "test", "test", "test", 3);
-    private final VoteList voteList = new VoteList(List.of(new VotedSong(song, 1, 0)));
     private final ModelConnector modelObserver = new ModelConnector(null, null, null);
-    private final PollingRestServer pollingServer = new PollingRestServer(LOCALHOST, 8080,
-            new SessionHandler(null, null, modelObserver));
+    private final SocketRestServer socketRestServer = new SocketRestServer(6060,
+            new SessionHandler(null, null, modelObserver), null);
 
     SessionHandlerITest() throws RestServerException {
+        final Song song = new Song("test", "test", "test", "test", "test", 3);
+        final VoteList voteList = new VoteList(List.of(new VotedSong(song, 1, 0)));
+        voteList.addPropertyChangeListener(modelObserver);
     }
 
     @BeforeEach
     private void startServer() throws IOException { //NOPMD
-        pollingServer.start();
-        voteList.addPropertyChangeListener(modelObserver);
-
+            socketRestServer.start();
     }
 
     @AfterEach
     private void endServer() { //NOPMD
-        pollingServer.closeAllConnections();
+        socketRestServer.closeAllConnections();
+        socketRestServer.stop();
     }
 
 
     @Test
     void wrongCurrentSongRequestCode() throws IOException {
+        System.out.println("sad");
         final int code = getCode("curren-song");
         Assertions.assertThat(code != 200).isTrue();
+
     }
 
 
@@ -54,19 +52,22 @@ class SessionHandlerITest {
     void playlistStatusCode() throws IOException {
         final int code = getCode("playlist");
         Assertions.assertThat(code == 200).isTrue();
+        socketRestServer.closeAllConnections();
+
     }
 
 
     @Test
     void wrongPlaylistRequestStatusCode() throws IOException {
-
         final int code = getCode("plalist");
         Assertions.assertThat(code != 200).isTrue();
+        socketRestServer.closeAllConnections();
+
     }
 
 
     private int getCode(final String subAddress) throws IOException {
-        final URL url = new URL("http://localhost:8080/" + subAddress);
+        final URL url = new URL("http://localhost:6060/" + subAddress);
         final HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("Content-Type", "application/json; utf-8");
