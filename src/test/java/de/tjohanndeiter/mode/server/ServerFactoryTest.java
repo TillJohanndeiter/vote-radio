@@ -15,7 +15,6 @@ class ServerFactoryTest {
     private final ServerFactory factory = new ServerFactory();
 
 
-    //TODO: Find solution for ci tests with vlc
     @Test
     void createProgramMode() throws ShutdownException {
 
