@@ -23,7 +23,7 @@ test:
 package:
   stage: package
     script:
-     - rm voteRadio.tar.gz
+     - mvn package
      - tar -zcvf voteRadio.tar.gz ${CI_PROJECT_DIR}/target/appassembler/
   artifacts:
     paths:
