@@ -1,7 +1,3 @@
-.hidden_job:
-  script:
-  - docker images
-
 image: maven:3.6.3-jdk-11-slim
 
 variables:
@@ -16,9 +12,9 @@ cache:
 build:
   stage: build
   script:
-    - mvn compile
+    - mvn $MAVEN_CLI_OPTS compile
 
 test:
   stage: test
   script:
-    - mvn test
+    - mvn $MAVEN_CLI_OPTS test
