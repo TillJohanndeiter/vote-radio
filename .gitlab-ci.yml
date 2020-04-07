@@ -18,12 +18,12 @@ build:
 test:
   stage: test
   script:
-    - mvn test
+    - mvn test -Dfindbugs.skip=true -Dpmd.skip=true -Dmaven.javadoc.skip=true
 
 deploy:
   stage: deploy
   script:
-     - mvn package
+     - mvn package -Dmaven.test.skip=true  -Dfindbugs.skip=true -Dpmd.skip=true -Dmaven.javadoc.skip=true
   artifacts:
     paths:
      - ${CI_PROJECT_DIR}/target/voteRadio-0.0.1-SNAPSHOT.zip
