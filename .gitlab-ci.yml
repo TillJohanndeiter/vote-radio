@@ -24,7 +24,8 @@ deploy:
   stage: deploy
   script:
      - mvn package
-     - tar -zcvf voteRadio.tar.gz ${CI_PROJECT_DIR}/target/appassembler/
+     - tar -zcvf ${CI_PROJECT_DIR}/target/appassembler/voteRadio.tar.gz ${CI_PROJECT_DIR}/target/appassembler/
+     - ls
   artifacts:
     paths:
      - ${CI_PROJECT_DIR}/target/appassembler/voteRadio.tar.gz
