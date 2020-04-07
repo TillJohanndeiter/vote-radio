@@ -7,8 +7,8 @@ variables:
 cache:
   key: one-key-to-rule-them-all
   paths:
-    - .m2/repository/
-    - target/
+    - ${CI_PROJECT_DIR}/.m2/repository/
+    - ${CI_PROJECT_DIR}/target/
 
 build:
   stage: build
