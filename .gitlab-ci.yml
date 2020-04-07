@@ -20,8 +20,8 @@ test:
   script:
     - mvn test
 
-package:
-  stage: package
+deploy:
+  stage: deploy
   script:
      - mvn package
      - tar -zcvf voteRadio.tar.gz ${CI_PROJECT_DIR}/target/appassembler/
