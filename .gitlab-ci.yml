@@ -25,11 +25,7 @@ package:
     script:
      - rm voteRadio.tar.gz
      - tar -zcvf voteRadio.tar.gz ${CI_PROJECT_DIR}/target/appassembler/
-
   artifacts:
     paths:
      - ${CI_PROJECT_DIR}/target/appassembler/voteRadio.tar.gz
     expire_in: 1 week
-  only:
-     - master
-
