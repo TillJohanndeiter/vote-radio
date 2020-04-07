@@ -4,7 +4,8 @@ import de.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.tjohanndeiter.mode.ProgramMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;
+
+import java.util.Objects;
 
 class TerminalFactoryTest {
 
@@ -13,11 +14,9 @@ class TerminalFactoryTest {
 
     @Test
     void createProgramMode() throws ShutdownException {
-        NativeDiscovery nativeDiscovery = new NativeDiscovery();
-        if (nativeDiscovery.discover()) {
-            ProgramMode programMode = factory.createProgramMode(Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
-            Assertions.assertTrue(programMode instanceof TerminalMode);
-        }
+        ProgramMode programMode = factory.createProgramMode(Objects.requireNonNull(
+                Thread.currentThread().getContextClassLoader().getResource("testMusicFiles")).getPath());
+        Assertions.assertTrue(programMode instanceof TerminalMode);
     }
 
 }

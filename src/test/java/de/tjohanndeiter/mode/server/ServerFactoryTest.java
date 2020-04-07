@@ -1,29 +1,27 @@
 package de.tjohanndeiter.mode.server;
 
 import de.tjohanndeiter.VoteRadio;
-import de.tjohanndeiter.mode.ProgramMode;
-import de.tjohanndeiter.mode.ProgramModeFactory;
 import de.tjohanndeiter.exception.prototypes.ShutdownException;
 import de.tjohanndeiter.exception.shutdown.InvalidArgsException;
+import de.tjohanndeiter.mode.ProgramMode;
+import de.tjohanndeiter.mode.ProgramModeFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import uk.co.caprica.vlcj.factory.discovery.NativeDiscovery;
+
+import java.util.Objects;
 
 class ServerFactoryTest {
 
     private final ServerFactory factory = new ServerFactory();
-
-    private NativeDiscovery nativeDiscovery = new NativeDiscovery();
 
 
     //TODO: Find solution for ci tests with vlc
     @Test
     void createProgramMode() throws ShutdownException {
 
-        if (nativeDiscovery.discover()) {
-            ProgramMode programMode = factory.createProgramMode(VoteRadio.SERVER_ARG, Thread.currentThread().getContextClassLoader().getResource("testMusicFiles").getPath());
-            Assertions.assertTrue(programMode instanceof ServerMode);
-        }
+        ProgramMode programMode = factory.createProgramMode(VoteRadio.SERVER_ARG, Objects.requireNonNull(
+                Thread.currentThread().getContextClassLoader().getResource("testMusicFiles")).getPath());
+        Assertions.assertTrue(programMode instanceof ServerMode);
 
     }
 
