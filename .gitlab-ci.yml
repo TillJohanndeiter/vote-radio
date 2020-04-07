@@ -2,7 +2,7 @@
   script:
   - docker images
 
-image: maven:latest
+image: maven:3.6.3-jdk-11-slim
 
 variables:
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
