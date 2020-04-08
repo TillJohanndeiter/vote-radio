@@ -19,7 +19,7 @@ public final class VoteRadio {
     public static final String SERVER_ARG = "--server";
     public static final String CLIENT_ARG = "--client";
     public static final String JUKEBOX_ARG = "--jukebox";
-    public static final String ALT_JUKEBOX_ARG = "-g";
+    public static final String ALT_JUKEBOX_ARG = "-j";
 
     private VoteRadio() {
     }
