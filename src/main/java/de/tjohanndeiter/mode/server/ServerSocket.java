@@ -97,6 +97,7 @@ public class ServerSocket extends NanoWSD.WebSocket {
 
     @Override
     protected void onException(final IOException e) {
+        allServerSockets.remove(this);
         e.printStackTrace();  //NOPMD
     }
 }
