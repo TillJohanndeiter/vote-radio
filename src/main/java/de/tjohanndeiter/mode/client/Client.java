@@ -91,7 +91,10 @@ public class Client {
         receiverPlayer = new ReceiverPlayer(streamUrl);
         updateStrategy = new SocketStrategy(new HttpRequester(restAddress, port));
         addObservers();
-        receiverPlayer.startPlay();
+        if (!streamUrl.getPort().equals(StreamUrl.NO_STREAM_VALUE)
+                || !streamUrl.getMulticastAddress().equals(StreamUrl.NO_STREAM_VALUE)) {
+            receiverPlayer.startPlay();
+        }
         support.firePropertyChange(NEW_PLAYER, null, receiverPlayer);
         support.firePropertyChange(CONNECTED, null, restAddress);
         connected = true;

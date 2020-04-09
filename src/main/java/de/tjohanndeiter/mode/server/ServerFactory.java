@@ -28,7 +28,6 @@ public class ServerFactory extends ProgramModeFactory {
     private static final int REST_PORT_DEFAULT = 8080;
     private static final int STREAM_PORT_DEFAULT = 1234;
     private static final String MULTICAST_DEFAULT = "239.255.0.1"; //NOPMD
-    private static final String LOCAL_STREAM_ADDRESS = "none";
 
     @Override
     public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
@@ -83,7 +82,7 @@ public class ServerFactory extends ProgramModeFactory {
         if (streamPlay) {
             return new StreamUrl(multicast, streamPort);
         } else {
-            return new StreamUrl(LOCAL_STREAM_ADDRESS, LOCAL_STREAM_ADDRESS);
+            return new StreamUrl(StreamUrl.NO_STREAM_VALUE, StreamUrl.NO_STREAM_VALUE);
         }
     }
 

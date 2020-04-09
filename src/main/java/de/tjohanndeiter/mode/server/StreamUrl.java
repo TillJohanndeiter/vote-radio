@@ -8,6 +8,8 @@ package de.tjohanndeiter.mode.server;
  */
 public class StreamUrl {
 
+    public static final String NO_STREAM_VALUE = "none";
+
     private String multicastAddress = null;
     private String port = null;
 
