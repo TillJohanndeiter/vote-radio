@@ -159,12 +159,12 @@ public class CurrentSongController implements PropertyChangeListener {
      * Kills the timer task and the task itself.
      */
     public void end() {
+        if (task != null) {
+            task.cancel();
+        }
         if (timer != null) {
             timer.cancel();
             timer.purge();
-        }
-        if (task != null) {
-            task.cancel();
         }
     }
 }

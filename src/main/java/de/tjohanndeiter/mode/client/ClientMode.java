@@ -8,7 +8,6 @@ import de.tjohanndeiter.mode.ProgramMode;
 import de.tjohanndeiter.mode.server.User;
 import de.tjohanndeiter.model.voting.ClientStrategy;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -49,9 +48,7 @@ public class ClientMode extends Application implements ProgramMode {
         stage.setMinHeight(MIN_HEIGHT);
         stage.setMinWidth(MIN_WIDTH);
         stage.setOnCloseRequest(windowEvent -> {
-            client.kill();
-            currentSongController.end();
-            Platform.exit();
+            System.exit(0);
         });
         stage.setTitle("GSERadio Client mode");
         stage.setScene(scene);
