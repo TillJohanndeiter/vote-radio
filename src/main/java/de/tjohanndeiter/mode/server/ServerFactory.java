@@ -48,6 +48,7 @@ public class ServerFactory extends ProgramModeFactory {
                 restPort = getArgumentAsInteger(args, i);
             } else if (args[i].startsWith(STREAMING_ADDRESS_ARG)) {
                 multicast = getMulticast(args, i);
+                streamPlay = true;
             } else if (args[i].startsWith(REPLAY_ARG)) {
                 playsBeforeReplay = getReplay(args, i);
             }
