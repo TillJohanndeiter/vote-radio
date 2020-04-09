@@ -60,6 +60,8 @@ public abstract class ProgramModeFactory {
     protected SongLibrary createSongLibrary(final String[] args, final int posOfFilepath) throws ShutdownException {
         String filepath = System.getProperty(CURRENT_DIR);
         if (args.length > posOfFilepath && !args[posOfFilepath].startsWith(STREAMING_PORT_ARG)
+                && !args[posOfFilepath].startsWith(STREAMING_ADDRESS_ARG)
+                && !args[posOfFilepath].startsWith(REPLAY_ARG)
                 && !args[posOfFilepath].startsWith(PORT_ARG)) {
             filepath = args[posOfFilepath];
         }

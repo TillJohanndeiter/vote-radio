@@ -34,12 +34,10 @@ public class ServerFactory extends ProgramModeFactory {
     public ProgramMode createSpecificProgramMode(final String... args) throws ShutdownException {
         checkIfIllegalArgCombination(args);
         boolean streamPlay = false;
-        String filepath = System.getProperty(CURRENT_DIR);
         String multicast = MULTICAST_DEFAULT;
         int streamPort = STREAM_PORT_DEFAULT;
         int restPort = REST_PORT_DEFAULT;
         int playsBeforeReplay = REPLAY_DEFAULT;
-        SongLibrary songLibrary = null;
 
 
         for (int i = args.length - 1; i > 0; i--) {
@@ -52,10 +50,10 @@ public class ServerFactory extends ProgramModeFactory {
                 multicast = getMulticast(args, i);
             } else if (args[i].startsWith(REPLAY_ARG)) {
                 playsBeforeReplay = getReplay(args, i);
-            } else {
-                songLibrary = createSongLibrary(args, i);
             }
         }
+
+        SongLibrary songLibrary = createSongLibrary(args, args.length - 1);
 
         final VoteList voteList = new VoteList(Objects.requireNonNull(songLibrary), playsBeforeReplay);
         final VoteStrategy voteStrategy = new ServerStrategy(voteList);
