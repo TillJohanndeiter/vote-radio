@@ -48,7 +48,8 @@ public class ClientMode extends Application implements ProgramMode {
         stage.setMinHeight(MIN_HEIGHT);
         stage.setMinWidth(MIN_WIDTH);
         stage.setOnCloseRequest(windowEvent -> {
-            System.exit(0);
+            client.endConnection();
+            currentSongController.end();
         });
         stage.setTitle("GSERadio Client mode");
         stage.setScene(scene);

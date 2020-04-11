@@ -41,3 +41,19 @@ The server mode starts deamon rest server. You can specify port of rest server w
 Additionally to commands form terminal mode you get with port and adress informations about server location.
 
 ./gseRadio --server --streamPort=5050 --streamAddress=239.255.0.1 --restPort=8080 --replays=5 music
+
+
+## Sources
+
+Thank to everybody who upload their work in the internet and allow other to resuse their work!
+
+CD Icon: Jrdn88 https://commons.wikimedia.org/wiki/File:CD_Audio_icon.png
+Play/Stop/Pause Button https://pixabay.com/de/vectors/tasten-anschlag-datensatz-anhalten-304219/
+
+Music: Head Run - 	7OOP3D http://ccmixter.org/files/texasradiofish/60392
+       Night Owl - Broke For Free https://freemusicarchive.org/music/Broke_For_Free/Directionless_EP/Broke_For_Free_-_Directionless_EP_-_01_Night_Owl
+       Enthusiast - Tours https://freemusicarchive.org/music/Tours/Enthusiast/Tours_-_Enthusiast
+       Leaving Babylon - Zep Hurme http://ccmixter.org/files/zep_hurme/60052
+       One True Connection - Whitewolf http://ccmixter.org/files/Whitewolf225/59987
+       Sirius Crystal - Speck - http://ccmixter.org/files/speck/60126
+       Streets of my Hometown - Scomber http://ccmixter.org/files/scomber/60268

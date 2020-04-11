@@ -122,16 +122,10 @@ public class Client {
         if (updateStrategy != null) {
             updateStrategy.stop();
         }
-        if (receiverPlayer != null) {
-            receiverPlayer.end();
-        }
         connected = false;
         support.firePropertyChange(CANCELED_CONNECTION, false, true);
     }
 
-    public void kill() {
-        endConnection();
-    }
 
     public ReceiverPlayer getReceiverPlayer() {
         return receiverPlayer;

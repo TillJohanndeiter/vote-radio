@@ -43,12 +43,7 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
 
     @Override
     public void stop() {
-        close();
-        try {
-            closeBlocking();
-        } catch (InterruptedException e) {
-            e.printStackTrace(); //NOPMD
-        }
+        closeConnection(0, "exit");
     }
 
     @Override
@@ -108,7 +103,6 @@ public class SocketStrategy extends WebSocketClient implements UpdateStrategy {
     @Override
     public void onClose(final int i, final String s, final boolean b) {
         support.firePropertyChange(Client.CANCELED_CONNECTION, null, null);
-        close();
     }
 
     @Override
