@@ -3,6 +3,10 @@ git clone https://se.techfak.de/git/g-se-tut-ws-2019.project-template.git
 
 ## Welcome to VoteRadio
 
+Latest Version: https://gitlab.ub.uni-bielefeld.de/till.johanndeiter/voteradio/-/jobs/17044/artifacts/download
+
+
+
 ## Motivation
 
 Last semester i work as a tutor at my university. The students had to program with java and and libraries (VlcJ, Jackson, NanotHttp, JavaFx,...) a desktop app similar to festify https://festify.rocks/. For prepreation of my tutorial i made the project.
