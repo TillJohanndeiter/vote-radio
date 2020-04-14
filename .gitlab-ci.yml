@@ -1,0 +1,30 @@
+image: tilljo/vote_radio:latest
+
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+cache:
+  key: one-key-to-rule-them-all
+  paths:
+    - ${CI_PROJECT_DIR}/.m2/repository/
+    - ${CI_PROJECT_DIR}/target/
+
+build:
+  stage: build
+  script:
+    - mvn compile
+
+test:
+  stage: test
+  script:
+    - mvn test -Dfindbugs.skip=true -Dpmd.skip=true -Dmaven.javadoc.skip=true
+
+deploy:
+  stage: deploy
+  script:
+     - mvn package -Dmaven.test.skip=true  -Dfindbugs.skip=true -Dpmd.skip=true -Dmaven.javadoc.skip=true
+  artifacts:
+    paths:
+     - ${CI_PROJECT_DIR}/target/voteRadio-0.0.1-SNAPSHOT.zip
+    expire_in: 1 week
