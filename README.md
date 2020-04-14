@@ -3,7 +3,7 @@ git clone https://se.techfak.de/git/g-se-tut-ws-2019.project-template.git
 
 ## Welcome to VoteRadio
 
-Latest Version: https://gitlab.ub.uni-bielefeld.de/till.johanndeiter/voteradio/-/jobs/17044/artifacts/download
+Latest Version for Linux: https://gitlab.ub.uni-bielefeld.de/till.johanndeiter/voteradio/-/jobs/17044/artifacts/download
 
 
 
