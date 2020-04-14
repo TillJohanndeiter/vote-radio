@@ -1,7 +1,7 @@
 
 ## Welcome to VoteRadio
 
-[Latest Version for Linux](https://gitlab.ub.uni-bielefeld.de/till.johanndeiter/voteradio/-/jobs/17044/artifacts/download)
+[Latest Version for Linux](https://gitlab.com/till_johanndeiter/voteradio/-/jobs/artifacts/0.2/target/voteRadio-0.0.1-SNAPSHOT.zip?job=deploy)
 
 
 
