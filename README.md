@@ -1,5 +1,3 @@
-GIT checkout:
-git clone https://se.techfak.de/git/g-se-tut-ws-2019.project-template.git
 
 ## Welcome to VoteRadio
 
