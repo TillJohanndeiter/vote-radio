@@ -1,4 +1,3 @@
-
 ## Welcome to VoteRadio
 
 [Latest Version for Linux](https://gitlab.com/till_johanndeiter/voteradio/-/jobs/510896843/artifacts/download?file_type=archive)
